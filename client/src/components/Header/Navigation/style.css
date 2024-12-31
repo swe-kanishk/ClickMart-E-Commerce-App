@@ -1,0 +1,10 @@
+.categoryPanel button {
+    text-transform: capitalize !important;
+}
+
+.navigation-submenu:hover .navigation-innerSubmenu {
+    display: flex !important;
+    opacity: 100% !important;
+    left: 100% !important;
+    transition: ease-in-out !important;
+}

@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f5f0f0;
+}
+
+.container {
+  width: 95%;
+  margin: auto;
+}
+
+.link:hover {
+  color: #1876D2;
+}
+
+nav ul button {
+  text-transform: capitalize !important;
+  color: rgba(0,0,0,0.7) !important;
+}
+
+nav ul button:hover {
+  text-transform: capitalize !important;
+  color: #d3003f !important;
+}
