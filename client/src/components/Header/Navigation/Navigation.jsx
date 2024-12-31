@@ -36,7 +36,7 @@ function Navigation() {
                 <Link to="/home" className="transition text-[15px] font-[500]">
                   <Button className="transition">Fashion</Button>
                 </Link>
-                <div className="navigation-submenu group-hover:flex flex-col link transition-all group-hover:opacity-100 opacity-0 delay-100 absolute top-[110%] hidden left-0 min-w-[200px] bg-white shadow-md">
+                <div className="navigation-submenu z-50 group-hover:flex flex-col link transition-all group-hover:opacity-100 opacity-0 delay-100 absolute top-[110%] hidden left-0 min-w-[200px] bg-white shadow-md">
                   <ul className="w-full">
                     <li className="list-none">
                       <Link to={"/#"} className="w-full group">

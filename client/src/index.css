@@ -5,11 +5,11 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-body {
+html, body {
   background: #f5f0f0;
+  box-sizing: border-box !important;
 }
 
 .container {
@@ -29,4 +29,53 @@ nav ul button {
 nav ul button:hover {
   text-transform: capitalize !important;
   color: #d3003f !important;
+}
+
+.homeCatSlider .swiper-button-prev,
+.homeCatSlider .swiper-button-next {
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  min-height: 30px;
+  background-color: #1876D2;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homeCatSlider .swiper-button-prev::after {
+  font-size: 16px;
+}
+
+.homeCatSlider .swiper-button-next::after {
+  font-size: 16px;
+}
+
+.homeCatSlider .item:hover img {
+  transform: scale(1.1);
+}
+
+::-webkit-scrollbar {
+  height: 10px !important;
+  width: 10px !important;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.MuiTabs-indicator {
+  background-color: #4a0bdc !important;
+}
+
+.MuiTab-textColorPrimary {
+  color: rgb(44, 43, 45) !important;
+}
+
+.Mui-selected {
+  color: #4a0bdc !important;
 }
