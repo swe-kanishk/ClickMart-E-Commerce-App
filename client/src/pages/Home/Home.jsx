@@ -3,10 +3,21 @@ import HomeSlider from "./HomeSlider";
 import HomeCategorySlider from "./HomeCategorySlider/HomeCategorySlider";
 import { FaShippingFast } from "react-icons/fa";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "./style.css";
+// import required modules
+import { Navigation } from "swiper/modules";
+
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
 import ProductsSlider from "./products/ProductsSlider";
+import BlogItem from "../BlogItem";
+import Footer from "./Footer";
+import HomeBanner from "./HomeBanner";
 
 function Home() {
   const [value, setValue] = useState(0);
@@ -17,7 +28,16 @@ function Home() {
 
   return (
     <>
-      <HomeSlider />
+      <section className="py-6">
+        <div className="container flex gap-2 justify-between">
+          <div className="part-1 w-[75%] flex flex-col">
+            <HomeSlider />
+          </div>
+          <div className="part-2 w-[25%] flex flex-col">
+            <HomeBanner />
+          </div>
+        </div>
+      </section>
       <HomeCategorySlider />
       <section className="bg-white py-8">
         <div className="container">
@@ -50,7 +70,7 @@ function Home() {
           <ProductsSlider />
         </div>
       </section>
-      <section className="py-12 bg-white">
+      <section className="py-5 bg-white">
         <div className="container">
           <div className="freeShipping w-[80%] mx-auto p-6 border-2 border-[#1876D2] flex items-center justify-between">
             <div className="items-center flex gap-3 w-1/5 border-gray-300 border-r-2">
@@ -70,6 +90,65 @@ function Home() {
           </div>
         </div>
       </section>
+      <section className="py-5 pt-0 bg-white">
+        <div className="container">
+          <h2 className="text-[20px] font-[600]">Latest Products</h2>
+          <ProductsSlider />
+        </div>
+      </section>
+      <section className="py-5 pt-0 bg-white">
+        <div className="container">
+          <h2 className="text-[20px] font-[600]">Featured Products</h2>
+          <ProductsSlider />
+        </div>
+      </section>
+      <section className="pb-8 pt-0 bg-white blogSection">
+        <div className="container">
+          <h2 className="text-[20px] font-[600] mb-4">From the Blog</h2>
+          <Swiper
+            slidesPerView={4}
+            spaceBetween={20}
+            navigation={true}
+            pagination={{
+              clickable: true,
+            }}
+            modules={[Navigation]}
+            className="blogSlider"
+          >
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+            <SwiperSlide>
+              <BlogItem />
+            </SwiperSlide>
+          </Swiper>
+        </div>
+      </section>
+      <Footer />
     </>
   );
 }

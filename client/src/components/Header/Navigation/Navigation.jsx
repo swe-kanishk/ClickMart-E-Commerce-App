@@ -14,7 +14,7 @@ function Navigation() {
 
   return (
     <>
-      <nav className="py-2">
+      <nav>
         <div className="container flex items-center justify-end gap-6">
           <div className="col-1 w-[20%] text-start">
             <Button
@@ -29,14 +29,14 @@ function Navigation() {
             <ul className="flex justify-evenly items-center gap-2">
               <li className="list-none">
                 <Link to="/home" className="transition font-[500]">
-                  <Button className="transition !text-[15px]">Home</Button>
+                  <Button className="transition !text-[15px] !py-3">Home</Button>
                 </Link>
               </li>
               <li className="list-none relative group">
                 <Link to="/home" className="transition text-[15px] font-[500]">
-                  <Button className="transition">Fashion</Button>
+                  <Button className="transition !py-3">Fashion</Button>
                 </Link>
-                <div className="navigation-submenu z-50 group-hover:flex flex-col link transition-all group-hover:opacity-100 opacity-0 delay-100 absolute top-[110%] hidden left-0 min-w-[200px] bg-white shadow-md">
+                <div className="navigation-submenu z-50 group-hover:flex flex-col link transition-all group-hover:opacity-100 opacity-0 delay-100 absolute top-[105%] hidden left-0 min-w-[200px] bg-white shadow-md">
                   <ul className="w-full">
                     <li className="list-none">
                       <Link to={"/#"} className="w-full group">
@@ -117,34 +117,34 @@ function Navigation() {
               </li>
               <li className="list-none">
                 <Link to="/home" className="transition font-[500]">
-                  <Button className="transition !text-[15px]">
+                  <Button className="transition !text-[15px] !py-3">
                     Electronics
                   </Button>
                 </Link>
               </li>
               <li className="list-none">
                 <Link to="/home" className="transition font-[500]">
-                  <Button className="transition !text-[15px]">Footwear</Button>
+                  <Button className="transition !text-[15px] !py-3">Footwear</Button>
                 </Link>
               </li>
               <li className="list-none">
                 <Link to="/home" className="transition font-[500]">
-                  <Button className="transition !text-[15px]">Groceries</Button>
+                  <Button className="transition !text-[15px] !py-3">Groceries</Button>
                 </Link>
               </li>
               <li className="list-none">
                 <Link to="/home" className="transition font-[500]">
-                  <Button className="transition !text-[15px]">Bags</Button>
+                  <Button className="transition !text-[15px] !py-3">Bags</Button>
                 </Link>
               </li>
               <li className="list-none">
                 <Link to="/home" className="transition font-[500]">
-                  <Button className="transition !text-[15px]">Jewellery</Button>
+                  <Button className="transition !text-[15px] !py-3">Jewellery</Button>
                 </Link>
               </li>
               <li className="list-none">
                 <Link to="/home" className="transition font-[500]">
-                  <Button className="transition !text-[15px]">Beauty</Button>
+                  <Button className="transition !text-[15px] !py-3">Beauty</Button>
                 </Link>
               </li>
             </ul>

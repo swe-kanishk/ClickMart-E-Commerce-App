@@ -4,62 +4,84 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
+import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import "./style.css";
 
 // import required modules
-import { Navigation, Autoplay, Pagination, Mousewheel, Keyboard } from "swiper/modules";
+import { EffectFade, Navigation, Autoplay, Pagination } from "swiper/modules";
+import { Button } from "@mui/material";
 
 function HomeSlider() {
   return (
-    <div className="container flex items-start justify-between py-4 gap-4 overflow-hidden">
-      <div className="w-[70%]">
-      <Swiper
-        cssMode={true}
-        navigation={true}
-        pagination={true}
-        mousewheel={true}
-        keyboard={true}
-        modules={[Navigation, Autoplay, Pagination, Mousewheel, Keyboard]}
-        autoplay={{delay: 2500, disableOnInteraction: false}}
-        className="mySwiper"
-      >
-        <SwiperSlide>
-          <img
-            src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_imageslider/views/img/sample-1.jpg"
-            alt=""
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_imageslider/views/img/sample-2.jpg"
-            alt=""
-          />
-        </SwiperSlide>
-      </Swiper>
-      </div>
-      <div className="flex w-[30%] !h-[100%] flex-col overflow-hidden items-end justify-between gap-3">
-        <div className="group overflow-hidden h-1/2 rounded-lg relative">
-            <div className="absolute top-[2rem] z-50 left-[2rem]"><h3 className="font-medium pb-4 text-xl">Samsung Gear <br />
-            VR Camera</h3>
-            <span className="text-red-500 font-medium tex-[15px]">$129.00</span>
+    <div className="flex items-start justify-between gap-4 overflow-hidden">
+        <Swiper
+          loop={true}
+          spaceBetween={30}
+          effect={"fade"}
+          navigation={true}
+          pagination={{
+            clickable: true,
+          }}
+          autoplay={{}}
+          modules={[Navigation, EffectFade, Autoplay, Pagination]}
+          className="homeSlider"
+        >
+          <SwiperSlide>
+            <div className="item w-full rounded-md overflow-hidden relative">
+              <img
+                src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_imageslider/views/img/sample-1.jpg"
+                alt=""
+              />
+              <div className="info absolute top-0 right-[-100%] opacity-0 transition-all duration-700 w-[50%] text-start h-[100%] flex items-start justify-center flex-col z-50 p-8">
+                <h4 className="text-[18px] right-[-100%] opacity-0 duration-[2s] relative font-[500]">
+                  Big Saving Days Sale
+                </h4>
+                <h2 className="text-[30px] right-[-100%] opacity-0 duration-[1.5s] relative font-[700]">
+                  Women Solid Round Green <br />
+                  T-Shirt
+                </h2>
+                <h3 className="text-[18px] right-[-100%] opacity-0 duration-[1s] relative flex items-center gap-3 font-[500] w-full text-left my-3">
+                  Starting At Only{" "}
+                  <span className="text-[30px] font-[700] text-red-500">
+                    $59
+                  </span>
+                </h3>
+                <Button className="!text-white btn right-[-100%] opacity-0 duration-[2200ms] relative !bg-red-500">
+                  Shop Now
+                </Button>
+              </div>
             </div>
-          <img
-            src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/img/cms/sub-banner-1.jpg"
-            alt=""
-            className="group-hover:scale-105 h-[100%] transition-transform object-cover"
-          />
-        </div>
-        <div className="group overflow-hidden h-1/2 rounded-lg relative">
-          <img
-            src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/img/cms/sub-banner-2.jpg"
-            alt=""
-            className="group-hover:scale-105 h-[100%] transition-transform object-cover"
-          />
-        </div>
-      </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="item w-full rounded-md overflow-hidden relative">
+              <img
+                src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_imageslider/views/img/sample-2.jpg"
+                alt=""
+              />
+              <div className="info absolute top-0 right-[-100%] opacity-0 transition-all duration-700 w-[45%] text-start h-[100%] flex items-start justify-center flex-col z-50 p-8">
+                <h4 className="text-[18px] right-[-100%] opacity-0 duration-[1800ms] relative font-[500]">
+                  Big Saving Days Sale
+                </h4>
+                <h2 className="text-[30px] right-[-100%] opacity-0 duration-[1s] relative font-[700]">
+                  Buy Modern Chair In <br />
+                  Black Color
+                </h2>
+                <h3 className="text-[18px] right-[-100%] opacity-0 duration-[1200ms] relative flex items-center gap-3 font-[500] w-full text-left my-3">
+                  Starting At Only{" "}
+                  <span className="text-[30px] font-[700] text-red-500">
+                    $89
+                  </span>
+                </h3>
+                <Button className="!text-white right-[-100%] btn opacity-0 duration-[2200ms] relative !bg-red-500">
+                  Shop Now
+                </Button>
+              </div>
+            </div>
+          </SwiperSlide>
+        </Swiper>
     </div>
   );
 }

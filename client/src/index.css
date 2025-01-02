@@ -79,3 +79,34 @@ nav ul button:hover {
 .Mui-selected {
   color: #4a0bdc !important;
 }
+
+.MuiFormControlLabel-label {
+  font-size: 14px !important;
+  line-height: 12px !important;
+}
+
+.homeSlider .swiper-slide-active .info {
+  right: 0px !important;
+  opacity: 1 !important;
+}
+
+.homeSlider .swiper-slide-active .info h4 {
+  right: 0px !important;
+  opacity: 1 !important;
+}
+
+.homeSlider .swiper-slide-active .info h3 {
+  right: 0px !important;
+  opacity: 1 !important;
+}
+
+.homeSlider .swiper-slide-active .info h2 {
+  right: 0px !important;
+  opacity: 1 !important;
+}
+
+.homeSlider .swiper-slide-active .info .btn {
+  right: 0px !important;
+  top: 0px !important;
+  opacity: 1 !important;
+}
