@@ -9,6 +9,7 @@ import { IoIosGitCompare } from "react-icons/io";
 import { BsCart3 } from "react-icons/bs";
 import Tooltip from '@mui/material/Tooltip';
 import Navigation from "./Navigation/Navigation";
+import Logo from "./logo";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -56,7 +57,7 @@ function Header() {
       <nav className="border-b-[1px] border-gray-200">
         <div className="container flex items-center justify-between py-3">
           <div className="col-1 w-[25%]">
-            <Link to={"/"}>ClickMart</Link>
+            <Logo />
           </div>
           <div className="col-2 w-[45%]">
             <Search />
