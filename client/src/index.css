@@ -110,3 +110,90 @@ nav ul button:hover {
   top: 0px !important;
   opacity: 1 !important;
 }
+
+.MuiCheckbox-root {
+  padding: 6px !important;
+}
+
+.sidebar .scrollCategory::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+.ReactCollapse--collapse {
+  transition: height 400ms ease-in-out !important;
+}
+.range-slider__range {
+    background: #8331ff !important;
+    transition: height .3s;
+}
+.range-slider {
+  height: 3px !important;
+}
+.range-slider .range-slider__thumb {
+    background: #5407fa !important;
+    transition: transform .3s;
+    width: 14px !important;
+    height: 14px !important;
+}
+.range-slider__thumb[data-active] {
+    transform: translate(-50%, -50%) scale(1.25);
+}
+.range-slider__range[data-active] {
+    height: 16px;
+}
+
+.pagination-btn .Mui-selected {
+  background-color: #1876D2 !important;
+  color: white !important;
+}
+
+.pagination-btn .MuiButtonBase-root:hover {
+  color: #eef1f4 !important;
+  background-color: #1876D2 !important;
+}
+
+.zoomProductSlider {
+  height: 620px !important;
+  margin: auto !important;
+  overflow: hidden !important;
+  border-radius: 0px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+.zoomProductSlider .swiper-button-next {
+  bottom: 0px !important;
+  left: inherit !important;
+  top: inherit !important;
+  transform: rotate(90deg) !important;
+  background-color: transparent !important;
+  color: rgb(0, 0, 0) !important;
+  height: 100px !important;
+  width: 1.5rem !important;
+  bottom: -40px !important;
+  padding: 5px !important;
+  margin: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.zoomProductSlider .swiper-button-prev {
+  bottom: inherit !important;
+  left: 10px !important;
+  top: -40px !important;
+  margin: auto !important;
+  height: 100px !important;
+  transform: rotate(90deg) !important;
+  background-color: transparent !important;
+  color: rgb(0, 0, 0) !important;
+  width: 1.5rem !important;
+  padding: 5px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.zoomProductSlider .swiper-button-prev::after, 
+.zoomProductSlider .swiper-button-next::after {
+  font-size: 12px !important;
+}

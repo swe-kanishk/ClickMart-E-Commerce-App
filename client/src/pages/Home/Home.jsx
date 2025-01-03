@@ -16,7 +16,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import ProductsSlider from "./products/ProductsSlider";
 import BlogItem from "../BlogItem";
-import Footer from "./Footer";
 import HomeBanner from "./HomeBanner";
 
 function Home() {
@@ -148,7 +147,6 @@ function Home() {
           </Swiper>
         </div>
       </section>
-      <Footer />
     </>
   );
 }

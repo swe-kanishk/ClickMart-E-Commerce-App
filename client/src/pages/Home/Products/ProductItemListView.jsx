@@ -7,12 +7,13 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { IoIosGitCompare } from "react-icons/io";
 import { MdZoomOutMap } from "react-icons/md";
 import { IoOpenOutline } from "react-icons/io5";
+import { FaCartPlus } from "react-icons/fa6";
 
-function ProductItem() {
+function ProductItemListView() {
   return (
-    <div className="productItem rounded-md overflow-hidden shadow-lg">
-      <div className="img-wrapper group w-[220px] h-[220px] rounded-md overflow-hidden relative">
-        <span className="discout flex items-center absolute top-[10px] left-[10px] z-50 bg-red-500 rounded-[0.2rem] text-white text-[12px] px-1 py-[2px]">
+    <div className="productItem w-full flex rounded-md overflow-hidden shadow-lg">
+      <div className="img-wrapper group max-w-[30%] h-[220px] rounded-md overflow-hidden relative">
+        <span className="discout flex items-center absolute top-[10px] left-[10px] z-50 bg-green-600 rounded-[0.2rem] text-white text-[12px] px-1 py-[2px]">
           -7%
         </span>
         <Link to="/">
@@ -50,29 +51,31 @@ function ProductItem() {
           </Tooltip>
         </div>
       </div>
-      <div className="info p-3 flex flex-col w-[220px] justify-start items-start">
-        <h6 className="text-[13px]">
+      <div className="info p-3 px-8 flex w-[70%] flex-col justify-start items-start">
+        <h6 className="text-[15px] text-gray-500">
           <Link to={"/"} className="link">
             Apple Airpods
           </Link>
         </h6>
-        <h3 className="text-[15px] text-start title my-2 font-[500] text-[black]">
+        <h3 className="text-[18px] text-start title my-2 mb-3 font-[500] text-[black]">
           <Link to={"/"} className="link transition-all">
             Apple AirPods Max Over-Ear Wireless Headphone
           </Link>
         </h3>
         <Rating name="size-small" defaultValue={2} size="small" readOnly />
-        <flex className="flex items-center gap-4 py-2">
+        <div className="flex items-center gap-4 py-2">
           <span className="oldPrice line-through text-gray-500 text-[16px] font-[500]">
             $256
           </span>
           <span className="oldPrice text-primary text-[16px] font-medium">
             $256
           </span>
-        </flex>
+        </div>
+        <p className="text-gray-500 text-sm">We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire that they cannot.</p>
+        <Button className="!capitalize !bg-red-500 hover:!bg-gray-600 !font-medium !my-2 !text-[14px] !flex !items-center gap-2 !text-white"><FaCartPlus size={'16px'} /> Add to Cart</Button>
       </div>
     </div>
   );
 }
 
-export default ProductItem;
+export default ProductItemListView;
