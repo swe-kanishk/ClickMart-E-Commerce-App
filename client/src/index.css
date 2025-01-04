@@ -197,3 +197,33 @@ nav ul button:hover {
 .zoomProductSlider .swiper-button-next::after {
   font-size: 12px !important;
 }
+
+.size-btns button {
+  border: 1px solid #d6d6d6 !important;
+  color: rgb(48, 48, 48);
+  font-weight: 500 !important;
+  max-width: 35px !important;
+  width: 35px !important;
+  min-width: 35px !important;
+  height: 35px !important;
+  max-height: 35px !important;
+  min-height: 35px !important;
+}
+
+.active-size {
+  background-color: #ff173a !important;
+  color: white !important;
+  border: none !important;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+.qty-btns button {
+  border: 1px solid black !important;
+}

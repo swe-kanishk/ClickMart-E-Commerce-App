@@ -1,10 +1,22 @@
-import { Breadcrumbs } from "@mui/material";
-import React from "react";
+import { Breadcrumbs, Button, Typography } from "@mui/material";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ProductZoom from "../../components/ProductZoom";
-import Rating from "@mui/material/Rating";
+import QtyBox from "./QtyBox";
+import { IoIosGitCompare, IoMdHeartEmpty, IoMdCart } from "react-icons/io";
+
+import { Rating } from "@mui/material";
+import Ratings from "./Rating&Reviews/Ratings";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import { IoIosStar } from "react-icons/io";
+import ProductsSlider from "../Home/products/ProductsSlider";
 
 function ProductDetails() {
+  const [activeProductSize, setActiveProductSize] = useState("S");
+  const [activeTab, setActiveTab] = useState(1);
+  const [ratingValue, setRatingValue] = useState(70);
+
   return (
     <>
       <div className="py-5">
@@ -42,8 +54,8 @@ function ProductDetails() {
           <div className="productZoomContainer w-[40%] overflow-hidden">
             <ProductZoom />
           </div>
-          <div className="productContent w-[60%]">
-          <div className="flex items-center gap-3 mb-2">
+          <div className="productContent w-[60%] pr-10">
+            <div className="flex items-center gap-3 mb-2">
               <span className="text-gray-600">
                 Brands:{" "}
                 <span className="font-[500] text-black opacity-80 text-[14px]">
@@ -56,21 +68,448 @@ function ProductDetails() {
                 defaultValue={3.6}
                 readOnly
               />
-              <span className="text-[13px] cursor-pointer text-gray-600">Review (5)</span>
+              <span className="text-[13px] cursor-pointer text-gray-600">
+                Review (5)
+              </span>
             </div>
-            <h1 className="text-[22px] font-[600] mb-1">
+            <h1 className="text-[24px] font-[600] mb-1">
               Female Black Top and Plazo
             </h1>
-            <p className="text-gray-600 text-sm">This chic black top paired with elegant plazo pants is perfect for any occasion. Comfortable and stylish, it offers a flattering fit and versatile look, ideal for casual outings, work, or evening events.</p>
-            <div className="flex items-center gap-4 mt-4">
-                <span className="oldPrice line-through text-gray-500 text-[15px] font-[500]">
-                    $63.00
+            <p className="text-gray-600 text-sm">
+              This chic black top paired with elegant plazo pants is perfect for
+              any occasion. Comfortable and stylish, it offers a flattering fit
+              and versatile look, ideal for casual outings, work, or evening
+              events.
+            </p>
+            <div className="flex items-center gap-4 mb-2 mt-3">
+              <span className="oldPrice line-through text-gray-500 text-[18px] font-[500]">
+                $63.00
+              </span>
+              <span className="price text-primary text-[18px] font-[600]">
+                $42.00
+              </span>
+            </div>
+            <hr />
+            <div className="mt-3">
+              <span className="text-[14px]">
+                Available In Stock:{" "}
+                <span className="text-green-700 font-semibold">84 Items</span>
+              </span>
+              <div className="flex flex-col items-start justify-center">
+                <div className="flex items-center gap-2 size-btns my-3">
+                  <span className="font-semibold">Size:</span>
+                  <Button
+                    onClick={() => setActiveProductSize("S")}
+                    className={`${activeProductSize === "S" && "active-size"}`}
+                  >
+                    S
+                  </Button>
+                  <Button
+                    onClick={() => setActiveProductSize("M")}
+                    className={`${activeProductSize === "M" && "active-size"}`}
+                  >
+                    M
+                  </Button>
+                  <Button
+                    onClick={() => setActiveProductSize("L")}
+                    className={`${activeProductSize === "L" && "active-size"}`}
+                  >
+                    L
+                  </Button>
+                  <Button
+                    onClick={() => setActiveProductSize("XL")}
+                    className={`${activeProductSize === "XL" && "active-size"}`}
+                  >
+                    XL
+                  </Button>
+                </div>
+                <p className="text-[14px] font-medium mb-3 text-red-500">
+                  Free Delivery (Est. Delivery Time 3-5 Days)
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-[80px]">
+                    <QtyBox />
+                  </div>
+                  <Button className="flex gap-1 !capitalize hover:!bg-black !bg-primary !text-white">
+                    {" "}
+                    <IoMdCart size={"20px"} className="" /> Add to Cart
+                  </Button>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 mt-4">
+                <span className="text-gray-500 text-[14px] hover:text-black group hover:underline transition-all duration-500 cursor-pointer underline-offset-2 flex gap-1 items-center">
+                  <IoMdHeartEmpty
+                    size={"18px"}
+                    className="text-gray-600 group-hover:text-[#f84e8f]"
+                  />{" "}
+                  Add to Wishlist
                 </span>
-                <span className="price text-primary text-[15px] font-[600]">
-                    $42.00
+                <span className="text-gray-500 text-[14px] hover:text-black group hover:underline transition-all duration-500 cursor-pointer underline-offset-2 flex gap-1 items-center">
+                  <IoIosGitCompare
+                    size={"18px"}
+                    className="text-gray-600 group-hover:text-[#945aff]"
+                  />{" "}
+                  Add to Compare
                 </span>
+              </div>
             </div>
           </div>
+        </div>
+        <div className="container pt-10">
+          <div className="flex items-center gap-5 mb-5">
+            <span
+              onClick={() => setActiveTab(1)}
+              className={`link text-[18px] cursor-pointer px-2 rounded-[4px] py-[3px] text-[500] ${
+                activeTab === 1 && "bg-primary hover:!text-white text-white"
+              }`}
+            >
+              Description
+            </span>
+            <span
+              onClick={() => setActiveTab(2)}
+              className={`link text-[18px] cursor-pointer px-2 rounded-[4px] py-[3px] text-[500] ${
+                activeTab === 2 && "bg-primary hover:!text-white text-white"
+              }`}
+            >
+              Product Details
+            </span>
+            <span
+              onClick={() => setActiveTab(3)}
+              className={`link text-[18px] cursor-pointer px-2 rounded-[4px] py-[3px] text-[500] ${
+                activeTab === 3 && "bg-primary hover:!text-white text-white"
+              }`}
+            >
+              Reviews (5)
+            </span>
+          </div>
+          {activeTab === 1 && (
+            <div className={`shadow-md border w-full p-5 rounded-md`}>
+              <p className="text-[14px] text-gray-500 mb-3">
+                The best is yet to come! Give your walls a voice with a framed
+                poster. This aesthethic, optimistic poster will look great in
+                your desk or in an open-space office. Painted wooden frame with
+                passe-partout for more depth.
+              </p>
+              <h4 className="mb-1 font-medium">Lightweight Design</h4>
+              <p className="text-[14px] text-gray-500 mb-3">
+                Designed with a super light geometric case, the Versa family
+                watches are slim, casual and comfortable enough to wear all day
+                and night. Switch up your look with classic, leather, metal and
+                woven accessory bands. Ut elit tellus, luctus nec ullamcorper
+                mattis, pulvinar dapibus leo.
+              </p>
+              <h4 className="mb-1 font-medium">Free Shipping & Return</h4>
+              <p className="text-[14px] text-gray-500 mb-3">
+                We offer free shipping for products on orders above 50$ and
+                offer free delivery for all orders in US.
+              </p>
+              <h4 className="mb-1 font-medium">Money Back Guarantee</h4>
+              <p className="text-[14px] text-gray-500 mb-3">
+                We guarantee our products and you could get back all of your
+                money anytime you want in 30 days.
+              </p>
+              <h4 className="mb-1 font-medium">Online Support</h4>
+              <p className="text-[14px] text-gray-500 mb-3">
+                You will get 24 hour support with this purchase product and you
+                can return it within 30 days for an exchange.
+              </p>
+            </div>
+          )}
+          {activeTab === 2 && (
+            <div className={`shadow-md border w-full p-5 rounded-md`}>
+              <div className="relative overflow-x-auto">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-100  ">
+                    <tr>
+                      <th scope="col" className="px-6 py-3">
+                        Product name
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Color
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Category
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Price
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="bg-white border-b">
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      >
+                        Apple MacBook Pro 17"
+                      </th>
+                      <td className="px-6 py-4">Silver</td>
+                      <td className="px-6 py-4">Laptop</td>
+                      <td className="px-6 py-4">$2999</td>
+                    </tr>
+                    <tr className="bg-white border-b">
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      >
+                        Microsoft Surface Pro
+                      </th>
+                      <td className="px-6 py-4">White</td>
+                      <td className="px-6 py-4">Laptop PC</td>
+                      <td className="px-6 py-4">$1999</td>
+                    </tr>
+                    <tr className="bg-white -800">
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      >
+                        Magic Mouse 2
+                      </th>
+                      <td className="px-6 py-4">Black</td>
+                      <td className="px-6 py-4">Accessories</td>
+                      <td className="px-6 py-4">$99</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          {activeTab === 3 && (
+            <div
+              className={`shadow-md border gap-8 items-start justify-between h-full flex w-full p-5 rounded-md`}
+            >
+              <div className="w-[55%] pr-5 border-r h-full flex-col flex justify-start items-start">
+                <h2 className="mb-4 font-[500] text-[18px]">Overall Rating</h2>
+                <div className="flex w-full border-b pb-6 items-start gap-12">
+                  <Ratings value={ratingValue} />
+                  <div className="flex flex-col w-full range-container gap-[5px]">
+                    <div className="flex items-center justify-start gap-3 w-full">
+                      <p className="flex gap-1 text-[12px] items-start">
+                        <span>5</span> <IoIosStar />
+                      </p>
+                      <div className="w-full h-[5px] flex items-center bg-gray-200 rounded-md overflow-hidden">
+                        <div className={`w-[60%] bg-green-600 h-[3px]`}></div>
+                      </div>
+                      <span className="text-[11px] font-medium text-gray-500">
+                        2,311
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-start gap-3 w-full">
+                      <p className="flex gap-1 text-[12px] items-start">
+                        <span>4</span> <IoIosStar />
+                      </p>
+                      <div className="w-full h-[5px] flex items-center bg-gray-200 rounded-md overflow-hidden">
+                        <div className={`w-[51%] bg-green-600 h-[3px]`}></div>
+                      </div>
+                      <span className="text-[11px] font-medium text-gray-500">
+                        101
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-start gap-3 w-full">
+                      <p className="flex gap-1 text-[12px] items-start">
+                        <span>3</span> <IoIosStar />
+                      </p>
+                      <div className="w-full h-[5px] flex items-center bg-gray-200 rounded-md overflow-hidden">
+                        <div className={`w-[44%] bg-green-600 h-[3px]`}></div>
+                      </div>
+                      <span className="text-[11px] font-medium text-gray-500">
+                        1,201
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-start gap-3 w-full">
+                      <p className="flex gap-1 text-[12px] items-start">
+                        <span>2</span> <IoIosStar />
+                      </p>
+                      <div className="w-full h-[5px] flex items-center bg-gray-200 rounded-md overflow-hidden">
+                        <div className={`w-[20%] bg-orange-400 h-[3px]`}></div>
+                      </div>
+                      <span className="text-[11px] font-medium text-gray-500">
+                        2,399
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-start gap-3 w-full">
+                      <p className="flex gap-1 text-[12px] items-start">
+                        <span>1</span> <IoIosStar />
+                      </p>
+                      <div className="w-full h-[5px] flex items-center bg-gray-200 rounded-md overflow-hidden">
+                        <div className={`w-[32%] bg-red-600 h-[3px]`}></div>
+                      </div>
+                      <span className="text-[11px] font-medium text-gray-500">
+                        234
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col w-full mt-5">
+                <h2 className="my-4 font-[500] text-[18px]">
+                  Share Your Review and Provide a Rating
+                </h2>
+                <Box
+                  sx={{ "& > legend": { mt: 2 } }}
+                  className="flex items-center gap-4"
+                >
+                  <span className="text-sm text-gray-600">
+                    Rate this Product:
+                  </span>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingValue}
+                    onChange={(event, newValue) => {
+                      setRatingValue(newValue);
+                    }}
+                  />
+                  <span className="text-sm text-gray-600 text-center">({ratingValue})</span>
+                </Box>
+                <TextField
+                  id="standard-multiline-flexible"
+                  label="Your Review"
+                  multiline
+                  maxRows={4}
+                  variant="standard"
+                  className="w-full !mt-3"
+                />
+                </div>
+              </div>
+
+              <div className="w-[40%]">
+                <div className="flex items-center mb-5">
+                  <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800">
+                    8.7
+                  </p>
+                  <p className="ms-2 font-medium text-gray-900">Excellent</p>
+                  <span className="w-1 h-1 mx-2 bg-gray-900 rounded-full dark:bg-gray-500"></span>
+                  <p className="text-sm font-medium text-gray-500">
+                    376 reviews
+                  </p>
+                  <Link
+                    to="/"
+                    className="ms-auto text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
+                  >
+                    Read all reviews
+                  </Link>
+                </div>
+                <article>
+                  <div className="flex items-center mb-4">
+                    <img
+                      className="w-10 h-10 me-4 rounded-full"
+                      src="https://static-00.iconduck.com/assets.00/user-icon-1024x1024-dtzturco.png"
+                      alt=""
+                    />
+                    <div className="font-medium">
+                      <p>
+                        Jese Leos{" "}
+                        <time
+                          datetime="2014-08-16 19:00"
+                          className="block text-sm text-gray-500"
+                        >
+                          Joined on August 2014
+                        </time>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center mb-1 space-x-1 rtl:space-x-reverse">
+                    <svg
+                      className="w-4 h-4 text-yellow-300"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 22 20"
+                    >
+                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <svg
+                      className="w-4 h-4 text-yellow-300"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 22 20"
+                    >
+                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <svg
+                      className="w-4 h-4 text-yellow-300"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 22 20"
+                    >
+                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <svg
+                      className="w-4 h-4 text-yellow-300"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 22 20"
+                    >
+                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <svg
+                      className="w-4 h-4 text-gray-300 dark:text-gray-500"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 22 20"
+                    >
+                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <h3 className="ms-2 text-sm font-semibold text-gray-900">
+                      Thinking to buy another one!
+                    </h3>
+                  </div>
+                  <footer className="mb-5 text-sm text-gray-500">
+                    <p>
+                      Reviewed in the United Kingdom on{" "}
+                      <time datetime="2017-03-03 19:00">March 3, 2017</time>
+                    </p>
+                  </footer>
+                  <p className="mb-2 text-gray-500">
+                    This is my third Invicta Pro Diver. They are just fantastic
+                    value for money. This one arrived yesterday and the first
+                    thing I did was set the time, popped on an identical strap
+                    from another Invicta and went in the shower with it to test
+                    the waterproofing.... No problems.
+                  </p>
+                  <p className="mb-3 text-gray-500">
+                    It is obviously not the same build quality as those very
+                    expensive watches. But that is like comparing a Citroën to a
+                    Ferrari. This watch was well under £100! An absolute
+                    bargain.
+                  </p>
+                  <a
+                    href="#"
+                    className="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
+                  >
+                    Read more
+                  </a>
+                  <aside>
+                    <p className="mt-1 text-xs text-gray-500">
+                      19 people found this helpful
+                    </p>
+                    <div className="flex items-center mt-3">
+                      <a
+                        href="#"
+                        className="px-2 py-1.5 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                      >
+                        Helpful
+                      </a>
+                      <a
+                        href="#"
+                        className="ps-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 border-gray-200 ms-4 border-s md:mb-0 "
+                      >
+                        Report abuse
+                      </a>
+                    </div>
+                  </aside>
+                </article>
+              </div>
+            </div>
+          )}
+        </div>
+        <hr className="mt-12" />
+        <div className="container pt-10">
+        <h2 className="text-[20px] font-[600]">Related Products</h2>
+        <ProductsSlider />
         </div>
       </section>
     </>
