@@ -231,3 +231,11 @@ input[type=number]::-webkit-outer-spin-button {
 .zoomSwiper {
   width: 100% !important;
 }
+
+.cartPanel .MuiPaper-root {
+  width: 400px !important;
+  display: flex !important;
+  align-items: start !important;
+  justify-content: space-between !important;
+  height: 100vh !important;
+}

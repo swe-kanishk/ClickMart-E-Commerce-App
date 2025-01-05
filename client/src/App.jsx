@@ -1,66 +1,72 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Header from './components/Header/Header'
-import Home from './pages/Home/Home'
-import ProductList from './pages/ProductListing/ProductList'
-import Footer from './pages/Home/Footer'
-import ProductDetails from './pages/ProductDetails/ProductDetails'
-import { createContext, useState } from 'react'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Header from "./components/Header/Header";
+import Home from "./pages/Home/Home";
+import ProductList from "./pages/ProductListing/ProductList";
+import Footer from "./pages/Home/Footer";
+import ProductDetails from "./pages/ProductDetails/ProductDetails";
+import { createContext, useState } from "react";
 
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import ProductZoom from './components/ProductZoom'
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import ProductZoom from "./components/ProductZoom";
 
 import { IoMdClose } from "react-icons/io";
-import ProductDetailsContent from './components/ProductDetailsContent'
-import Login from './pages/Auth/Login'
-import Register from './pages/Auth/Register'
+import ProductDetailsContent from "./components/ProductDetailsContent";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import CartPanel from "./components/cart/CartPanel";
 
 const MyContext = createContext();
 
 function App() {
   const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
+  const [openCartPanel, setOpenCartPanel] = useState(true);
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal(false);
   };
 
-  const store = {
-    setOpenProductDetailsModal
-  }
+  const value = {
+    setOpenProductDetailsModal,
+    openCartPanel,
+    setOpenCartPanel,
+  };
 
   return (
     <>
-    <BrowserRouter>
-    <MyContext.Provider value={store}>
-      <Header />
-      <Routes>
-        <Route path={'/'} element={<Home />} />
-        <Route path={'/productListing'} element={<ProductList />} />
-        <Route path={'/productDetails/:id'} element={<ProductDetails />} />
-        <Route path={'/login'} element={<Login />} />
-        <Route path={'/register'} element={<Register />} />
-      </Routes>
-      <Footer />
-      </MyContext.Provider>
-    </BrowserRouter>
+      <BrowserRouter>
+        <MyContext.Provider value={value}>
+          <Header />
+          <Routes>
+            <Route path={"/"} element={<Home />} />
+            <Route path={"/productListing"} element={<ProductList />} />
+            <Route path={"/productDetails/:id"} element={<ProductDetails />} />
+            <Route path={"/login"} element={<Login />} />
+            <Route path={"/register"} element={<Register />} />
+          </Routes>
+          <Footer />
+        </MyContext.Provider>
+      </BrowserRouter>
 
-    <Dialog
+      <Dialog
         open={openProductDetailsModal}
-        maxWidth={'lg'}
+        maxWidth={"lg"}
         onClose={handleCloseProductDetailsModal}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        className='productDetailsModal'
+        className="productDetailsModal"
         fullWidth={true}
       >
         <DialogContent>
           <div className="flex items-center gap-12 justify-between w-full relative">
-            <IoMdClose size={'22px'} onClick={handleCloseProductDetailsModal} className='top-1 absolute right-1 z-50 cursor-pointer' />
+            <Button
+              className="!rounded-full !min-h-[35px] !h-[35px] !top-1 !absolute !right-1 z-50 cursor-pointer !flex !items-center !justify-center !min-w-[35px] !w-[35px] !text-gray-500"
+              onClick={handleCloseProductDetailsModal}
+            >
+              <IoMdClose size={"22px"} />
+            </Button>
             <div className="col-1 w-[40%]">
               <ProductZoom />
             </div>
@@ -71,8 +77,8 @@ function App() {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
 
-export default App
-export {MyContext}
+export default App;
+export { MyContext };
