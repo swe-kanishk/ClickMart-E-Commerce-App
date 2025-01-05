@@ -108,12 +108,14 @@ function ProductZoom() {
             className="zoomSwiper"
           >
             <SwiperSlide>
+              <div className="w-full h-[500px]">
               <InnerImageZoom
                 src="https://www.mgfilmproductions.com/uploads/1/4/5/8/145812880/389783587_4.jpg"
                 zoomScale={1.5}
                 zoomType="hover"
                 zoomPreload={true}
               />
+              </div>
             </SwiperSlide>
           </Swiper>
         </div>

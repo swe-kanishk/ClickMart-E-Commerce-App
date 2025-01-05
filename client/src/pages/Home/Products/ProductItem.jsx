@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
 import Rating from "@mui/material/Rating";
@@ -7,8 +7,11 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { IoIosGitCompare } from "react-icons/io";
 import { MdZoomOutMap } from "react-icons/md";
 import { IoOpenOutline } from "react-icons/io5";
+import { MyContext } from "../../../App";
 
 function ProductItem() {
+  const context = useContext(MyContext)
+
   return (
     <div className="productItem rounded-md overflow-hidden shadow-lg">
       <div className="img-wrapper group w-[220px] h-[220px] rounded-md overflow-hidden relative">
@@ -29,7 +32,7 @@ function ProductItem() {
         </Link>
         <div className="actions absolute transition-all duration-300 top-[-100%] group-hover:top-[10px] right-[3px] opacity-0 group-hover:opacity-100 flex flex-col">
           <Tooltip placement="right" title="View">
-            <Button className="!rounded-full !w-[35px] !min-h-[35px] !h-[35px] !min-w-[35px] bg-white hover:bg-primary hover:!text-white !text-black">
+            <Button onClick={() => context.setOpenProductDetailsModal(true)} className="!rounded-full !w-[35px] !min-h-[35px] !h-[35px] !min-w-[35px] bg-white hover:bg-primary hover:!text-white !text-black">
               <MdZoomOutMap size={"18px"} />
             </Button>
           </Tooltip>
