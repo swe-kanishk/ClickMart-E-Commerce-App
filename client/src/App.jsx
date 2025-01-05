@@ -17,6 +17,8 @@ import ProductZoom from './components/ProductZoom'
 
 import { IoMdClose } from "react-icons/io";
 import ProductDetailsContent from './components/ProductDetailsContent'
+import Login from './pages/Auth/Login'
+import Register from './pages/Auth/Register'
 
 const MyContext = createContext();
 
@@ -40,6 +42,8 @@ function App() {
         <Route path={'/'} element={<Home />} />
         <Route path={'/productListing'} element={<ProductList />} />
         <Route path={'/productDetails/:id'} element={<ProductDetails />} />
+        <Route path={'/login'} element={<Login />} />
+        <Route path={'/register'} element={<Register />} />
       </Routes>
       <Footer />
       </MyContext.Provider>

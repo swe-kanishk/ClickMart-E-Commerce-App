@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.min.css";
+
 import InnerImageZoom from "react-inner-image-zoom";
 
 // Import Swiper styles
