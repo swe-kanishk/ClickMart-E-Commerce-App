@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Navigation from "./Navigation/Navigation";
 import Logo from "./logo";
 import { MyContext } from "../../App";
-import CartPanel from "../cart/CartPanel";
+import CartPanel from "../../pages/Cart/CartPanel";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {

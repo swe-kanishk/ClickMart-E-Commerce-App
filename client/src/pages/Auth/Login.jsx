@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { MdOutlineEmail } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { MyContext } from "../../App";
 
 function Login() {
     const [isShowPassword, setIsShowPassword] = useState(false)
+    const [formFields, setFormFields] = useState({
+      email: '',
+      password: ''
+    })
+    const context = useContext(MyContext)
+    const history = useNavigate()
+
+    const forgotPassword = () => {
+      history('/verify')
+      context.openAlertBox("success", "OTP Send")
+    }
+
   return (
     <section className="py-5">
       <div className="container">
@@ -22,6 +35,9 @@ function Login() {
                 label="Email"
                 variant="outlined"
                 className="w-full"
+                name="email"
+                value={formFields.email}
+                onChange={(e) => setFormFields({...formFields, email: e.target.value.trim()})}
               />
               <span className="!absolute top-4 right-1 !rounded-full !min-h-[35px] !h-[35px] !text-gray-500 !min-w-[35px] !w-[35px]"><MdOutlineEmail size={'22px'} /></span>
             </div>
@@ -32,12 +48,15 @@ function Login() {
                 variant="outlined"
                 className="w-full"
                 type={isShowPassword ? 'text' : 'password'}
+                name="password"
+                value={formFields.password}
+                onChange={(e) => setFormFields({...formFields, password: e.target.value.trim()})}
               />
               <Button onClick={() => setIsShowPassword(!isShowPassword)} className="!absolute top-3 right-1 !rounded-full !min-h-[40px] !h-[40px] !min-w-[40px] !w-[40px] !text-gray-500">{ isShowPassword ? <IoMdEyeOff size={'22px'} /> : <IoMdEye size={'22px'} />}</Button>
             </div>
-            <Link className="hover:text-red-500 text-[14px] font-[500] text-blue-600">Forgot Password?</Link>
+            <a onClick={forgotPassword} className="hover:text-red-500 cursor-pointer text-[14px] font-[500] text-blue-600">Forgot Password?</a>
             <div className="flex items-center my-5">
-                <Button className="!w-full !bg-red-500 !text-white !py-2 hover:!bg-black">Login</Button>
+                <Button type="submit" className="!w-full !bg-red-500 !text-white !py-2 hover:!bg-black">Login</Button>
             </div>
             <p className="text-center text-[14px] text-gray-500 underline underline-offset-2">Not Registered? <Link to="/register" className="hover:text-red-500 text-[14px] font-[500] text-blue-600">Register</Link></p>
             <p className="text-sm text-center my-5 font-medium text-gray-500">Or continue with social account</p>

@@ -16,22 +16,33 @@ import { IoMdClose } from "react-icons/io";
 import ProductDetailsContent from "./components/ProductDetailsContent";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
-import CartPanel from "./components/cart/CartPanel";
+import CartPanel from "./pages/Cart/CartPanel";
+import Cart from "./pages/Cart/Cart";
+import Verify from "./pages/Auth/verify";
+
+import toast, { Toaster } from 'react-hot-toast';
+
+const notify = () => toast('Here is your toast.');
 
 const MyContext = createContext();
 
 function App() {
   const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
-  const [openCartPanel, setOpenCartPanel] = useState(true);
+  const [openCartPanel, setOpenCartPanel] = useState(false);
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal(false);
   };
 
+  const openAlertBox = (status, msg) => {
+    toast[status](msg)
+  }
+
   const value = {
     setOpenProductDetailsModal,
     openCartPanel,
     setOpenCartPanel,
+    openAlertBox
   };
 
   return (
@@ -45,11 +56,14 @@ function App() {
             <Route path={"/productDetails/:id"} element={<ProductDetails />} />
             <Route path={"/login"} element={<Login />} />
             <Route path={"/register"} element={<Register />} />
+            <Route path={"/cart"} element={<Cart />} />
+            <Route path={"/verify"} element={<Verify />} />
           </Routes>
           <Footer />
         </MyContext.Provider>
       </BrowserRouter>
 
+          <Toaster />
       <Dialog
         open={openProductDetailsModal}
         maxWidth={"lg"}

@@ -65,14 +65,14 @@ function ProductItem() {
           </Link>
         </h3>
         <Rating name="size-small" defaultValue={2} size="small" readOnly />
-        <flex className="flex items-center gap-4 py-2">
+        <div className="flex items-center gap-4 py-2">
           <span className="oldPrice line-through text-gray-500 text-[16px] font-[500]">
             $256
           </span>
           <span className="oldPrice text-primary text-[16px] font-medium">
             $256
           </span>
-        </flex>
+        </div>
       </div>
     </div>
   );
