@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MyContext } from "../../App";
+import { Link } from "react-router-dom";
 
 function CartPanel() {
     const context = useContext(MyContext)
@@ -134,9 +135,11 @@ function CartPanel() {
           <Button className="!w-[50%] !bg-red-500 !text-white hover:!bg-black">
             View Cart
           </Button>
-          <Button className="!w-[50%] !bg-red-500 !text-white hover:!bg-black">
+          <Link to="/checkout" className="!w-[50%] d-block" onClick={() => context.setOpenCartPanel(false)} >
+          <Button className="!bg-red-500 !text-white w-full hover:!bg-black">
             CheckOut
           </Button>
+          </Link>
         </div>
       </div>
     </Drawer>

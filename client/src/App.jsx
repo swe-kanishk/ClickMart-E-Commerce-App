@@ -21,6 +21,7 @@ import Cart from "./pages/Cart/Cart";
 import Verify from "./pages/Auth/verify";
 
 import toast, { Toaster } from 'react-hot-toast';
+import Checkout from "./pages/Checkout/Checkout";
 
 const notify = () => toast('Here is your toast.');
 
@@ -58,6 +59,7 @@ function App() {
             <Route path={"/register"} element={<Register />} />
             <Route path={"/cart"} element={<Cart />} />
             <Route path={"/verify"} element={<Verify />} />
+            <Route path={"/checkout"} element={<Checkout />} />
           </Routes>
           <Footer />
         </MyContext.Provider>
