@@ -22,6 +22,7 @@ import Verify from "./pages/Auth/verify";
 
 import toast, { Toaster } from 'react-hot-toast';
 import Checkout from "./pages/Checkout/Checkout";
+import MyAccount from "./pages/My-Account/MyAccount";
 
 const notify = () => toast('Here is your toast.');
 
@@ -30,6 +31,7 @@ const MyContext = createContext();
 function App() {
   const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
   const [openCartPanel, setOpenCartPanel] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal(false);
@@ -43,7 +45,9 @@ function App() {
     setOpenProductDetailsModal,
     openCartPanel,
     setOpenCartPanel,
-    openAlertBox
+    openAlertBox,
+    isLogin,
+    setIsLogin
   };
 
   return (
@@ -53,13 +57,14 @@ function App() {
           <Header />
           <Routes>
             <Route path={"/"} element={<Home />} />
+            <Route path={"/register"} element={<Register />} />
+            <Route path={"/verify"} element={<Verify />} />
+            <Route path={"/login"} element={<Login />} />
+            <Route path={"/my-account"} element={<MyAccount />} />
             <Route path={"/productListing"} element={<ProductList />} />
             <Route path={"/productDetails/:id"} element={<ProductDetails />} />
-            <Route path={"/login"} element={<Login />} />
-            <Route path={"/register"} element={<Register />} />
-            <Route path={"/cart"} element={<Cart />} />
-            <Route path={"/verify"} element={<Verify />} />
             <Route path={"/checkout"} element={<Checkout />} />
+            <Route path={"/cart"} element={<Cart />} />
           </Routes>
           <Footer />
         </MyContext.Provider>

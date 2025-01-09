@@ -239,3 +239,39 @@ input[type=number]::-webkit-outer-spin-button {
   justify-content: space-between !important;
   height: 100vh !important;
 }
+
+.user .btn {
+  color: rgb(66, 65, 65) !important;
+  background-color: transparent !important;
+}
+
+#account-menu .MuiPaper-root {
+  width: 250px !important;
+}
+
+.myAccountTabs li a {
+  position: relative;
+  display: block;
+}
+
+.myAccountTabs li a::before {
+  content: '';
+  width: 3px;
+  height: 50%;
+  position: absolute;
+  top: 50%;
+  transform: all 0.3s ease-in-out;
+  opacity: 0;
+  left: 0px;
+  background: #ff5526;
+}
+
+.myAccountTabs li a.active::before {
+  height: 100%;
+  opacity: 1;
+  top: 0px;
+}
+
+.myAccountTabs li a.active button svg {
+  color: #ff5526;
+}
