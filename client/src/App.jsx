@@ -24,6 +24,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import Checkout from "./pages/Checkout/Checkout";
 import MyAccount from "./pages/My-Account/MyAccount";
 import Wishlist from "./pages/Wishlist/Wishlist";
+import Orders from "./pages/Order/Orders";
 
 const notify = () => toast('Here is your toast.');
 
@@ -67,6 +68,7 @@ function App() {
             <Route path={"/checkout"} element={<Checkout />} />
             <Route path={"/cart"} element={<Cart />} />
             <Route path={"/wishlist"} element={<Wishlist />} />
+            <Route path={"/orders"} element={<Orders />} />
           </Routes>
           <Footer />
         </MyContext.Provider>

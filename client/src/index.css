@@ -260,7 +260,7 @@ input[type=number]::-webkit-outer-spin-button {
   height: 50%;
   position: absolute;
   top: 50%;
-  transform: all 0.3s ease-in-out;
+  transform: all 1s ease-in-out !important;
   opacity: 0;
   left: 0px;
   background: #ff5526;
