@@ -16,7 +16,6 @@ import { IoMdClose } from "react-icons/io";
 import ProductDetailsContent from "./components/ProductDetailsContent";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
-import CartPanel from "./pages/Cart/CartPanel";
 import Cart from "./pages/Cart/Cart";
 import Verify from "./pages/Auth/verify";
 
