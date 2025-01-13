@@ -39,7 +39,7 @@ function Header() {
   };
 
   return (
-    <header className="w-full h-[60px] pr-7 shadow-md flex border-b border-gray-300 items-center justify-between pl-52 bg-[#fff]">
+    <header className="w-full h-[60px] pr-7 shadow-md flex border-b border-gray-300 items-center justify-between pl-64 bg-[#fff]">
       <div className="col-1 flex gap-5 w-[40%]">
         <Button
           className="!w-[40px] !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"

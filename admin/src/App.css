@@ -5,3 +5,7 @@
 #account-menu {
     top: 35px;
 }
+
+.ReactCollapse--collapse {
+    transition: height 300ms;
+  }
