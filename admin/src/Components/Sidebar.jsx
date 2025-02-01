@@ -57,10 +57,12 @@ function Sidebar() {
       </Link>
       <ul className="mt-4">
         <li>
+          <Link to="/">
           <Button className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end">
             <RxDashboard size={"18px"} />{" "}
             <span className="text-[16px]">Dashboard</span>
           </Button>
+          </Link>
         </li>
         <li>
           <Button onClick={() => isOpenSubmenu(1)} className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end">
@@ -80,9 +82,11 @@ function Sidebar() {
           </Collapse>
         </li>
         <li>
+        <Link to="/users">
           <Button className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end">
             <LuUsers size={"20px"} /> <span className="text-[16px]">Users</span>
           </Button>
+          </Link>
         </li>
         <li>
           <Button onClick={() => isOpenSubmenu(2)} className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end">

@@ -8,7 +8,6 @@ import Ratings from "./Rating&Reviews/Ratings";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { IoIosStar } from "react-icons/io";
-import ProductsSlider from "../Home/products/ProductsSlider";
 import ProductDetailsContent from "../../components/ProductDetailsContent";
 
 function ProductDetails() {
