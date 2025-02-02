@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "@mui/material/Button";
 import { HiMenu } from "react-icons/hi";
 import { HiMenuAlt1 } from "react-icons/hi";
@@ -19,6 +19,7 @@ import { LuUserRound } from "react-icons/lu";
 import { MdOutlineLogout } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiActivity } from "react-icons/fi";
+import { MyContext } from "../App";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -30,22 +31,22 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 function Header() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const [anchorMyAccount, setAnchorMyAccount] = useState(false);
 
   const handleCloseMyAcc = () => {
     setAnchorMyAccount(null);
   };
 
+  const context = useContext(MyContext)
+
   return (
-    <header className="w-full h-[60px] pr-7 shadow-md flex border-b border-gray-300 items-center justify-between pl-64 bg-[#fff]">
-      <div className="col-1 flex gap-5 w-[40%]">
+    <header className={`w-full h-[60px] pr-5 shadow-md flex transition-all ${context.isSidebarOpen ? 'pl-[18%]' : 'pl-7'} border-b border-gray-300 items-center justify-between bg-[#fff]`}>
+      <div className="col-1 flex gap-5 w-[400px]">
         <Button
-          className="!w-[40px] !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="!w-[40px] z-50 !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
+          onClick={() => context.setIsSidebarOpen(!context.isSidebarOpen)}
         >
-          {isSidebarOpen ? (
+          {context.isSidebarOpen ? (
             <HiMenu size={"20px"} />
           ) : (
             <HiMenuAlt1 size={"20px"} />

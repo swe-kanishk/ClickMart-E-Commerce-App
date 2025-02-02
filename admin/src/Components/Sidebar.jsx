@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { RxDashboard } from "react-icons/rx";
 import { LuUsers } from "react-icons/lu";
@@ -13,6 +13,7 @@ import { CiViewList } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
 
 import {Collapse} from 'react-collapse';
+import { MyContext } from "../App";
 
 function Sidebar() {
   const [submenuIndex, setSubmenuIndex] = useState(null);
@@ -21,8 +22,11 @@ function Sidebar() {
       setSubmenuIndex(null);
     } else setSubmenuIndex(index);
   };
+
+  const context = useContext(MyContext)
+
   return (
-    <div className="fixed py-2 px-2 top-0 left-0 bg-[#fff] w-[18%] border-r border-gray-300 h-full">
+    <div className={`fixed py-2 px-2 top-0 left-0 bg-[#fff] ${context.isSidebarOpen ? 'w-[18%]' : 'w-[0px]'} border-r border-gray-300 h-full`}>
       <Link className="logo border-b pb-5 border-gray-300 flex items-center gap-2 justify-start pl-2 py-2 w-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"
