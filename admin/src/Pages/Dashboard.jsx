@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import DashBoardBox from "../Components/DashBoardBox";
 import { Button } from "@mui/material";
 import { FaAngleDown, FaPlus, FaRegEye } from "react-icons/fa6";
+import { BiExport } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
@@ -17,6 +18,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -51,8 +55,14 @@ function createData(name, code, population, size) {
 }
 
 function Dashboard() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [categoryFilterVal, setCategoryFilterVal] = useState('');
+
+  const handleChangeCatFilter = (event) => {
+    setCategoryFilterVal(event.target.value);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -86,9 +96,34 @@ function Dashboard() {
       <DashBoardBox />
 
       <div className="card bg-white overflow-hidden shadow-md sm:rounded-lg rounded-md border my-4 border-gray-200 hover:border-gray-400 transition-all">
-        <div className="flex items-center px-3 py-5 justify-between">
+        <div className="flex items-center px-5 py-2 justify-between">
           <h3 className="text-[20px] font-[600]">Products</h3>
         </div>
+        <div className="flex items-center w-full px-5 py-2 justify-between">
+            <div className="col w-[20%]">
+              <h4 className="font-[600] text-[13px] mb-2">Category By</h4>
+              <Select
+              className="w-full"
+              size="small"
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={categoryFilterVal}
+          onChange={handleChangeCatFilter}
+          label="Category"
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Men</MenuItem>
+          <MenuItem value={20}>Women</MenuItem>
+          <MenuItem value={30}>Kids</MenuItem>
+        </Select>
+            </div>
+            <div className="col flex items-center justify-between gap-3 ml-auto">
+              <Button className="!bg-green-600 !font-medium !py-[6px] !text-[13px]  !px-[14px] !text-white !flex !items-center gap-2 !capitalize"><BiExport className="mb-1" size={'16px'} /> Export</Button>
+              <Button className="!bg-blue-600 !font-medium !py-[6px]  !text-[13px] !px-[14px] !text-white gap-2 !capitalize"><FaPlus /> Add Product</Button>
+            </div>
+          </div>
         <div className="relative w-full overflow-x-auto">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
             <thead className="text-xs text-gray-700 uppercase bg-gray-100  ">
@@ -539,9 +574,34 @@ function Dashboard() {
       </div>
 
       <div className="card bg-white overflow-hidden shadow-md sm:rounded-lg rounded-md border my-4 border-gray-200 hover:border-gray-400 transition-all">
-        <div className="flex items-center px-3 py-5 justify-between">
+        <div className="flex items-center px-5 py-2 justify-between">
           <h3 className="text-[20px] font-[600]">Products</h3>
         </div>
+          <div className="flex items-center w-full px-5 py-2 justify-between">
+            <div className="col w-[20%]">
+              <h4 className="font-[600] text-[13px] mb-2">Category By</h4>
+              <Select
+              className="w-full"
+              size="small"
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={categoryFilterVal}
+          onChange={handleChangeCatFilter}
+          label="Category"
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Men</MenuItem>
+          <MenuItem value={20}>Women</MenuItem>
+          <MenuItem value={30}>Kids</MenuItem>
+        </Select>
+            </div>
+            <div className="col flex items-center justify-between gap-3 ml-auto">
+              <Button className="!bg-green-600 !font-medium !py-[6px] !text-[13px]  !px-[14px] !text-white !flex !items-center gap-2 !capitalize"><BiExport className="mb-1" size={'16px'} /> Export</Button>
+              <Button className="!bg-blue-600 !font-medium !py-[6px]  !text-[13px] !px-[14px] !text-white gap-2 !capitalize"><FaPlus /> Add Product</Button>
+            </div>
+          </div>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -902,7 +962,7 @@ function Dashboard() {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          // count={rows.length}
+          count={10}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
