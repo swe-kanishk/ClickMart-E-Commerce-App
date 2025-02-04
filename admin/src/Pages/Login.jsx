@@ -50,7 +50,7 @@ function Login() {
         </div>
       </header>
       <img
-        src="/bgPattern.webp"
+        src="https://fullstack-ecommerce-add-admin.netlify.app/static/media/pattern.df9a7a28fc13484d1013.webp"
         className="w-full fixed top-0 left-0 pointer-events-none opacity-5"
         alt=""
       />
