@@ -20,6 +20,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiActivity } from "react-icons/fi";
 import { MyContext } from "../App";
+import Logo from "./Logo";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -41,7 +42,14 @@ function Header() {
 
   return (
     <header className={`w-full h-[60px] pr-5 shadow-md flex transition-all ${context.isSidebarOpen ? 'pl-[18%]' : 'pl-7'} border-b border-gray-300 items-center justify-between bg-[#fff]`}>
-      <div className="col-1 flex gap-5 w-[400px]">
+      <div className={`col-1 flex gap-5  ${context.isSidebarOpen ? 'w-[400px]' : 'w-[650px]'}`}>
+      {
+        !context.isSidebarOpen && (
+          <div className="mr-6 border-gray-400 transition-all border-r pr-8 whitespace-nowrap">
+            <Logo />
+          </div>
+        )
+      }
         <Button
           className="!w-[40px] z-50 !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
           onClick={() => context.setIsSidebarOpen(!context.isSidebarOpen)}
@@ -60,7 +68,9 @@ function Header() {
             <FaRegBell />
           </StyledBadge>
         </IconButton>
-        <div className="relative">
+        {
+          context.isLogin ? (
+            <div className="relative">
           <Button
             className="!w-[40px] !overflow-hidden !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
             onClick={() => setAnchorMyAccount(!anchorMyAccount)}
@@ -138,6 +148,9 @@ function Header() {
             </MenuItem>
           </Menu>
         </div>
+          ) : <Button className="!text-white !capitalize !bg-blue-600 !px-3 !py-1 !rounded-full">Sign In</Button>
+        }
+        
       </div>
     </header>
   );

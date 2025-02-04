@@ -15,63 +15,53 @@ function DashBoardBox() {
   return (
     <>
      <Swiper
-        slidesPerView={3}
+        slidesPerView={4}
         spaceBetween={10}
         navigation={false}
         modules={[Navigation]}
         className="mySwiper"
       >
         <SwiperSlide>
-            <div className="box bg-white p-4 rounded-md cursor-pointer border hover:bg-[#fafafa] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
-                <GoGift size={'40px'} className='text-blue-500' />
-                <div className="info w-[70%] whitespace-nowrap">
-                    <h3 className='text-gray-500'>New Orders</h3>
-                    <b>1,143</b>
+            <div className="box bg-blue-600 px-4 py-10 rounded-md cursor-pointer border hover:bg-[#4045e5] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
+                <GoGift size={'45px'} className='text-white' />
+                <div className="info w-[50%] whitespace-nowrap">
+                    <h3 className='text-white'>New Orders</h3>
+                    <b className='text-white'>1,143</b>
                 </div>
-                <div className='flex -gap-2'>
-                    <LuChartNoAxesColumnDecreasing size={'50px'} className='text-[#1d60ff]' />
-                    <LuChartNoAxesColumn size={'50px'} className='text-[#1d60ff]' />
+                <div className='flex -gap-1'>
+                    <LuChartNoAxesColumnDecreasing size={'50px'} className='text-white' />
+                    <LuChartNoAxesColumn size={'50px'} className='text-white' />
                 </div>
             </div>
         </SwiperSlide>
         <SwiperSlide>
-            <div className="box bg-white p-4 rounded-md cursor-pointer border hover:bg-[#fafafa] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
-                <FaChartPie size={'40px'} className='text-[#10b981]' />
-                <div className="info w-[70%]">
-                    <h3 className='text-gray-500'>Sales</h3>
+            <div className="box bg-pink-600 px-4 py-10 rounded-md cursor-pointer border hover:bg-[#da4a8d] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
+                <FaChartPie size={'45px'} className='text-[#ffffff]' />
+                <div className="info w-[50%] text-white">
+                    <h3 >Sales</h3>
                     <b>1,143</b>
                 </div>
-                <BsGraphUpArrow size={'50px'} className='text-[#10b981]' />
+                <BsGraphUpArrow size={'50px'} className='text-[#ffffff]' />
             </div>
         </SwiperSlide>
         <SwiperSlide>
-            <div className="box bg-white p-4 rounded-md cursor-pointer border hover:bg-[#fafafa] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
-                <BsBank size={'30px'} className='text-[#7928ca]' />
-                <div className="info w-[70%]">
-                    <h3 className='text-gray-500'>Revenue</h3>
+            <div className="box bg-green-600 px-4 py-10 rounded-md cursor-pointer border hover:bg-[#28943a] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
+                <BsBank size={'40px'} className='text-[#ffffff]' />
+                <div className="info text-white w-[50%]">
+                    <h3>Revenue</h3>
                     <b>1,143</b>
                 </div>
-                <BsGraphUpArrow size={'50px'} className='text-[#7928ca]' />
+                <BsGraphUpArrow size={'50px'} className='text-[#ffffff]' />
             </div>
         </SwiperSlide>
         <SwiperSlide>
-            <div className="box bg-white p-4 rounded-md cursor-pointer border hover:bg-[#fafafa] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
-                <RiProductHuntLine size={'30px'} className='text-blue-500' />
-                <div className="info w-[70%]">
-                    <h3 className='text-gray-500'>Total Products</h3>
+            <div className="box bg-orange-500 px-4 py-10 rounded-md cursor-pointer border hover:bg-[#ef793a] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
+                <RiProductHuntLine size={'50px'} className='text-white' />
+                <div className="info text-white w-[50%]">
+                    <h3>Total Products</h3>
                     <b>1,143</b>
                 </div>
-                <BsGraphUpArrow size={'50px'} className='text-[#3832fa]' />
-            </div>
-        </SwiperSlide>
-        <SwiperSlide>
-            <div className="box bg-white p-4 rounded-md cursor-pointer border hover:bg-[#fafafa] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">
-                <GoGift size={'30px'} className='text-blue-500' />
-                <div className="info w-[70%]">
-                    <h3 className='text-gray-500'>New Orders</h3>
-                    <b>1,143</b>
-                </div>
-                <BsGraphUpArrow size={'50px'} className='text-[#3832fa]' />
+                <BsGraphUpArrow size={'50px'} className='text-white' />
             </div>
         </SwiperSlide>
         </Swiper> 

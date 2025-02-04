@@ -15,3 +15,8 @@ th.MuiTableCell-root {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
+
+a.active button {
+    background-color: rgb(26, 26, 26) !important;
+    color: white !important;
+}
