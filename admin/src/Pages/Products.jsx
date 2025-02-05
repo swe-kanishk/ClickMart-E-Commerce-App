@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { FaPlus, FaRegEye } from "react-icons/fa6";
 import { BiExport } from "react-icons/bi";
@@ -21,6 +21,7 @@ import TableRow from "@mui/material/TableRow";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import ProductSearchbox from "../Components/ProductSearchbox";
+import { MyContext } from "../App";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -54,6 +55,8 @@ function Products() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const context = useContext(MyContext)
+
   const handleChangeCatFilter = (event) => {
     setCategoryFilterVal(event.target.value);
   };
@@ -75,7 +78,7 @@ function Products() {
             <Button className="!bg-green-600 !font-medium !py-[6px] !text-[13px]  !px-[14px] !text-white !flex !items-center gap-2 !capitalize">
               <BiExport className="mb-1" size={"16px"} /> Export
             </Button>
-            <Button className="!bg-blue-600 !font-medium !py-[6px]  !text-[13px] !px-[14px] !text-white gap-2 !capitalize">
+            <Button onClick={() => context.setIsOpenFullScreenPannel({open: true, model: 'Add Product'})} className="!bg-blue-600 !font-medium !py-[6px]  !text-[13px] !px-[14px] !text-white gap-2 !capitalize">
               <FaPlus /> Add Product
             </Button>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState, PureComponent } from "react";
+import React, { useState, PureComponent, useContext } from "react";
 import DashBoardBox from "../Components/DashBoardBox";
 import { Button } from "@mui/material";
 import { FaAngleDown, FaPlus, FaRegEye } from "react-icons/fa6";
@@ -25,6 +25,7 @@ import MenuItem from '@mui/material/MenuItem';
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { MyContext } from "../App";
 
 
 const columns = [
@@ -61,6 +62,8 @@ function createData(name, code, population, size) {
 function Dashboard() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const context = useContext(MyContext)
 
   const [categoryFilterVal, setCategoryFilterVal] = useState('');
 
@@ -161,7 +164,7 @@ function Dashboard() {
             Here's What happening on your store today. See the statistics at
             once
           </p>
-          <Button className="!capitalize !bg-black !mt-4 !text-white gap-1">
+          <Button onClick={() => context.setIsOpenFullScreenPannel({open: true, model: 'Add Product'})} className="!capitalize !bg-black !mt-4 !text-white gap-1">
             <FaPlus size={"17px"} className="text-white" /> Add Product
           </Button>
         </div>
@@ -200,7 +203,7 @@ function Dashboard() {
             </div>
             <div className="col flex items-center justify-between gap-3 ml-auto">
               <Button className="!bg-green-600 !font-medium !py-[6px] !text-[13px]  !px-[14px] !text-white !flex !items-center gap-2 !capitalize"><BiExport className="mb-1" size={'16px'} /> Export</Button>
-              <Button className="!bg-blue-600 !font-medium !py-[6px]  !text-[13px] !px-[14px] !text-white gap-2 !capitalize"><FaPlus /> Add Product</Button>
+              <Button onClick={() => context.setIsOpenFullScreenPannel({open: true, model: 'Add Product'})} className="!bg-blue-600 !font-medium !py-[6px]  !text-[13px] !px-[14px] !text-white gap-2 !capitalize"><FaPlus /> Add Product</Button>
             </div>
           </div>
         <div className="relative w-full overflow-x-auto">
@@ -678,7 +681,7 @@ function Dashboard() {
             </div>
             <div className="col flex items-center justify-between gap-3 ml-auto">
               <Button className="!bg-green-600 !font-medium !py-[6px] !text-[13px]  !px-[14px] !text-white !flex !items-center gap-2 !capitalize"><BiExport className="mb-1" size={'16px'} /> Export</Button>
-              <Button className="!bg-blue-600 !font-medium !py-[6px]  !text-[13px] !px-[14px] !text-white gap-2 !capitalize"><FaPlus /> Add Product</Button>
+              <Button onClick={() => context.setIsOpenFullScreenPannel({open: true, model: 'Add Product'})} className="!bg-blue-600 !font-medium !py-[6px]  !text-[13px] !px-[14px] !text-white gap-2 !capitalize"><FaPlus /> Add Product</Button>
             </div>
           </div>
         <TableContainer sx={{ maxHeight: 440 }}>
