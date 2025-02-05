@@ -6,6 +6,7 @@ import Sidebar from "./Components/Sidebar";
 import { createContext, useState } from "react";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
+import Products from "./Pages/Products";
 
 const MyContext = createContext()
 
@@ -40,6 +41,23 @@ function App() {
       path: "/sign-up",
       exact: true,
       element: <Signup />
+    },
+    {
+      path: "/products",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+              <Sidebar />
+            </div>
+            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+              <Products />
+            </div>
+          </div>
+        </section>
+      ),
     },
   ]);
 
