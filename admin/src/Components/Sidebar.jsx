@@ -52,7 +52,7 @@ function Sidebar() {
             <ul className="w-full">
               <li className="w-full">
                 <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Add Home Banner Slide</Button>
-                <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Home Slides List</Button>
+                <Link to="/homeSlider/list"><Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Home Slides List</Button></Link>
               </li>
             </ul>
           </Collapse>

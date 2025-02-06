@@ -17,6 +17,8 @@ import Typography from '@mui/material/Typography';
 import Slide from '@mui/material/Slide';
 import { IoMdClose } from "react-icons/io";
 import AddProduct from "./Pages/AddProduct";
+import HomeSliderBanners from "./Pages/HomeSliderBanners";
+import AddHomeSlide from "./Pages/AddHomeSlide";
 
 const MyContext = createContext()
 
@@ -82,6 +84,23 @@ function App() {
         </section>
       ),
     },
+    {
+      path: "/homeSlider/list",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+              <Sidebar />
+            </div>
+            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+              <HomeSliderBanners />
+            </div>
+          </div>
+        </section>
+      ),
+    },
   ]);
 
   const values = {
@@ -120,6 +139,9 @@ function App() {
         </AppBar>
         {
           isOpenFullScreenPannel.model === 'Add Product' && <AddProduct />
+        }
+        {
+          isOpenFullScreenPannel.model === 'Add Home Slide' && <AddHomeSlide />
         }
       </Dialog>
     </MyContext.Provider>
