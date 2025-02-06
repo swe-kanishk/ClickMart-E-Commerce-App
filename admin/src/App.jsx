@@ -19,6 +19,12 @@ import { IoMdClose } from "react-icons/io";
 import AddProduct from "./Pages/AddProduct";
 import HomeSliderBanners from "./Pages/HomeSliderBanners";
 import AddHomeSlide from "./Pages/AddHomeSlide";
+import AddNewCategory from "./Pages/AddNewCategory";
+import CategoryList from "./Pages/CategoryList";
+import SubCategoryList from "./Pages/SubCategoryList";
+import AddNewSubCategory from "./Pages/AddNewSubCategory";
+import Users from "./Pages/Users";
+import Orders from "./Pages/Orders";
 
 const MyContext = createContext()
 
@@ -85,6 +91,23 @@ function App() {
       ),
     },
     {
+      path: "/category/list",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+              <Sidebar />
+            </div>
+            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+              <CategoryList />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
       path: "/homeSlider/list",
       exact: true,
       element: (
@@ -96,6 +119,57 @@ function App() {
             </div>
             <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
               <HomeSliderBanners />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/subCategory/list",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+              <Sidebar />
+            </div>
+            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+              <SubCategoryList />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/users",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+              <Sidebar />
+            </div>
+            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+              <Users />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/orders",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+              <Sidebar />
+            </div>
+            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+              <Orders />
             </div>
           </div>
         </section>
@@ -142,6 +216,12 @@ function App() {
         }
         {
           isOpenFullScreenPannel.model === 'Add Home Slide' && <AddHomeSlide />
+        }
+        {
+          isOpenFullScreenPannel.model === 'Add New Category' && <AddNewCategory />
+        }
+        {
+          isOpenFullScreenPannel.model === 'Add New Sub Category' && <AddNewSubCategory />
         }
       </Dialog>
     </MyContext.Provider>

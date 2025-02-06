@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function Logo() {
   return (
-    <Link className="logo border-gray-300 flex items-center gap-2 justify-start pl-2 py-2 w-full">
+    <Link to={'/'} className="logo border-gray-300 flex items-center gap-2 justify-start pl-2 py-2 w-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={"40px"}

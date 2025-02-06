@@ -51,8 +51,8 @@ function Sidebar() {
           <Collapse isOpened={submenuIndex === 1 ? true : false}>
             <ul className="w-full">
               <li className="w-full">
-                <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Add Home Banner Slide</Button>
                 <Link to="/homeSlider/list"><Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Home Slides List</Button></Link>
+                <Button onClick={() => context.setIsOpenFullScreenPannel({open: true, model: 'Add Home Slide'})}  className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Add Home Banner Slide</Button>
               </li>
             </ul>
           </Collapse>
@@ -75,10 +75,10 @@ function Sidebar() {
           <Collapse isOpened={submenuIndex === 2 ? true : false}>
             <ul className="w-full">
             <li className="w-full">
-                <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Category List</Button>
-                <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Add a category</Button>
-                <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Sub Category List</Button>
-                <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Add a sub category</Button>
+                <Link to={'/category/list'}><Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Category List</Button></Link>
+                <Button onClick={() => context.setIsOpenFullScreenPannel({open: true, model: 'Add New Category'})} className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Add a category</Button>
+                <Link to={'/subCategory/list'}><Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Sub Category List</Button></Link>
+                <Button onClick={() => context.setIsOpenFullScreenPannel({open: true, model: 'Add New Sub Category'})} className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"><span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span> Add a sub category</Button>
               </li>
             </ul>
           </Collapse>
@@ -101,10 +101,10 @@ function Sidebar() {
           </Collapse>
         </li>
         <li>
-          <Button className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end">
+          <Link to={'/orders'}><Button className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end">
             <IoBagCheckOutline size={"20px"} />{" "}
             <span className="text-[16px]">Orders</span>
-          </Button>
+          </Button></Link>
         </li>
         <li>
           <Button className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end">
