@@ -14,6 +14,7 @@ import ProductSearchbox from "../Components/ProductSearchbox";
 import { MyContext } from "../App";
 import { IoMailUnreadOutline } from "react-icons/io5";
 import { MdLocalPhone } from "react-icons/md";
+import { HiOutlineCalendarDateRange } from "react-icons/hi2";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -28,6 +29,11 @@ const columns = [
   {
     id: "userPhone",
     label: "USER PHONE NO",
+    minWidth: 130,
+  },
+  {
+    id: "createdDate",
+    label: "CREATED ",
     minWidth: 130,
   },
 ];
@@ -83,7 +89,7 @@ function Users() {
                 </TableCell>
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <div className="flex items-center gap-4 w-[300px]">
-                    <div className="img-section w-[65px] h-[65px] rounded-md overflow-hidden group">
+                    <div className="img-section w-[45px] h-[45px] rounded-md overflow-hidden group">
                       <Link to="/products/1342421" data-discover="true">
                         <img
                           className="w-full group-hover:scale-110 transition-all h-full object-cover"
@@ -103,6 +109,9 @@ function Users() {
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <span className="flex items-center gap-2"><MdLocalPhone /> (+91)-9832934232</span>
                 </TableCell>
+                <TableCell style={{ minWidth: columns.minWidth }}>
+                  <span className="flex items-center gap-2"><HiOutlineCalendarDateRange size={'18px'} /> 07-02-2025</span>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell style={{ minWidth: columns.minWidth }}>
@@ -110,7 +119,7 @@ function Users() {
                 </TableCell>
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <div className="flex items-center gap-4 w-[300px]">
-                    <div className="img-section w-[65px] h-[65px] rounded-md overflow-hidden group">
+                    <div className="img-section w-[45px] h-[45px] rounded-md overflow-hidden group">
                       <Link to="/products/1342421" data-discover="true">
                         <img
                           className="w-full group-hover:scale-110 transition-all h-full object-cover"
@@ -130,6 +139,9 @@ function Users() {
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <span className="flex items-center gap-2"><MdLocalPhone /> (+91)-9832934232</span>
                 </TableCell>
+                <TableCell style={{ minWidth: columns.minWidth }}>
+                  <span className="flex items-center gap-2"><HiOutlineCalendarDateRange size={'18px'} /> 07-02-2025</span>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell style={{ minWidth: columns.minWidth }}>
@@ -137,7 +149,7 @@ function Users() {
                 </TableCell>
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <div className="flex items-center gap-4 w-[300px]">
-                    <div className="img-section w-[65px] h-[65px] rounded-md overflow-hidden group">
+                    <div className="img-section w-[45px] h-[45px] rounded-md overflow-hidden group">
                       <Link to="/products/1342421" data-discover="true">
                         <img
                           className="w-full group-hover:scale-110 transition-all h-full object-cover"
@@ -157,6 +169,9 @@ function Users() {
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <span className="flex items-center gap-2"><MdLocalPhone /> (+91)-9832934232</span>
                 </TableCell>
+                <TableCell style={{ minWidth: columns.minWidth }}>
+                  <span className="flex items-center gap-2"><HiOutlineCalendarDateRange size={'18px'} /> 07-02-2025</span>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell style={{ minWidth: columns.minWidth }}>
@@ -164,7 +179,7 @@ function Users() {
                 </TableCell>
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <div className="flex items-center gap-4 w-[300px]">
-                    <div className="img-section w-[65px] h-[65px] rounded-md overflow-hidden group">
+                    <div className="img-section w-[45px] h-[45px] rounded-md overflow-hidden group">
                       <Link to="/products/1342421" data-discover="true">
                         <img
                           className="w-full group-hover:scale-110 transition-all h-full object-cover"
@@ -183,6 +198,9 @@ function Users() {
                 </TableCell>
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <span className="flex items-center gap-2"><MdLocalPhone /> (+91)-9832934232</span>
+                </TableCell>
+                <TableCell style={{ minWidth: columns.minWidth }}>
+                  <span className="flex items-center gap-2"><HiOutlineCalendarDateRange size={'18px'} /> 07-02-2025</span>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -192,7 +210,7 @@ function Users() {
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <div className="flex items-center gap-4 w-[300px]">
                     {" "}
-                    <div className="img-section w-[65px] h-[65px] rounded-md overflow-hidden group">
+                    <div className="img-section w-[45px] h-[45px] rounded-md overflow-hidden group">
                       <Link to="/products/1342421" data-discover="true">
                         <img
                           className="w-full group-hover:scale-110 transition-all h-full object-cover"
@@ -211,6 +229,9 @@ function Users() {
                 </TableCell>
                 <TableCell style={{ minWidth: columns.minWidth }}>
                   <span className="flex items-center gap-2"><MdLocalPhone /> (+91)-9832934232</span>
+                </TableCell>
+                <TableCell style={{ minWidth: columns.minWidth }}>
+                  <span className="flex items-center gap-2"><HiOutlineCalendarDateRange size={'18px'} /> 07-02-2025</span>
                 </TableCell>
               </TableRow>
             </TableBody>

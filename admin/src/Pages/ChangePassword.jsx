@@ -9,23 +9,15 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa6";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
-function Login() {
-  const [loadingGoogle, setLoadingGoogle] = useState(false);
-  const [loadingFacebook, setLoadingFacebook] = useState(false);
-  const [isShowPassword, setIsShowPassword] = useState(false);
+function ChangePassword() {
+  const [isShowNewPassword, setIsShowNewPassword] = useState(false);
+  const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
 
   const [formFields, setFormFields] = useState({
-    email: "",
-    password: "",
-  });
+      newPassword: "",
+      confirmPassword: "",
+    });
 
-  function handleClickGoogle() {
-    setLoadingGoogle(true);
-  }
-
-  function handleClickFacebook() {
-    setLoadingFacebook(true);
-  }
   return (
     <section className="bg-[#ffffff]">
       <header className="w-full fixed top-0 left-0 px-4 py-3 flex items-center justify-between">
@@ -87,70 +79,22 @@ function Login() {
           </svg>
         </div>
         <h1 className="text-center text-[40px] font-bold mt-4">
-          Welcome Back! <br /> Login with your credentials
+          Welcome Back! <br /> You can change your password from here.
         </h1>
-        <div className="flex items-center mt-5 justify-center gap-4">
-          <LoadingButton
-            size="small"
-            onClick={handleClickGoogle}
-            endIcon={<FcGoogle size={"25px"} />}
-            loading={loadingGoogle}
-            loadingPosition="end"
-            variant="outlined"
-            className="!capitalize !px-5 !text-[15px] !py-2 !font-medium !text-gray-700"
-          >
-            Login with Google
-          </LoadingButton>
-
-          <LoadingButton
-            size="small"
-            onClick={handleClickFacebook}
-            endIcon={<FaFacebook size={"22px"} className="text-blue-500" />}
-            loading={loadingFacebook}
-            loadingPosition="end"
-            variant="outlined"
-            className="!capitalize !px-5 !text-[15px] !py-2 !font-medium !text-gray-700"
-          >
-            Login with Facebook
-          </LoadingButton>
-        </div>
-        <br />
-        <div className="flex items-center gap-3 w-full justify-center">
-          <span className="flex items-center h-[1px] w-[150px] bg-slate-400"></span>
-          <span className="text-slate-500 text-[14px]">
-            Or, Login with your email
-          </span>
-          <span className="flex items-center h-[1px] w-[150px] bg-slate-400"></span>
-        </div>
         <form className="w-full mt-4 space-y-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="bg-gray-50 border h-[50px] outline-gray-700 border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2"
-              placeholder="name@company.com"
-              required
-            />
-          </div>
+  
           <div>
             <label
               htmlFor="password"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
-              Password
+              New Password
             </label>
             <div className="form-group w-full relative">
               <input
                 id="password"
                 label="Password"
-                type={isShowPassword ? "text" : "password"}
+                type={isShowNewPassword ? "text" : "password"}
                 variant="outlined"
                 placeholder="••••••••"
                 name="password"
@@ -159,15 +103,15 @@ function Login() {
                 onChange={(e) =>
                   setFormFields({
                     ...formFields,
-                    password: e.target.value.trim(),
+                    newPassword: e.target.value.trim(),
                   })
                 }
               />
               <Button
-                onClick={() => setIsShowPassword(!isShowPassword)}
+                onClick={() => setIsShowNewPassword(!isShowNewPassword)}
                 className="!absolute top-1 right-1 !rounded-full !min-h-[40px] !h-[40px] !min-w-[40px] !w-[40px] !text-gray-500"
               >
-                {isShowPassword ? (
+                {isShowNewPassword ? (
                   <IoMdEyeOff size={"22px"} />
                 ) : (
                   <IoMdEye size={"22px"} />
@@ -175,40 +119,54 @@ function Login() {
               </Button>
             </div>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember"
-                type="checkbox"
-                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
-              />
-              <label htmlFor="remember" className="ml-2 text-sm text-gray-500">
-                Remember me
-              </label>
-            </div>
-            <Link
-              to="/forgot-password"
-              className="text-sm font-medium text-blue-600 hover:underline"
+          <div>
+            <label
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
-              Forgot password?
-            </Link>
+              Confirm Password
+            </label>
+            <div className="form-group w-full relative">
+              <input
+                id="password"
+                label="Password"
+                type={isShowConfirmPassword ? "text" : "password"}
+                variant="outlined"
+                placeholder="••••••••"
+                name="password"
+                className="bg-gray-50 border h-[50px] outline-gray-700 border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2"
+                value={formFields.password}
+                onChange={(e) =>
+                  setFormFields({
+                    ...formFields,
+                    confirmPassword: e.target.value.trim(),
+                  })
+                }
+              />
+              <Button
+                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+                className="!absolute top-1 right-1 !rounded-full !min-h-[40px] !h-[40px] !min-w-[40px] !w-[40px] !text-gray-500"
+              >
+                {isShowConfirmPassword ? (
+                  <IoMdEyeOff size={"22px"} />
+                ) : (
+                  <IoMdEye size={"22px"} />
+                )}
+              </Button>
+            </div>
           </div>
+
+          <br />
           <button
             type="submit"
             className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Login
+            Change Password
           </button>
-          <p className="text-sm font-light text-gray-500">
-            Don’t have an account yet?{" "}
-            <Link to={'/sign-up'} className="font-medium text-blue-600 hover:underline">
-              Sign up
-            </Link>
-          </p>
         </form>
       </div>
     </section>
   );
 }
 
-export default Login;
+export default ChangePassword;
