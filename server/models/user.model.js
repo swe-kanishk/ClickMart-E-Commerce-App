@@ -1,4 +1,4 @@
-import mongoose, { model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -42,19 +42,19 @@ const userSchema = new Schema(
     },
     address_details: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: Schema.ObjectId,
         ref: "address",
       },
     ],
     shopping_cart: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: Schema.ObjectId,
         ref: "cartProduct",
       },
     ],
     orderHistory: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: Schema.ObjectId,
         ref: "order",
       },
     ],
