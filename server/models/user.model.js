@@ -43,28 +43,26 @@ const userSchema = new Schema(
     address_details: [
       {
         type: Schema.ObjectId,
-        ref: "address",
+        ref: "Address",
       },
     ],
     shopping_cart: [
       {
         type: Schema.ObjectId,
-        ref: "cartProduct",
+        ref: "CartProduct",
       },
     ],
     orderHistory: [
       {
         type: Schema.ObjectId,
-        ref: "order",
+        ref: "Order",
       },
     ],
-    forgot_password_otp: {
-      type: String,
-      default: null,
+    otp: {
+        type: String
     },
-    forgot_password_otp_expiry: {
-      type: Date,
-      default: "",
+    otpExpires: {
+        type: Date
     },
     role: {
       type: String,
@@ -75,5 +73,5 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-const userModel = model("User", userSchema);
-export default userModel;
+const UserModel = model("User", userSchema);
+export default UserModel;

@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import morgan from "morgan";
 import connectDB from "./config/connectDb.js";
+import userRouter from "./routes/user.route.js";
 
 const app = express();
 
@@ -20,10 +21,7 @@ app.use(helmet({
 
 const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-    res.write("hello kanishk!")
-    res.end()
-})
+app.use('/api/user', userRouter);
 
 connectDB().then(() => {
     app.listen(PORT, () => {
