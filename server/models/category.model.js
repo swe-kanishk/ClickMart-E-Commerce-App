@@ -1,0 +1,26 @@
+import { model, Schema } from "mongoose";
+
+const categorySchema = new Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    images: [{
+        type: String
+    }],
+    color: {
+        type: String
+    },
+    parentCatName: {
+        type: String
+    },
+    parentId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        default: null
+    }
+}, {timestamps: true});
+
+const categoryModel = model('Category', categorySchema);
+export default categoryModel;
