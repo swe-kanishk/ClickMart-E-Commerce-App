@@ -152,7 +152,8 @@ export const loginUserController = async (req, res) => {
 
     if (user.verify_email !== true) {
       return res.status(400).json({
-        message: "Your email is not verified yet, Please verify your email first!",
+        message:
+          "Your email is not verified yet, Please verify your email first!",
         error: true,
         success: false,
       });
@@ -368,6 +369,147 @@ export const updateUserDetails = async (req, res) => {
       error: false,
       success: true,
       user: updateUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const forgotPasswordController = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Email is not available!",
+        error: true,
+        success: false,
+      });
+    }
+    const verifyOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.otp = verifyOTP;
+    user.otpExpires = Date.now() + 600000;
+    await user.save();
+
+    await sendEmailFun({
+      to: email,
+      subject: "verify email from ClickMart App",
+      text: "",
+      html: verifyEmailTemplate({
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        otp: verifyOTP,
+      }),
+    });
+
+    return res.json({
+      message: "check your email!",
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const verifyForgotPasswordOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    if ((!email, !otp)) {
+      return res.status(400).json({
+        message: "Provide required field email, otp!",
+        error: true,
+        success: false,
+      });
+    }
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Email is not available!",
+        error: true,
+        success: false,
+      });
+    }
+    if (user.otp !== user.otp) {
+      return res.status(400).json({
+        message: "Invalid OTP!",
+        error: true,
+        success: false,
+      });
+    }
+
+    if (user.otpExpires > Date.now()) {
+      return res.status(400).json({
+        message: "OTP Expired!",
+        error: true,
+        success: false,
+      });
+    }
+
+    user.otp = "";
+    user.otpExpires = null;
+    await user.save();
+
+    return res.json({
+      message: "OTP verifed successfully!",
+      success: true,
+      error: false,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const resetPasswordController = async (req, res) => {
+  try {
+    const { email, newPassword, confirmPassword } = req.body;
+    if ((!email, !newPassword, !confirmPassword)) {
+      return res.status(400).json({
+        message: "Provide required field email, newPassword, confirmPassword!",
+        error: true,
+        success: false,
+      });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        message: "newPassword and confirmPassword must be same!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Email is not available!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const salt = bcrypt.genSalt(10);
+    user.password = bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    return res.json({
+      message: "Password updated successfully!",
+      error: false,
+      success: true,
     });
   } catch (error) {
     return res.status(500).json({
