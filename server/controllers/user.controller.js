@@ -150,6 +150,14 @@ export const loginUserController = async (req, res) => {
       });
     }
 
+    if (user.verify_email !== true) {
+      return res.status(400).json({
+        message: "Your email is not verified yet, Please verify your email first!",
+        error: true,
+        success: false,
+      });
+    }
+
     const isPasswordMatched = bcrypt.compare(password, user.password);
     if (!isPasswordMatched) {
       return res.json({
@@ -228,6 +236,30 @@ export const userAvatarController = async (req, res) => {
     const userId = req.userId;
     const images = req.files;
 
+    const user = await UserModel.findOne({ _id: userId });
+    if (!user) {
+      return res.status(500).json({
+        message: "User not found!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const userAvatar = user.avatar;
+
+    const urlArr = userAvatar.split("/");
+    const avatarImage = urlArr[urlArr.length - 1];
+    const imageName = avatarImage.split(".")[0];
+
+    if (imageName) {
+      const cloudinaryRes = await cloudinary.uploader.destroy(
+        imageName,
+        (err, result) => {
+          // console.log(err, res)
+        }
+      );
+    }
+
     const options = {
       use_filename: true,
       unique_filename: false,
@@ -246,6 +278,9 @@ export const userAvatarController = async (req, res) => {
         });
     }
 
+    user.avatar = images[0];
+    await user.save();
+
     return res.status(200).json({
       _id: userId,
       avatar: imagesArr[0],
@@ -262,16 +297,78 @@ export const userAvatarController = async (req, res) => {
 export const removeImageFromCloudinary = async (req, res) => {
   try {
     const imgUrl = req.query.img;
-    const urlArr = imgUrl.split('/');
+    const urlArr = imgUrl.split("/");
     const image = urlArr[urlArr.length - 1];
-    const imageName = image.split('.')[0];
+    const imageName = image.split(".")[0];
 
-    if(imageName) {
-      const cloudinaryRes = await cloudinary.uploader.destroy(imageName, (err, result) => {
-        // console.log(err, res)
-      })
-      if(cloudinaryRes) res.status(200).send(cloudinaryRes);
+    if (imageName) {
+      const cloudinaryRes = await cloudinary.uploader.destroy(
+        imageName,
+        (err, result) => {
+          // console.log(err, res)
+        }
+      );
+      if (cloudinaryRes) res.status(200).send(cloudinaryRes);
     }
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const updateUserDetails = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { firstName, lastName, email, mobile, password } = req.body;
+    const userExist = await UserModel.findById(userId);
+    if (!userExist) return res.status(400).send("User cannot be updated!");
+
+    let verifyOTP = "";
+    if (email !== userExist.email) {
+      verifyOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    let hashPassword = "";
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      hashPassword = await bcrypt.hash(password, salt);
+    } else {
+      hashPassword = userExist.password;
+    }
+
+    const updateUser = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        firstName,
+        lastName,
+        mobile,
+        email,
+        verify_email: email !== userExist.email ? false : true,
+        password: hashPassword,
+        otp: verifyOTP !== "" ? verifyOTP : null,
+        otpExpires: verifyOTP !== "" ? Date.now() + 600000 : "",
+      },
+      { new: true }
+    );
+
+    if (email !== userExist.email) {
+      await sendEmailFun({
+        to: email,
+        subject: "verify email from ClickMart App",
+        text: "",
+        html: verifyEmailTemplate({ firstName, lastName, otp: verifyOTP }),
+      });
+    }
+
+    return res.json({
+      message: "User updated successfully!",
+      error: false,
+      success: true,
+      user: updateUser,
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
