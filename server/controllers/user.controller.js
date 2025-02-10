@@ -6,6 +6,16 @@ import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CONFIG_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_CONFIG_API_KEY,
+  api_secret: process.env.CLOUDINARY_CONFIG_API_SECRET,
+  secure: true,
+});
+
 export const registerUserController = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -132,7 +142,7 @@ export const loginUserController = async (req, res) => {
       });
     }
 
-    if (user.status !== 'Active') {
+    if (user.status !== "Active") {
       return res.status(400).json({
         message: "Contact to admin!",
         error: true,
@@ -141,7 +151,7 @@ export const loginUserController = async (req, res) => {
     }
 
     const isPasswordMatched = bcrypt.compare(password, user.password);
-    if(!isPasswordMatched) {
+    if (!isPasswordMatched) {
       return res.json({
         message: "Incorrect password!",
         error: true,
@@ -152,16 +162,18 @@ export const loginUserController = async (req, res) => {
     const accessToken = await generateAccessToken(user._id);
     const refreshToken = await generateRefreshToken(user._id);
 
-    await UserModel.findByIdAndUpdate(user?._id, {last_login_date: new Date()});
+    await UserModel.findByIdAndUpdate(user?._id, {
+      last_login_date: new Date(),
+    });
 
     const cookiesOption = {
       httpOnly: true,
       secure: true,
-      sameSite: "none"
-    }
+      sameSite: "none",
+    };
 
-    res.cookie('accessToken', accessToken, cookiesOption);
-    res.cookie('refreshToken', refreshToken, cookiesOption);
+    res.cookie("accessToken", accessToken, cookiesOption);
+    res.cookie("refreshToken", refreshToken, cookiesOption);
 
     return res.json({
       message: "Login Successfully",
@@ -169,9 +181,9 @@ export const loginUserController = async (req, res) => {
       success: true,
       data: {
         accessToken,
-        refreshToken
-      }
-    })
+        refreshToken,
+      },
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
@@ -181,23 +193,25 @@ export const loginUserController = async (req, res) => {
   }
 };
 
-export const logoutController = async(req, res) => {
+export const logoutController = async (req, res) => {
   try {
-    const userId = req.userId // coming from middleware
+    const userId = req.userId; // coming from middleware
     const cookiesOption = {
       httpOnly: true,
       secure: true,
-      sameSite: "none"
-    }
-    res.clearCookie('accessToken', cookiesOption);
-    res.clearCookie('refreshToken', cookiesOption);
+      sameSite: "none",
+    };
+    res.clearCookie("accessToken", cookiesOption);
+    res.clearCookie("refreshToken", cookiesOption);
 
-    const removeRefreshToken = await UserModel.findByIdAndUpdate(userId, {refresh_token: ''});
+    const removeRefreshToken = await UserModel.findByIdAndUpdate(userId, {
+      refresh_token: "",
+    });
     return res.json({
-      message: 'Logout successfully!',
+      message: "Logout successfully!",
       error: false,
-      success: true
-    })
+      success: true,
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
@@ -205,4 +219,42 @@ export const logoutController = async(req, res) => {
       success: false,
     });
   }
-}
+};
+
+var imagesArr = [];
+export const userAvatarController = async (req, res) => {
+  try {
+    imagesArr = [];
+    const userId = req.userId;
+    const images = req.files;
+
+    const options = {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: false,
+    };
+
+    for (let i = 0; i < images?.length; i++) {
+      const img = await cloudinary.uploader
+        .upload(images[i].path, options, (err, result) => {
+          imagesArr.push(result.secure_url);
+          fs.unlinkSync(`uploads/${images[i].filename}`);
+          console.log(images[i].filename);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    return res.status(200).json({
+      _id: userId,
+      avatar: imagesArr[0]
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
