@@ -519,3 +519,67 @@ export const resetPasswordController = async (req, res) => {
     });
   }
 };
+
+export const refreshTokenController = async (req, res) => {
+  try {
+    const refreshToken = req?.cookies?.refreshToken || req?.headers?.authorization.split(' ')[1];
+    if(!refreshToken) {
+      return res.status(401).json({
+        message: "Invalid token!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const verifyToken = await jwt.verify(refreshToken, process.env.SECRET_KEY_REFRESH_TOKEN);
+    if(!verifyToken) {
+      return res.status(401).json({
+        message: "Token Expired!",
+        error: true,
+        success: false,
+      });
+    }
+    const userId = verifyToken._id;
+    const newAccessToken = await generateAccessToken(userId);
+    const cookiesOption = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none"
+    }
+    res.cookie('accessToken', newAccessToken, cookiesOption);
+
+    return res.json({
+      message: 'New access token generated!',
+      error: false,
+      success: true,
+      data: {
+        accessToken: newAccessToken
+      }
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const getUserDetails = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await UserModel.findById(userId).select('-password -refresh_token');
+    return res.json({
+      message: 'user details!',
+      data: user,
+      success: true,
+      error: false
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
