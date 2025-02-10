@@ -248,8 +248,30 @@ export const userAvatarController = async (req, res) => {
 
     return res.status(200).json({
       _id: userId,
-      avatar: imagesArr[0]
+      avatar: imagesArr[0],
     });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const removeImageFromCloudinary = async (req, res) => {
+  try {
+    const imgUrl = req.query.img;
+    const urlArr = imgUrl.split('/');
+    const image = urlArr[urlArr.length - 1];
+    const imageName = image.split('.')[0];
+
+    if(imageName) {
+      const cloudinaryRes = await cloudinary.uploader.destroy(imageName, (err, result) => {
+        // console.log(err, res)
+      })
+      if(cloudinaryRes) res.status(200).send(cloudinaryRes);
+    }
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
