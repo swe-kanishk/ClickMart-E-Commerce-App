@@ -82,3 +82,33 @@ export const createCategory = async (req, res) => {
     });
   }
 };
+
+export const getCategories = async (req, res) => {
+  try {
+    const categories = CategoryModel.find();
+    const categoryMap = {};
+    categories.forEach((cat) => {
+      categoryMap[cat._id] = { ...cat._doc, children: [] };
+    });
+    const rootCategories = [];
+    categories.forEach((cat) => {
+      if (cat.parentId) {
+        categoryMap[cat.parentId].children.push(categoryMap[cat._id]);
+      } else {
+        rootCategories.push(categoryMap[cat._id]);
+      }
+    });
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      data: rootCategories,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
