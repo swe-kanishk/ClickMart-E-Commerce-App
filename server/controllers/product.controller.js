@@ -107,11 +107,45 @@ export const createProduct = async (req, res) => {
 
     imagesArr = [];
     res.status(200).json({
-        success: true,
-        error: false,
-        message: 'Product created successfully!',
-        product
-    })
+      success: true,
+      error: false,
+      message: "Product created successfully!",
+      product,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const getAllProducts = async (req, res) => {
+  try {
+    const page = parseInt(req?.query?.page) || 1;
+    const perPage = parseInt(req?.query.perPage);
+    const totalProducts = await ProductModel.countDocuments();
+    const totalPages = Math.ceil(totalProducts/perPage);
+
+    if(page > totalPages) {
+        return res.status(400).json({success: false, error: true, message: 'Page not found!'});
+    }
+
+    const products = await ProductModel.find().populate('category').skip((page-1)*perPage).limit(perPage).exec();
+    if (!products) {
+      return res.status(500).json({
+        success: false,
+        error: true,
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      error: false,
+      data: products,
+      totalPages,
+      page
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,

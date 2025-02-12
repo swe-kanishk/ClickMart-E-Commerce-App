@@ -59,6 +59,11 @@ const productSchema = new Schema({
     type: String,
     default: "",
   },
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: "Category",
+    required: true,
+  },
   countInStock: {
     type: Number,
     required: [true, "Product stock count required!"],
