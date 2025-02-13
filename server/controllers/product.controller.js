@@ -563,7 +563,7 @@ export const getProductsCount = async (req, res) => {
     return res.status(200).json({
       success: true,
       error: false,
-      productsCount
+      productsCount,
     });
   } catch (error) {
     return res.status(500).json({
@@ -576,7 +576,9 @@ export const getProductsCount = async (req, res) => {
 
 export const getFeaturedProducts = async (req, res) => {
   try {
-    const featuredProducts = await ProductModel.find({isFeatured: true}).populate('category');
+    const featuredProducts = await ProductModel.find({
+      isFeatured: true,
+    }).populate("category");
 
     if (!featuredProducts) {
       return res.status(500).json({
@@ -587,7 +589,156 @@ export const getFeaturedProducts = async (req, res) => {
     return res.status(200).json({
       success: true,
       error: false,
-      featuredProducts
+      featuredProducts,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.id).populate(
+      "category"
+    );
+
+    if (!product) {
+      return res.status(500).json({
+        message: "Product not found!",
+        success: false,
+        error: true,
+      });
+    }
+    const images = product.images;
+    for (let img of images) {
+      const imgUrlArr = images.split("/");
+      const image = imgUrlArr[imgUrlArr.length - 1];
+      const imageName = image.split(".")[0];
+
+      if (imageName) {
+        await cloudinary.uploader.destroy(imageName, (err, result) => {
+          console.log(err, result);
+        });
+      }
+    }
+
+    const deleteProduct = await ProductModel.findByIdAndDelete(req.params.id);
+    if (!deleteProduct) {
+      return res.status(500).json({
+        message: "Product not deleted!",
+        success: false,
+        error: true,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      message: "Product deleted!",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const getProduct = async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.id).populate(
+      "category"
+    );
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "Product not found!",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      product,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const removeImageFromCloudinary = async (req, res) => {
+  try {
+    const imgUrl = req.query.img;
+    const urlArr = imgUrl.split("/");
+    const image = urlArr[urlArr.length - 1];
+    const imageName = image.split(".")[0];
+
+    if (imageName) {
+      const cloudinaryRes = await cloudinary.uploader.destroy(
+        imageName,
+        (err, result) => {
+          // console.log(err, res)
+        }
+      );
+      if (cloudinaryRes) return res.status(200).send(cloudinaryRes);
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const updateProduct = async (req, res) => {
+  try {
+    const product = await ProductModel.findByIdAndUpdate(req.params.id, {
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      oldPrice: req.body.oldPrice,
+      catId: req.body.catId,
+      catName: req.body.catName,
+      brand: req.body.brand,
+      subCat: req.body.subCat,
+      subCatId: req.body.subCatId,
+      category: req.body.category,
+      thirdSubCat: req.body.thirdSubCat,
+      thirdSubCatId: req.body.thirdSubCatId,
+      countInStock: req.body.countInStock,
+      rating: req.body.rating,
+      isFeatured: req.body.isFeatured,
+      discount: req.body.discount,
+      size: req.body.size,
+      productRam: req.body.productRam,
+      weight: req.body.weight,
+    }, {new: true});
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "Product cannot be updated!",
+      });
+    }
+
+    imagesArr = [];
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      message: 'Product is updated!'
     });
   } catch (error) {
     return res.status(500).json({
