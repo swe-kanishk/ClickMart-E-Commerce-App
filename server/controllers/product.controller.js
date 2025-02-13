@@ -549,3 +549,51 @@ export const getAllProductsByRating = async (req, res) => {
     });
   }
 };
+
+export const getProductsCount = async (req, res) => {
+  try {
+    const productsCount = await ProductModel.countDocuments();
+
+    if (!productsCount) {
+      return res.status(500).json({
+        success: false,
+        error: true,
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      error: false,
+      productsCount
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const getFeaturedProducts = async (req, res) => {
+  try {
+    const featuredProducts = await ProductModel.find({isFeatured: true}).populate('category');
+
+    if (!featuredProducts) {
+      return res.status(500).json({
+        success: false,
+        error: true,
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      error: false,
+      featuredProducts
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};

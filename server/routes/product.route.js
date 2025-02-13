@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProduct, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdLevelCatId, getAllProductsByThirdLevelCatName, uploadImages } from "../controllers/product.controller.js";
+import { createProduct, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdLevelCatId, getAllProductsByThirdLevelCatName, getFeaturedProducts, getProductsCount, uploadImages } from "../controllers/product.controller.js";
 import auth from "../middlewares/auth.js";
 import upload from "../middlewares/multer.js";
 
@@ -16,5 +16,7 @@ productRouter.post('/upload-images', auth, upload.array('images'), uploadImages)
 productRouter.post('/create', auth, createProduct)
 productRouter.post('/getProductsByPrice', getAllProductsByPrice)
 productRouter.post('/getProductsByRating', getAllProductsByRating)
+productRouter.post('/getProductsCount', getProductsCount)
+productRouter.post('/getFeaturedProducts', getFeaturedProducts)
 
 export default productRouter;     
