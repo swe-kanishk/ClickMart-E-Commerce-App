@@ -18,10 +18,11 @@ cloudinary.config({
 
 export const registerUserController = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
-    if (!firstName || !lastName || !email || !password) {
+    const { fullName, email, password } = req.body;
+    console.log(fullName, email, password)
+    if (!fullName || !email || !password) {
       return res.status(400).json({
-        message: `provide email, firstName, lastName, password`,
+        message: `provide email, fullName, password`,
         error: true,
         success: false,
       });
@@ -43,8 +44,7 @@ export const registerUserController = async (req, res) => {
     user = new UserModel({
       email,
       password,
-      firstName,
-      lastName,
+      fullName,
       password: hashPassword,
       otp: verifyOTP,
       otpExpires: Date.now() + 600000, // 10 minutes
@@ -55,7 +55,7 @@ export const registerUserController = async (req, res) => {
       to: email,
       subject: "verify email from ClickMart App",
       text: "",
-      html: verifyEmailTemplate({ firstName, lastName, otp: verifyOTP }),
+      html: verifyEmailTemplate({ fullName, otp: verifyOTP }),
     });
 
     const token = jwt.sign(
@@ -323,7 +323,7 @@ export const removeImageFromCloudinary = async (req, res) => {
 export const updateUserDetails = async (req, res) => {
   try {
     const userId = req.userId;
-    const { firstName, lastName, email, mobile, password } = req.body;
+    const { fullName, email, mobile, password } = req.body;
     const userExist = await UserModel.findById(userId);
     if (!userExist) return res.status(400).send("User cannot be updated!");
 
@@ -343,8 +343,8 @@ export const updateUserDetails = async (req, res) => {
     const updateUser = await UserModel.findByIdAndUpdate(
       userId,
       {
-        firstName,
-        lastName,
+        fullName,
+       
         mobile,
         email,
         verify_email: email !== userExist.email ? false : true,
@@ -360,7 +360,7 @@ export const updateUserDetails = async (req, res) => {
         to: email,
         subject: "verify email from ClickMart App",
         text: "",
-        html: verifyEmailTemplate({ firstName, lastName, otp: verifyOTP }),
+        html: verifyEmailTemplate({ fullName, otp: verifyOTP }),
       });
     }
 
@@ -400,11 +400,7 @@ export const forgotPasswordController = async (req, res) => {
       to: email,
       subject: "verify email from ClickMart App",
       text: "",
-      html: verifyEmailTemplate({
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        otp: verifyOTP,
-      }),
+      html: verifyEmailTemplate({ fullName, otp: verifyOTP }),
     });
 
     return res.json({

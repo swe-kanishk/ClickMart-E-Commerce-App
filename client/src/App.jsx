@@ -25,14 +25,12 @@ import MyAccount from "./pages/My-Account/MyAccount";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Orders from "./pages/Order/Orders";
 
-const notify = () => toast('Here is your toast.');
-
 const MyContext = createContext();
 
 function App() {
   const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
   const [openCartPanel, setOpenCartPanel] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal(false);

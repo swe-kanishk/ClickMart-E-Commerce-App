@@ -1,4 +1,4 @@
-const verifyEmailTemplate = ({ firstName, lastName, otp }) => {
+const verifyEmailTemplate = ({ fullName, otp }) => {
     return `
         <!DOCTYPE html>
         <html lang="en">
@@ -41,7 +41,7 @@ const verifyEmailTemplate = ({ firstName, lastName, otp }) => {
         </head>
         <body>
             <div class="container">
-                <h2>Dear ${firstName} ${lastName},</h2>
+                <h2>Dear ${fullName},</h2>
                 <p>Thank you for registering with ClickMart.</p>
                 <p>Please use the OTP below to verify your email address.</p>
                 <span>${otp}</span>
