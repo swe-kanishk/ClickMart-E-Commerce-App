@@ -9,26 +9,30 @@ import connectDB from "./config/connectDb.js";
 import userRouter from "./routes/user.route.js";
 import categoryRouter from "./routes/category.route.js";
 import productRouter from "./routes/product.route.js";
+import cartRouter from "./routes/cart.route.js";
 
 const app = express();
 
 app.use(cors());
-app.options('*', cors());
+app.options("*", cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan());
-app.use(helmet({
-    crossOriginResourcePolicy: false
-}))
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 
 const PORT = process.env.PORT || 3000;
 
-app.use('/api/user', userRouter);
-app.use('/api/category', categoryRouter);
-app.use('/api/product', productRouter);
+app.use("/api/user", userRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/product", productRouter);
+app.use("/api/cart", cartRouter);
 
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`App is running on ${PORT}`)
-    })
-})
+  app.listen(PORT, () => {
+    console.log(`App is running on ${PORT}`);
+  });
+});
