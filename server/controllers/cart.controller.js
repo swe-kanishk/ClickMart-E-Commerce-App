@@ -78,3 +78,84 @@ export const getCartItem = async (req, res) => {
     });
   }
 };
+
+export const updateCartItemQty = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { _id, qty } = req.body;
+
+    if (!_id || !qty) {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: "Provide _id, Qty!",
+      });
+    }
+
+    const updateCartItem = await CartProductModel.updateOne(
+      { _id, userId },
+      {
+        quantity: qty,
+      }
+    );
+
+    return res.status(200).json({
+      message: "Updated successfully!",
+      error: false,
+      success: true,
+      data: updateCartItem,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const deleteCartItem = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { _id, productId } = req.body;
+
+    if (!_id) {
+      return res.status(400).json({
+        message: "Provide _id!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const deleteCartItem = await CartProductModel.deleteOne({ _id, userId });
+    if (!deleteCartItem) {
+      return res.status(404).json({
+        message: "Product is not found in the cart!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const user = await UserModel.findOne({ _id: userId });
+    const userCartItems = user?.shopping_cart;
+
+    const deletedCartItem = userCartItems.splice(
+      userCartItems.indexOf(productId),
+      1
+    );
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Cart item deleted successfully!",
+      success: true,
+      error: false,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
