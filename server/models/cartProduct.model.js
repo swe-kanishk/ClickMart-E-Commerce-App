@@ -4,7 +4,7 @@ const cartProductSchema = new Schema(
   {
     productId: {
       type: Schema.ObjectId,
-      ref: "product",
+      ref: "Product",
     },
     quantity: {
       type: Number,
