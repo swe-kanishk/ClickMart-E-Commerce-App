@@ -121,10 +121,10 @@ function Header() {
                       </Button>
                       <div className="info flex flex-col w-full justify-center items-start">
                         <h4 className="text-[14px] capitalize leading-3">
-                          Kanisxkkk
+                          {context?.userData?.fullName}
                         </h4>
                         <span className="text-[13px] !lowecase">
-                          cse.kanishkk@gmail.com
+                         {context?.userData?.email}
                         </span>
                       </div>
                     </Button>

@@ -19,11 +19,12 @@ import Register from "./pages/Auth/Register";
 import Cart from "./pages/Cart/Cart";
 import Verify from "./pages/Auth/verify";
 
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import Checkout from "./pages/Checkout/Checkout";
 import MyAccount from "./pages/My-Account/MyAccount";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Orders from "./pages/Order/Orders";
+import { getData } from "./utils/api";
 
 const MyContext = createContext();
 
@@ -31,16 +32,27 @@ function App() {
   const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
   const [openCartPanel, setOpenCartPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if(token !== undefined && token !== null && token !== '') {
-      setIsLogin(true)
+    const token = localStorage.getItem("accessToken");
+    if (token !== undefined && token !== null && token !== "") {
+      setIsLogin(true);
+      getData(
+        `/api/user/user-details?token=${localStorage.getItem("accessToken")}`,
+        { withCredentials: true }
+      ).then((res) => {
+        console.log(res);
+        if (res?.success) {
+          setUserData(res.data);
+        } else {
+          toast.error("Something went wrong!");
+        }
+      });
+    } else {
+      setIsLogin(false);
     }
-    else {
-      setIsLogin(false)
-    }
-  }, [])
+  }, [isLogin]);
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal(false);
@@ -51,7 +63,9 @@ function App() {
     openCartPanel,
     setOpenCartPanel,
     isLogin,
-    setIsLogin
+    setIsLogin,
+    userData,
+    setUserData,
   };
 
   return (
@@ -76,7 +90,7 @@ function App() {
         </MyContext.Provider>
       </BrowserRouter>
 
-          <Toaster />
+      <Toaster />
       <Dialog
         open={openProductDetailsModal}
         maxWidth={"lg"}
