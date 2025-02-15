@@ -159,7 +159,7 @@ export const loginUserController = async (req, res) => {
       });
     }
 
-    const isPasswordMatched = bcrypt.compare(password, user.password);
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
     if (!isPasswordMatched) {
       return res.json({
         message: "Incorrect password!",
@@ -208,7 +208,7 @@ export const logoutController = async (req, res) => {
     const cookiesOption = {
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: "None",
     };
     res.clearCookie("accessToken", cookiesOption);
     res.clearCookie("refreshToken", cookiesOption);

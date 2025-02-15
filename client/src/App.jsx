@@ -5,7 +5,7 @@ import Home from "./pages/Home/Home";
 import ProductList from "./pages/ProductListing/ProductList";
 import Footer from "./pages/Home/Footer";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -32,19 +32,24 @@ function App() {
   const [openCartPanel, setOpenCartPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if(token !== undefined && token !== null && token !== '') {
+      setIsLogin(true)
+    }
+    else {
+      setIsLogin(false)
+    }
+  }, [])
+
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal(false);
   };
-
-  const openAlertBox = (status, msg) => {
-    toast[status](msg)
-  }
 
   const value = {
     setOpenProductDetailsModal,
     openCartPanel,
     setOpenCartPanel,
-    openAlertBox,
     isLogin,
     setIsLogin
   };

@@ -31,7 +31,6 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
     if (formFields.fullName === "") {
       toast.error("Please add fullName!");
       return;

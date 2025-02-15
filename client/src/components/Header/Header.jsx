@@ -20,6 +20,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import { HiClipboardCheck } from "react-icons/hi";
 import { IoLogOutOutline } from "react-icons/io5";
+import { getData } from "../../utils/api";
+import toast from "react-hot-toast";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -40,6 +42,28 @@ function Header() {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+    getData(
+      `/api/user/logout?token=${localStorage.getItem("accessToken")}`,
+      {withCredentials: true}
+    )
+      .then((res) => {
+        if (res?.success) {
+          toast.success(res?.message);
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          context.setIsLogin(false);
+        } else {
+          toast.error(res?.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Logout failed:", error);
+        toast.error("Logout failed. Please try again.");
+      });
   };
 
   return (
@@ -141,44 +165,44 @@ function Header() {
                       transformOrigin={{ horizontal: "right", vertical: "top" }}
                       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                     >
-                      <Link to={'/my-account'} className="w-full block">
-                      <MenuItem
-                        onClick={handleClose}
-                        className="!flex !gap-2 !py-2"
-                      >
-                        <FaRegUser size={"16px"} />{" "}
-                        <span className="text-[15px] font-[500]">
-                          My account
-                        </span>
-                      </MenuItem>
+                      <Link to={"/my-account"} className="w-full block">
+                        <MenuItem
+                          onClick={handleClose}
+                          className="!flex !gap-2 !py-2"
+                        >
+                          <FaRegUser size={"16px"} />{" "}
+                          <span className="text-[15px] font-[500]">
+                            My account
+                          </span>
+                        </MenuItem>
                       </Link>
-                      <Link to={'/orders'} className="w-full block">
-                      <MenuItem
-                        onClick={handleClose}
-                        className="!flex !gap-2 !py-2"
-                      >
-                        <HiClipboardCheck size={"18px"} />{" "}
-                        <span className="text-[15px] font-[500]">orders</span>
-                      </MenuItem>
+                      <Link to={"/orders"} className="w-full block">
+                        <MenuItem
+                          onClick={handleClose}
+                          className="!flex !gap-2 !py-2"
+                        >
+                          <HiClipboardCheck size={"18px"} />{" "}
+                          <span className="text-[15px] font-[500]">orders</span>
+                        </MenuItem>
                       </Link>
-                      <Link to={'/wishlist'} className="w-full block">
-                      <MenuItem
-                        onClick={handleClose}
-                        className="!flex !gap-2 !py-2"
-                      >
-                        <IoMdHeart size={"18px"} />{" "}
-                        <span className="text-[15px] font-[500]">My List</span>
-                      </MenuItem>
+                      <Link to={"/wishlist"} className="w-full block">
+                        <MenuItem
+                          onClick={handleClose}
+                          className="!flex !gap-2 !py-2"
+                        >
+                          <IoMdHeart size={"18px"} />{" "}
+                          <span className="text-[15px] font-[500]">
+                            My List
+                          </span>
+                        </MenuItem>
                       </Link>
-                      <Link to={'/logout'} className="w-full block">
                       <MenuItem
-                        onClick={handleClose}
+                        onClick={handleLogout}
                         className="!flex !gap-2 !py-2"
                       >
                         <IoLogOutOutline size={"18px"} />
                         <span className="text-[15px] font-[500]">Logout</span>
                       </MenuItem>
-                      </Link>
                     </Menu>
                   </>
                 ) : (
