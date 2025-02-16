@@ -25,6 +25,7 @@ import MyAccount from "./pages/My-Account/MyAccount";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Orders from "./pages/Order/Orders";
 import { getData } from "./utils/api";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
 
 const MyContext = createContext();
 
@@ -78,6 +79,7 @@ function App() {
             <Route path={"/register"} element={<Register />} />
             <Route path={"/verify"} element={<Verify />} />
             <Route path={"/login"} element={<Login />} />
+            <Route path={"/forgot-password"} element={<ForgotPassword />} />
             <Route path={"/my-account"} element={<MyAccount />} />
             <Route path={"/productListing"} element={<ProductList />} />
             <Route path={"/productDetails/:id"} element={<ProductDetails />} />

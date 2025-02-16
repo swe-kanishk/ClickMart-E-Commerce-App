@@ -398,9 +398,9 @@ export const forgotPasswordController = async (req, res) => {
 
     await sendEmailFun({
       to: email,
-      subject: "verify email from ClickMart App",
+      subject: "verify OTP from ClickMart App",
       text: "",
-      html: verifyEmailTemplate({ fullName, otp: verifyOTP }),
+      html: verifyEmailTemplate({ fullName: user.fullName, otp: verifyOTP }),
     });
 
     return res.json({
@@ -436,7 +436,7 @@ export const verifyForgotPasswordOtp = async (req, res) => {
         success: false,
       });
     }
-    if (user.otp !== user.otp) {
+    if (user.otp !== otp) {
       return res.status(400).json({
         message: "Invalid OTP!",
         error: true,
@@ -444,7 +444,7 @@ export const verifyForgotPasswordOtp = async (req, res) => {
       });
     }
 
-    if (user.otpExpires > Date.now()) {
+    if (user.otpExpires < Date.now()) {
       return res.status(400).json({
         message: "OTP Expired!",
         error: true,
@@ -498,8 +498,8 @@ export const resetPasswordController = async (req, res) => {
       });
     }
 
-    const salt = bcrypt.genSalt(10);
-    user.password = bcrypt.hash(newPassword, salt);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
 
     return res.json({

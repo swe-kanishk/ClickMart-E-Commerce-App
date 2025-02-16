@@ -23,8 +23,28 @@ function Login() {
   const navigate = useNavigate();
 
   const forgotPassword = () => {
-    navigate("/verify");
-    context.openAlertBox("success", "OTP Send");
+    if (formFields.email === "") {
+      toast.error("Please add email!");
+      return;
+    }
+    setIsLoading(true)
+    localStorage.setItem("actionType", "forgot-password");
+    localStorage.setItem("userEmail", formFields.email);
+    
+    postData("/api/user/forgot-password", {
+      email: formFields.email,
+    }).then((res) => {
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsLoading(false);
+        navigate("/verify");
+      } else {
+        toast.error(res?.message);
+        localStorage.removeItem("actionType");
+        localStorage.removeItem("userEmail");
+        setIsLoading(false);
+      }
+    });
   };
 
   const onChangeInput = (e) => {
@@ -50,9 +70,9 @@ function Login() {
           email: "",
           password: "",
         });
-        localStorage.setItem('accessToken', res.data.accessToken)
-        localStorage.setItem('refreshToken', res.data.refreshToken)
-        context.setIsLogin(true)
+        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
+        context.setIsLogin(true);
         navigate("/");
       } else {
         toast.error(res?.message);
@@ -61,7 +81,7 @@ function Login() {
     });
   };
 
-  const validValue = Object.values(formFields).every(el => el);
+  const validValue = Object.values(formFields).every((el) => el);
   return (
     <section className="py-5">
       <div className="container">
@@ -108,12 +128,12 @@ function Login() {
                 )}
               </Button>
             </div>
-            <a
+            <span
               onClick={forgotPassword}
               className="hover:text-red-500 cursor-pointer text-[14px] font-[500] text-blue-600"
             >
               Forgot Password?
-            </a>
+            </span>
             <div className="flex items-center my-5">
               <Button
                 disabled={!validValue || isLoading}

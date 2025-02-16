@@ -54,21 +54,40 @@ function Verify() {
 
   const verifyOTP = (e) => {
     e.preventDefault();
-    setIsLoading(true)
-    postData("/api/user/verify-email", {
-      email: localStorage.getItem("userEmail"),
-      otp: otp.join(''),
-    }).then((res) => {
-      if (res.success) {
-        localStorage.removeItem("userEmail")
-        toast.success(res?.message);
-        setIsLoading(false)
-        navigate("/login");
-      } else {
-        toast.error(res?.message);
-        setIsLoading(false)
-      }
-    });
+    setIsLoading(true);
+    const actionType = localStorage.getItem("actionType");
+    if (actionType !== "forgot-password") {
+      postData("/api/user/verify-email", {
+        email: localStorage.getItem("userEmail"),
+        otp: otp.join(""),
+      }).then((res) => {
+        if (res.success) {
+          localStorage.removeItem("userEmail");
+          toast.success(res?.message);
+          setIsLoading(false);
+          navigate("/login");
+        } else {
+          toast.error(res?.message);
+          setIsLoading(false);
+        }
+      });
+    }
+    else {
+      postData("/api/user/verify-forgot-password-otp", {
+        email: localStorage.getItem("userEmail"),
+        otp: otp.join(""),
+      }).then((res) => {
+        if (res.success === true) {
+          localStorage.removeItem("actionType");
+          toast.success(res?.message);
+          setIsLoading(false);
+          navigate("/forgot-password");
+        } else {
+          toast.error(res?.message);
+          setIsLoading(false);
+        }
+      });
+    }
   };
 
   const validValue = otp.every((el) => el);
