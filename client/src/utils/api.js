@@ -34,3 +34,18 @@ export const getData = async (url, credentials) => {
     throw error.response?.data || error.message;
   }
 };
+
+export const editData = async (url, updatedData, credentials) => {
+  try {
+    const res = await axios.put(`${apiUrl}${url}`, updatedData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "multipart/form-data",
+      },
+      credentials
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}

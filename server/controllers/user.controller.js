@@ -19,7 +19,7 @@ cloudinary.config({
 export const registerUserController = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
-    console.log(fullName, email, password)
+    console.log(fullName, email, password);
     if (!fullName || !email || !password) {
       return res.status(400).json({
         message: `provide email, fullName, password`,
@@ -246,19 +246,17 @@ export const userAvatarController = async (req, res) => {
       });
     }
 
-    const userAvatar = user.avatar;
+    if (user.avatar) {
+      try {
+        const avatarUrl = user.avatar;
+        const urlParts = avatarUrl.split("/");
+        const fileNameWithExt = urlParts[urlParts.length - 1];
+        const publicId = fileNameWithExt.substring(0, fileNameWithExt.lastIndexOf("."));
 
-    const urlArr = userAvatar.split("/");
-    const avatarImage = urlArr[urlArr.length - 1];
-    const imageName = avatarImage.split(".")[0];
-
-    if (imageName) {
-      const cloudinaryRes = await cloudinary.uploader.destroy(
-        imageName,
-        (err, result) => {
-          // console.log(err, res)
-        }
-      );
+        await cloudinary.uploader.destroy(publicId);
+      } catch (deleteError) {
+        console.error("Error deleting old avatar:", deleteError);
+      }
     }
 
     const options = {
@@ -278,8 +276,7 @@ export const userAvatarController = async (req, res) => {
           console.log(error);
         });
     }
-
-    user.avatar = images[0];
+    user.avatar = imagesArr[0];
     await user.save();
 
     return res.status(200).json({
@@ -344,7 +341,7 @@ export const updateUserDetails = async (req, res) => {
       userId,
       {
         fullName,
-       
+
         mobile,
         email,
         verify_email: email !== userExist.email ? false : true,
@@ -518,8 +515,9 @@ export const resetPasswordController = async (req, res) => {
 
 export const refreshTokenController = async (req, res) => {
   try {
-    const refreshToken = req?.cookies?.refreshToken || req?.headers?.authorization.split(' ')[1];
-    if(!refreshToken) {
+    const refreshToken =
+      req?.cookies?.refreshToken || req?.headers?.authorization.split(" ")[1];
+    if (!refreshToken) {
       return res.status(401).json({
         message: "Invalid token!",
         error: true,
@@ -527,8 +525,11 @@ export const refreshTokenController = async (req, res) => {
       });
     }
 
-    const verifyToken = await jwt.verify(refreshToken, process.env.SECRET_KEY_REFRESH_TOKEN);
-    if(!verifyToken) {
+    const verifyToken = await jwt.verify(
+      refreshToken,
+      process.env.SECRET_KEY_REFRESH_TOKEN
+    );
+    if (!verifyToken) {
       return res.status(401).json({
         message: "Token Expired!",
         error: true,
@@ -540,18 +541,18 @@ export const refreshTokenController = async (req, res) => {
     const cookiesOption = {
       httpOnly: true,
       secure: true,
-      sameSite: "none"
-    }
-    res.cookie('accessToken', newAccessToken, cookiesOption);
+      sameSite: "none",
+    };
+    res.cookie("accessToken", newAccessToken, cookiesOption);
 
     return res.json({
-      message: 'New access token generated!',
+      message: "New access token generated!",
       error: false,
       success: true,
       data: {
-        accessToken: newAccessToken
-      }
-    })
+        accessToken: newAccessToken,
+      },
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
@@ -564,12 +565,14 @@ export const refreshTokenController = async (req, res) => {
 export const getUserDetails = async (req, res) => {
   try {
     const userId = req.userId;
-    const user = await UserModel.findById(userId).select('-password -refresh_token');
+    const user = await UserModel.findById(userId).select(
+      "-password -refresh_token"
+    );
     return res.json({
-      message: 'user details!',
+      message: "user details!",
       data: user,
       success: true,
-      error: false
+      error: false,
     });
   } catch (error) {
     return res.status(500).json({
@@ -578,4 +581,4 @@ export const getUserDetails = async (req, res) => {
       success: false,
     });
   }
-}
+};
