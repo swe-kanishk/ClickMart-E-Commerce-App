@@ -365,7 +365,12 @@ export const updateUserDetails = async (req, res) => {
       message: "User updated successfully!",
       error: false,
       success: true,
-      user: updateUser,
+      user: {
+        fullName: updateUser?.fullName,
+        email: updateUser?.email,
+        _id: updateUser?._id,
+        mobile: updateUser?.mobile,
+      }
     });
   } catch (error) {
     return res.status(500).json({

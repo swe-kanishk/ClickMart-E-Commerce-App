@@ -49,3 +49,18 @@ export const uploadImage = async (url, updatedData, credentials) => {
     console.log(error)
   }
 }
+
+export const editData = async (url, updatedData, credentials) => {
+  try {
+    const res = await axios.put(`${apiUrl}${url}`, updatedData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+      },
+      credentials
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
