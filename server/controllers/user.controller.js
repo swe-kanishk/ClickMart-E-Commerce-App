@@ -251,7 +251,10 @@ export const userAvatarController = async (req, res) => {
         const avatarUrl = user.avatar;
         const urlParts = avatarUrl.split("/");
         const fileNameWithExt = urlParts[urlParts.length - 1];
-        const publicId = fileNameWithExt.substring(0, fileNameWithExt.lastIndexOf("."));
+        const publicId = fileNameWithExt.substring(
+          0,
+          fileNameWithExt.lastIndexOf(".")
+        );
 
         await cloudinary.uploader.destroy(publicId);
       } catch (deleteError) {
@@ -370,7 +373,7 @@ export const updateUserDetails = async (req, res) => {
         email: updateUser?.email,
         _id: updateUser?._id,
         mobile: updateUser?.mobile,
-      }
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -474,7 +477,7 @@ export const verifyForgotPasswordOtp = async (req, res) => {
 
 export const resetPasswordController = async (req, res) => {
   try {
-    const { email, newPassword, confirmPassword } = req.body;
+    const { email, oldPassword, newPassword, confirmPassword } = req.body;
     if ((!email, !newPassword, !confirmPassword)) {
       return res.status(400).json({
         message: "Provide required field email, newPassword, confirmPassword!",
@@ -495,6 +498,15 @@ export const resetPasswordController = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         message: "Email is not available!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const isPasswordMatched = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordMatched) {
+      return res.json({
+        message: "Incorrect old password!",
         error: true,
         success: false,
       });
