@@ -35,7 +35,7 @@ export const getData = async (url, credentials) => {
   }
 };
 
-export const editData = async (url, updatedData, credentials) => {
+export const uploadImage = async (url, updatedData, credentials) => {
   try {
     const res = await axios.put(`${apiUrl}${url}`, updatedData, {
       headers: {

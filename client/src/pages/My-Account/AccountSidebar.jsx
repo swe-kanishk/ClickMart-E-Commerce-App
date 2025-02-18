@@ -8,7 +8,7 @@ import { IoMdHeart } from "react-icons/io";
 import { IoLogOutOutline } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
 import { BiLoader } from "react-icons/bi";
-import { editData, getData } from "../../utils/api";
+import { uploadImage, getData } from "../../utils/api";
 import { MyContext } from "../../App";
 
 function AccountSidebar() {
@@ -21,7 +21,9 @@ function AccountSidebar() {
 
   useEffect(() => {
     const userAvatar = [];
-    userAvatar.push(context?.userData?.avatar);
+    if(context?.userData?.avatar !== '' && context?.userData?.avatar !== null && context?.userData?.avatar !== undefined) {
+      userAvatar.push(context?.userData?.avatar);
+    }
     setPreviews(userAvatar);
   }, [context?.userData]);
 
@@ -41,7 +43,7 @@ function AccountSidebar() {
           const file = files[i];
           formData.append("avatar", file);
 
-          editData("/api/user/user-avatar", formData, {
+          uploadImage("/api/user/user-avatar", formData, {
             withCredentials: true,
           }).then((res) => {
             setIsUploading(false);
