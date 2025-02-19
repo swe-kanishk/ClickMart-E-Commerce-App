@@ -1,22 +1,69 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import Logo from "../Components/Logo";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import Logo from "../../Components/Logo";
 import { Button } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { CgLogIn } from "react-icons/cg";
-import { PiUserCirclePlusFill, PiUserCirclePlusLight } from "react-icons/pi";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa6";
+import { PiUserCirclePlusFill } from "react-icons/pi";
+import toast from "react-hot-toast";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { BiLoader } from "react-icons/bi";
+import { postData } from "../../utils/api";
 
 function ChangePassword() {
+  const [isLoading, setIsLoading] = useState(false);
   const [isShowNewPassword, setIsShowNewPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
 
   const [formFields, setFormFields] = useState({
-      newPassword: "",
-      confirmPassword: "",
+    email: localStorage.getItem("userEmail"),
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  //   const context = useContext(MyContext)
+  const navigate = useNavigate();
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setFormFields((prev) => ({ ...prev, [name]: value.trim() }));
+    console.log(formFields)
+  };
+
+  const validValue = Object.values(formFields).every((el) => el);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formFields.newPassword === "") {
+      toast.error("Please enter new password!");
+      return;
+    } else if (formFields.confirmPassword === "") {
+      toast.error("Please enter confirm password!");
+      return;
+    } else if (formFields.newPassword !== formFields.confirmPassword) {
+      toast.error("new password & confirm password shoud be same!");
+      return;
+    }
+    setIsLoading(true);
+    postData("/api/user/reset-password", formFields).then((res) => {
+      console.log(res)
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsLoading(false);
+        localStorage.removeItem("userEmail");
+        setFormFields({
+          email: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+        navigate("/login");
+      } else {
+        toast.error(res?.message);
+        setIsLoading(false);
+      }
+    }).catch((err) => {
+      console.log(err)
     });
+  };
 
   return (
     <section className="bg-[#ffffff]">
@@ -81,8 +128,7 @@ function ChangePassword() {
         <h1 className="text-center text-[40px] font-bold mt-4">
           Welcome Back! <br /> You can change your password from here.
         </h1>
-        <form className="w-full mt-4 space-y-4">
-  
+        <form className="w-full mt-4 space-y-4" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="password"
@@ -92,20 +138,16 @@ function ChangePassword() {
             </label>
             <div className="form-group w-full relative">
               <input
-                id="password"
-                label="Password"
+                id="newPassword"
+                label="New Password"
                 type={isShowNewPassword ? "text" : "password"}
                 variant="outlined"
                 placeholder="••••••••"
-                name="password"
+                disabled={isLoading}
+                name="newPassword"
                 className="bg-gray-50 border h-[50px] outline-gray-700 border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2"
-                value={formFields.password}
-                onChange={(e) =>
-                  setFormFields({
-                    ...formFields,
-                    newPassword: e.target.value.trim(),
-                  })
-                }
+                value={formFields.newPassword}
+                onChange={onChangeInput}
               />
               <Button
                 onClick={() => setIsShowNewPassword(!isShowNewPassword)}
@@ -121,27 +163,23 @@ function ChangePassword() {
           </div>
           <div>
             <label
-              htmlFor="password"
+              htmlFor="confirmPassword"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
               Confirm Password
             </label>
             <div className="form-group w-full relative">
               <input
-                id="password"
-                label="Password"
+                id="confirmPassword"
+                label="Confirm Password"
+                disabled={isLoading}
                 type={isShowConfirmPassword ? "text" : "password"}
                 variant="outlined"
                 placeholder="••••••••"
-                name="password"
+                name="confirmPassword"
                 className="bg-gray-50 border h-[50px] outline-gray-700 border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2"
-                value={formFields.password}
-                onChange={(e) =>
-                  setFormFields({
-                    ...formFields,
-                    confirmPassword: e.target.value.trim(),
-                  })
-                }
+                value={formFields.confirmPassword}
+                onChange={onChangeInput}
               />
               <Button
                 onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
@@ -157,12 +195,17 @@ function ChangePassword() {
           </div>
 
           <br />
-          <button
+          <Button
+            disabled={!validValue || isLoading}
             type="submit"
-            className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="!w-full !text-white !bg-blue-600 !capitalize !hover:bg-blue-700 !focus:ring-4 !focus:outline-none !focus:ring-blue-300 !font-medium !rounded-lg !text-sm !px-5 !py-2.5 !text-center"
           >
-            Change Password
-          </button>
+            {isLoading ? (
+              <BiLoader size={"22px"} className="animate-spin" />
+            ) : (
+              "Change Password"
+            )}
+          </Button>
         </form>
       </div>
     </section>

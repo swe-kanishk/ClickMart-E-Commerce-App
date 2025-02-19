@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import Logo from "../Components/Logo";
+import Logo from "../../Components/Logo";
 import { Button } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { CgLogIn } from "react-icons/cg";
@@ -10,7 +10,7 @@ import { FaFacebook } from "react-icons/fa6";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { BiLoader } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { postData } from "../utils/api";
+import { postData } from "../../utils/api";
 
 function Signup() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);

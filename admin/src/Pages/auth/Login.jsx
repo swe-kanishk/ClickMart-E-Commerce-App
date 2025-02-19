@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import Logo from "../Components/Logo";
+import React, { useContext, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import Logo from "../../Components/Logo";
 import { Button } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { CgLogIn } from "react-icons/cg";
@@ -8,16 +8,16 @@ import { PiUserCirclePlusFill, PiUserCirclePlusLight } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa6";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { BiLoader } from "react-icons/bi";
+import { postData } from "../../utils/api";
+import toast from "react-hot-toast";
+import { MyContext } from "../../App";
 
 function Login() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingFacebook, setLoadingFacebook] = useState(false);
-  const [isShowPassword, setIsShowPassword] = useState(false);
 
-  const [formFields, setFormFields] = useState({
-    email: "",
-    password: "",
-  });
+  const context = useContext(MyContext);
 
   function handleClickGoogle() {
     setLoadingGoogle(true);
@@ -26,6 +26,52 @@ function Login() {
   function handleClickFacebook() {
     setLoadingFacebook(true);
   }
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
+
+  const [formFields, setFormFields] = useState({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setFormFields(() => ({ ...formFields, [name]: value }));
+  };
+
+  const validValue = Object.values(formFields).every((el) => el);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formFields.email === "") {
+      toast.error("Please add email!");
+      return;
+    } else if (formFields.password === "") {
+      toast.error("Please add password!");
+      return;
+    }
+    setIsLoading(true);
+    postData("/api/user/login", formFields).then((res) => {
+      if (res?.success) {
+        toast.success(res?.message);
+        setIsLoading(false);
+        setFormFields({
+          email: "",
+          password: "",
+        });
+        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
+        context.setIsLogin(true);
+        navigate("/");
+      } else {
+        toast.error(res?.message);
+        setIsLoading(false);
+      }
+    });
+  };
   return (
     <section className="bg-[#ffffff]">
       <header className="w-full fixed top-0 left-0 px-4 py-3 flex items-center justify-between">
@@ -122,7 +168,7 @@ function Login() {
           </span>
           <span className="flex items-center h-[1px] w-[150px] bg-slate-400"></span>
         </div>
-        <form className="w-full mt-4 space-y-4">
+        <form className="w-full mt-4 space-y-4" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="email"
@@ -132,8 +178,11 @@ function Login() {
             </label>
             <input
               type="email"
+              onChange={onChangeInput}
               name="email"
               id="email"
+              disabled={isLoading}
+              value={formFields.email}
               className="bg-gray-50 border h-[50px] outline-gray-700 border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2"
               placeholder="name@company.com"
               required
@@ -150,18 +199,14 @@ function Login() {
               <input
                 id="password"
                 label="Password"
+                disabled={isLoading}
                 type={isShowPassword ? "text" : "password"}
                 variant="outlined"
                 placeholder="••••••••"
                 name="password"
                 className="bg-gray-50 border h-[50px] outline-gray-700 border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2"
                 value={formFields.password}
-                onChange={(e) =>
-                  setFormFields({
-                    ...formFields,
-                    password: e.target.value.trim(),
-                  })
-                }
+                onChange={onChangeInput}
               />
               <Button
                 onClick={() => setIsShowPassword(!isShowPassword)}
@@ -193,15 +238,23 @@ function Login() {
               Forgot password?
             </Link>
           </div>
-          <button
+          <Button
+            disabled={!validValue || isLoading}
             type="submit"
-            className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="!w-full !text-white !capitalize !bg-blue-600 !hover:bg-blue-700 !focus:ring-4 !focus:outline-none !focus:ring-blue-300 !font-medium !rounded-lg !text-sm !px-5 !py-2.5 !text-center"
           >
-            Login
-          </button>
+            {isLoading ? (
+              <BiLoader size={"22px"} className="animate-spin" />
+            ) : (
+              "Login"
+            )}
+          </Button>
           <p className="text-sm font-light text-gray-500">
             Don’t have an account yet?{" "}
-            <Link to={'/sign-up'} className="font-medium text-blue-600 hover:underline">
+            <Link
+              to={"/sign-up"}
+              className="font-medium text-blue-600 hover:underline"
+            >
               Sign up
             </Link>
           </p>

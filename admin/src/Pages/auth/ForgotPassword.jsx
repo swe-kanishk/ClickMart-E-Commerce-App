@@ -1,15 +1,51 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import Logo from "../Components/Logo";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import Logo from "../../Components/Logo";
 import { Button } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { CgLogIn } from "react-icons/cg";
 import { PiUserCirclePlusFill, PiUserCirclePlusLight } from "react-icons/pi";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa6";
-import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { BiLoader } from "react-icons/bi";
+import { postData } from "../../utils/api";
+import toast from "react-hot-toast";
 
 function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const forgotPassword = (e) => {
+    e.preventDefault(); // Prevent form from refreshing the page
+  
+    if (email === "") {
+      toast.error("Please add email!");
+      return;
+    }
+  
+    setIsLoading(true);
+    localStorage.setItem("actionType", "forgot-password");
+    localStorage.setItem("userEmail", email); // Use email instead of formFields.email
+  
+    postData("/api/user/forgot-password", { email })
+      .then((res) => {
+        if (res?.success) {
+          toast.success(res?.message);
+          navigate("/verify-account");
+        } else {
+          toast.error(res?.message);
+          localStorage.removeItem("actionType");
+          localStorage.removeItem("userEmail");
+        }
+      })
+      .catch((error) => {
+        toast.error("Something went wrong. Please try again.");
+        console.error("Forgot Password Error:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+  
   return (
     <section className="bg-[#ffffff]">
       <header className="w-full fixed top-0 left-0 px-4 py-3 flex items-center justify-between">
@@ -73,7 +109,7 @@ function ForgotPassword() {
         <h1 className="text-center text-[40px] font-bold mt-4">
           Having trouble to sign in? <br /> Reset your password
         </h1>
-        <form className="w-full mt-4 space-y-4">
+        <form className="w-full mt-4 space-y-4" onSubmit={forgotPassword}>
           <div>
             <label
               htmlFor="email"
@@ -84,22 +120,30 @@ function ForgotPassword() {
             <input
               type="email"
               name="email"
+              value={email}
+              disabled={isLoading}
+              onChange={(e) => setEmail(e.target.value.trim())}
               id="email"
               className="bg-gray-50 border h-[50px] outline-gray-700 border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2"
               placeholder="Enter your email"
               required
             />
           </div>
-          <button
+          <Button
+            disabled={!email || isLoading}
             type="submit"
-            className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="!w-full !text-white !bg-blue-600 !capitalize !hover:bg-blue-700 !focus:ring-4 !focus:outline-none !focus:ring-blue-300 !font-medium !rounded-lg !text-sm !px-5 !py-2.5 !text-center"
           >
-            Reset Password
-          </button>
+            {isLoading ? (
+              <BiLoader size={"22px"} className="animate-spin" />
+            ) : (
+              "Reset Password"
+            )}
+          </Button>
           <p className="text-sm text-center font-light text-gray-500">
             Don’t want to reset?{" "}
-            <Link to={'/sign-up'} className="font-medium text-blue-600 hover:underline">
-              Sign In
+            <Link to={-1} className="font-medium text-blue-600 hover:underline">
+              Go back
             </Link>
           </p>
         </form>

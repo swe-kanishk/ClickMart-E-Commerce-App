@@ -1,10 +1,10 @@
 import React, { createRef, useCallback, useMemo, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import Logo from "../Components/Logo";
+import Logo from "../../Components/Logo";
 import { Button } from "@mui/material";
 import { CgLogIn } from "react-icons/cg";
 import { PiUserCirclePlusFill } from "react-icons/pi";
-import { postData } from "../utils/api";
+import { postData } from "../../utils/api";
 import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
 
@@ -89,7 +89,7 @@ function VerifyAccount() {
           localStorage.removeItem("actionType");
           toast.success(res?.message);
           setIsLoading(false);
-          navigate("/forgot-password");
+          navigate("/change-password");
         } else {
           toast.error(res?.message);
           setIsLoading(false);

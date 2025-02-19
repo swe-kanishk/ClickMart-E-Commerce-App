@@ -3,9 +3,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard";
 import Header from "./Components/Header";
 import Sidebar from "./Components/Sidebar";
-import React, { createContext, useState } from "react";
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
+import React, { createContext, useEffect, useState } from "react";
+import Login from "./Pages/auth/Login";
+import Signup from "./Pages/auth/Signup";
 import Products from "./Pages/Products";
 
 import Dialog from '@mui/material/Dialog';
@@ -26,9 +26,10 @@ import SubCategoryList from "./Pages/SubCategoryList";
 import AddNewSubCategory from "./Pages/AddNewSubCategory";
 import Users from "./Pages/Users";
 import Orders from "./Pages/Orders";
-import ForgotPassword from "./Pages/ForgotPassword";
-import VerifyAccount from "./Pages/VerifyAccount";
-import ChangePassword from "./Pages/ChangePassword";
+import ForgotPassword from "./Pages/auth/ForgotPassword";
+import VerifyAccount from "./Pages/auth/VerifyAccount";
+import ChangePassword from "./Pages/auth/ChangePassword";
+import { getData } from "./utils/api";
 
 const MyContext = createContext()
 
@@ -39,6 +40,28 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isLogin, setIsLogin] = useState(false)
+  const [adminData, setAdminData] = useState(null)
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token !== undefined && token !== null && token !== "") {
+      setIsLogin(true);
+      getData(
+        `/api/user/user-details?token=${localStorage.getItem("accessToken")}`,
+        { withCredentials: true }
+      ).then((res) => {
+        console.log(res);
+        if (res?.success === true) {
+          setAdminData(res?.data);
+        } else {
+          setIsLogin(false)
+          toast.error("Something went wrong!");
+        }
+      });
+    } else {
+      setIsLogin(false);
+    }
+  }, [isLogin]);
 
   const [isOpenFullScreenPannel, setIsOpenFullScreenPannel] = useState({
     open: false,
@@ -201,6 +224,8 @@ function App() {
     setIsSidebarOpen,
     isLogin,
     setIsLogin,
+    adminData,
+    setAdminData,
     isOpenFullScreenPannel,
     setIsOpenFullScreenPannel
   }
