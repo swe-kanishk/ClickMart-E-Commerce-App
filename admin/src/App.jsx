@@ -9,6 +9,7 @@ import Signup from "./Pages/Signup";
 import Products from "./Pages/Products";
 
 import Dialog from '@mui/material/Dialog';
+import toast, { Toaster } from "react-hot-toast";
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -242,6 +243,7 @@ function App() {
           isOpenFullScreenPannel.model === 'Add New Sub Category' && <AddNewSubCategory />
         }
       </Dialog>
+      <Toaster />
     </MyContext.Provider>
     </>
   );
