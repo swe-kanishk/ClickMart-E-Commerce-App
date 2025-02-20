@@ -1,42 +1,59 @@
 .MuiBadge-badge {
-    background: rgb(255, 73, 49) !important;
+  background: rgb(255, 73, 49) !important;
 }
 
 #account-menu {
-    top: 35px;
+  top: 35px;
 }
 
 .ReactCollapse--collapse {
-    transition: height 300ms;
+  transition: height 300ms;
 }
 
 th.MuiTableCell-root {
-    background-color: #e9e9e9;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+  background-color: #e9e9e9;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 a.active button {
-    background-color: rgb(26, 26, 26) !important;
-    color: white !important;
+  background-color: rgb(26, 26, 26) !important;
+  color: white !important;
 }
 
 .MuiAppBar-colorPrimary {
-    background: #e6e6e6 !important;
+  background: #e6e6e6 !important;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
 }
 
 .MuiDialog-paper {
-    background: #f9fafb !important;
+  background: #f9fafb !important;
 }
 
 .MuiTableBody-root tr:nth-child(even) {
-    background: #f1f1f1 !important;
+  background: #f1f1f1 !important;
+}
+
+.react-international-phone-input {
+  width: 100% !important;
+  height: 2.8rem !important;
+}
+
+.react-international-phone-country-selector-button {
+  width: 55px !important;
+  height: 2.8rem !important;
+}
+
+.react-international-phone-input-container:focus-within
+  .react-international-phone-input,
+.react-international-phone-input-container:focus-within
+  .react-international-phone-country-selector-button {
+  border: 1px solid black !important;
 }

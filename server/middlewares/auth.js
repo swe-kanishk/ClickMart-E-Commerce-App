@@ -2,7 +2,8 @@ import jwt from "jsonwebtoken";
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.cookies.accessToken || req?.headers?.authorization?.split(" ")[1];
+    const token =
+      req.cookies.accessToken || req?.headers?.authorization?.split(" ")[1];
     if (!token) {
       token = req?.query?.token;
     }
@@ -11,15 +12,25 @@ const auth = async (req, res, next) => {
         message: "Provide token",
       });
     }
-    const decode = await jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN);
-    if (!decode) {
+    let decoded;
+    try {
+      decoded = await jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        return res.status(401).json({
+          message: "Token has expired",
+          error: true,
+          success: false,
+          expired: true,
+        });
+      }
       return res.status(401).json({
-        message: "Unauthorized access!",
+        message: "Invalid authentication token",
         error: true,
         success: false,
       });
     }
-    req.userId = decode._id;
+    req.userId = decoded._id;
     next();
   } catch (error) {
     return res.status(500).json({

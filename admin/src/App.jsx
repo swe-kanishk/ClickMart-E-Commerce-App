@@ -43,25 +43,47 @@ function App() {
   const [isLogin, setIsLogin] = useState(false)
   const [adminData, setAdminData] = useState(null)
 
-  useEffect(() => {
+  const checkAuthStatus = async () => {
     const token = localStorage.getItem("accessToken");
-    if (token !== undefined && token !== null && token !== "") {
-      setIsLogin(true);
-      getData(
-        `/api/user/user-details?token=${localStorage.getItem("accessToken")}`,
-        { withCredentials: true }
-      ).then((res) => {
-        console.log(res);
-        if (res?.success === true) {
-          setAdminData(res?.data);
-        } else {
-          setIsLogin(false)
-          toast.error("Something went wrong!");
-        }
-      });
-    } else {
+
+    // Simplified token check
+    if (!token) {
       setIsLogin(false);
+      return; // No need to remove token if it doesn't exist
     }
+
+    try {
+      const res = await getData(
+        `/api/user/user-details?token=${token}`,
+        { withCredentials: true }
+      );
+      console.log(res);
+
+      if (res?.success === true) {
+        setAdminData(res.data);
+        setIsLogin(true); // Set only after successful response
+      } else {
+        localStorage.removeItem("accessToken");
+        setIsLogin(false);
+        toast.error(res.message || "Authentication failed. Please log in again.");
+      }
+    } catch (error) {
+      localStorage.removeItem("accessToken");
+      setIsLogin(false);
+
+      // Handle specific backend responses
+      if (error.expired) {
+        toast.error("Your session has expired. Please log in again.");
+      } else if (error.message) {
+        toast.error(error.message);
+      } else {
+        toast.error("Unable to connect to the server. Please try again later.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
   }, [isLogin]);
 
   const [isOpenFullScreenPannel, setIsOpenFullScreenPannel] = useState({
