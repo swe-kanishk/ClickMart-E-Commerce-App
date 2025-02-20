@@ -30,6 +30,7 @@ import ForgotPassword from "./Pages/auth/ForgotPassword";
 import VerifyAccount from "./Pages/auth/VerifyAccount";
 import ChangePassword from "./Pages/auth/ChangePassword";
 import { getData } from "./utils/api";
+import Profile from "./Pages/Profile";
 
 const MyContext = createContext()
 
@@ -195,6 +196,23 @@ function App() {
             </div>
             <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
               <Users />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/profile",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+              <Sidebar />
+            </div>
+            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+              <Profile />
             </div>
           </div>
         </section>

@@ -64,7 +64,7 @@ function Header() {
         toast.error("Logout failed. Please try again.");
       });
   };
-
+  console.log(context.adminData)
   return (
     <header
       className={`w-full h-[60px] pr-5 shadow-md flex transition-all ${
@@ -105,11 +105,19 @@ function Header() {
               className="!w-[40px] !overflow-hidden !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
               onClick={() => setAnchorMyAccount(!anchorMyAccount)}
             >
-              <img
-                className="h-[30px] w-[30px] min-h-[30px] rounded-full min-w-[30px] object-cover"
-                src="https://static.vecteezy.com/system/resources/previews/024/354/241/non_2x/happy-girl-standing-in-creative-office-illustration-ai-generative-free-photo.jpg"
-                alt=""
-              />
+              {context?.adminData?.avatar ? (
+                <img
+                  className="h-[30px] w-[30px] min-h-[30px] rounded-full min-w-[30px] object-cover"
+                  src={context?.adminData?.avatar}
+                  alt=""
+                />
+              ) : (
+                <img
+                  src={"./user-avatar.png"}
+                  alt="avatar"
+                  className="h-[30px] w-[30px] min-h-[30px] rounded-full min-w-[30px] object-cover"
+                />
+              )}
             </Button>
             <Menu
               anchorEl={anchorMyAccount}
@@ -152,7 +160,7 @@ function Header() {
                   <Button className="!w-[40px] !overflow-hidden !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]">
                     <img
                       className="h-[38px] w-[38px] min-h-[38px] rounded-full min-w-[38px] object-cover"
-                      src="https://static.vecteezy.com/system/resources/previews/024/354/241/non_2x/happy-girl-standing-in-creative-office-illustration-ai-generative-free-photo.jpg"
+                      src={context?.adminData?.avatar}
                       alt=""
                     />
                   </Button>
@@ -166,7 +174,7 @@ function Header() {
               </MenuItem>
               <Divider />
               <MenuItem
-                onClick={handleCloseMyAcc}
+                onClick={() => navigate("/profile")}
                 className="flex items-end gap-3"
               >
                 <LuUserRound /> <span className="text-[14px]">Profile</span>
@@ -176,7 +184,7 @@ function Header() {
                 className="flex items-end gap-3"
               >
                 <IoSettingsOutline />{" "}
-                <span className="text-[14px]">Profile</span>
+                <span className="text-[14px]">Settings</span>
               </MenuItem>
               <MenuItem
                 onClick={handleCloseMyAcc}
@@ -185,10 +193,7 @@ function Header() {
                 <FiActivity /> <span className="text-[14px]">Activity Log</span>
               </MenuItem>
               <Divider />
-              <MenuItem
-                onClick={handleLogout}
-                className="flex items-end gap-3"
-              >
+              <MenuItem onClick={handleLogout} className="flex items-end gap-3">
                 <MdOutlineLogout /> <span className="text-[14px]">Logout</span>
               </MenuItem>
             </Menu>
