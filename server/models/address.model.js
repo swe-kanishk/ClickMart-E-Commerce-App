@@ -2,7 +2,7 @@ import { model, Schema } from "mongoose";
 
 const addressSchema = new Schema(
   {
-    address_line: {
+    address_line1: {
         type: String,
         default: "",
     },
@@ -35,5 +35,5 @@ const addressSchema = new Schema(
   { timestamps: true }
 );
 
-const addressModel = model("Address", addressSchema);
-export default addressModel;
+const AddressModel = model("Address", addressSchema);
+export default AddressModel;
