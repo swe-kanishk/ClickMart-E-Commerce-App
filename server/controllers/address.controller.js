@@ -1,5 +1,5 @@
-import AddressModel from "../models/address.model";
-import UserModel from "../models/user.model";
+import AddressModel from "../models/address.model.js";
+import UserModel from "../models/user.model.js";
 
 export const addAddress = async (req, res) => {
   try {

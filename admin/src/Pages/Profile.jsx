@@ -12,6 +12,7 @@ import "react-international-phone/style.css";
 
 import TextField from "@mui/material/TextField";
 import { Collapse } from "react-collapse";
+import Address from "./Address";
 
 function Profile() {
   const [previews, setPreviews] = useState([]);
@@ -96,12 +97,15 @@ function Profile() {
   }, [localStorage.getItem("accessToken")]);
 
   useEffect(() => {
-    if (context?.adminData?._id !== "" && context?.adminData?._id !== undefined) {
+    if (
+      context?.adminData?._id !== "" &&
+      context?.adminData?._id !== undefined
+    ) {
       setAdminId(context?.adminData?._id);
       setFormFields({
         email: context?.adminData?.email,
         fullName: context?.adminData?.fullName,
-        mobile: context?.adminData?.mobile,
+        mobile: `${context?.adminData?.mobile}`,
       });
       setChangePassword({
         email: context?.adminData?.email,
@@ -128,17 +132,17 @@ function Profile() {
       return;
     }
     setIsLoading(true);
-    editData(`/api/user/${adminId}`, formFields, { withCredentials: true }).then(
-      (res) => {
-        if (res?.data?.success === true) {
-          toast.success(res?.data?.message);
-          setIsLoading(false);
-        } else {
-          toast.error(res?.data?.message);
-          setIsLoading(false);
-        }
+    editData(`/api/user/${adminId}`, formFields, {
+      withCredentials: true,
+    }).then((res) => {
+      if (res?.data?.success === true) {
+        toast.success(res?.data?.message);
+        setIsLoading(false);
+      } else {
+        toast.error(res?.data?.message);
+        setIsLoading(false);
       }
-    );
+    });
   };
 
   const handleSubmitChangePassword = (e) => {
@@ -174,162 +178,171 @@ function Profile() {
   const validValue2 = Object.values(formFields).every((el) => el);
 
   return (
-    <div className="card w-[65%] bg-white p-5 shadow-md shadow-gray-300 border rounded-md my-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-[20px] font-[600]">Admin Profile</h2>
-        <Button
-          onClick={() => setIsChangePasswordOpen(!isChangePasswordOpen)}
-          className="!ml-auto !capitalize"
-        >
-          Change Password
-        </Button>
-      </div>
-      <br />
-      <div className="rounded-full w-[110px] h-[110px] bg-gray-200 aspect-square flex items-center justify-center object-cover overflow-hidden relative mb-4 group cursor-pointer">
-        {isUploading ? (
-          <BiLoader size={28} className="text-gray-500 animate-spin" />
-        ) : previews?.length > 0 ? (
-          previews?.map((img, index) => (
+    <div className="flex gap-8">
+      <div className="card w-[65%] bg-white p-5 shadow-md shadow-gray-300 border rounded-md my-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-[20px] font-[600]">Admin Profile</h2>
+          <Button
+            onClick={() => setIsChangePasswordOpen(!isChangePasswordOpen)}
+            className="!ml-auto !capitalize"
+          >
+            Change Password
+          </Button>
+        </div>
+        <br />
+        <div className="rounded-full w-[110px] h-[110px] bg-gray-200 aspect-square flex items-center justify-center object-cover overflow-hidden relative mb-4 group cursor-pointer">
+          {isUploading ? (
+            <BiLoader size={28} className="text-gray-500 animate-spin" />
+          ) : previews?.length > 0 ? (
+            previews?.map((img, index) => (
+              <img
+                src={img}
+                key={index}
+                alt="avatar"
+                className="w-full h-full object-cover"
+              />
+            ))
+          ) : (
             <img
-              src={img}
-              key={index}
+              src={"./user-avatar.png"}
               alt="avatar"
               className="w-full h-full object-cover"
             />
-          ))
-        ) : (
-          <img
-            src={"./user-avatar.png"}
-            alt="avatar"
-            className="w-full h-full object-cover"
-          />
-        )}
+          )}
 
-        <div className="overlay w-full h-full absolute top-0 items-center justify-center left-0 z-50 bg-[rgba(0,0,0,0.5)] opacity-0 transition flex group-hover:opacity-100">
-          <FaCloudUploadAlt className="text-[#fff] text-[25px]" />
-          <input
-            type="file"
-            name="avatar"
-            accept="image/*"
-            className="opacity-0 absolute top-0 cursor-pointer left-0 w-full h-full"
-            onChange={(e) => handleOnChangeFile(e, "/api/user/user-avatar")}
-          />
-        </div>
-      </div>
-      <form className="mt-8 form" onSubmit={handleSubmit}>
-        <div className="flex items-center gap-5">
-          <div className="w-[50%]">
+          <div className="overlay w-full h-full absolute top-0 items-center justify-center left-0 z-50 bg-[rgba(0,0,0,0.5)] opacity-0 transition flex group-hover:opacity-100">
+            <FaCloudUploadAlt className="text-[#fff] text-[25px]" />
             <input
-              type="text"
-              className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
-              name="fullName"
-              disabled={isLoading}
-              value={formFields.fullName}
-              onChange={handleOnChangeInput}
-            />
-          </div>
-          <div className="w-[50%]">
-            <input
-              type="email"
-              className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
-              name="email"
-              disabled={isLoading}
-              value={formFields.email}
-              onChange={handleOnChangeInput}
+              type="file"
+              name="avatar"
+              accept="image/*"
+              className="opacity-0 absolute top-0 cursor-pointer left-0 w-full h-full"
+              onChange={(e) => handleOnChangeFile(e, "/api/user/user-avatar")}
             />
           </div>
         </div>
-        <div className="flex items-center mt-4 gap-5">
-          <div className="w-[50%]">
-            <PhoneInput
-              defaultCountry="in"
-              name="mobile"
-              disabled={isLoading}
-              value={formFields.mobile || ''}
-              onChange={(mobile) => setFormFields({...formFields, mobile})}
-            />
-          </div>
-        </div>
-        <br />
-        <div className="flex items-center gap-5">
-          <Button
-            disabled={!validValue || isLoading}
-            type="submit"
-            className={`!w-full ${
-              isLoading || !validValue ? "!bg-blue-400" : "!bg-blue-500"
-            }  !text-white !py-1 !capitalize hover:!bg-black`}
-          >
-            {isLoading ? (
-              <BiLoader size={"22px"} className="animate-spin" />
-            ) : (
-              "Save"
-            )}
-          </Button>
-        </div>
-      </form>
-      <Collapse isOpened={isChangePasswordOpen}>
-        <form className="mt-8" onSubmit={handleSubmitChangePassword}>
-          <div className="flex items-center pb-3">
-            <h2 className="">Change Password</h2>
-          </div>
+        <form className="mt-8 form" onSubmit={handleSubmit}>
           <div className="flex items-center gap-5">
             <div className="w-[50%]">
-              <TextField
-                label="Old Password"
+              <input
+                type="text"
+                className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
+                name="fullName"
                 disabled={isLoading}
-                value={changePassword.oldPassword}
+                value={formFields.fullName}
                 onChange={handleOnChangeInput}
-                className="w-full"
-                name="oldPassword"
-                variant="outlined"
-                size="small"
               />
             </div>
             <div className="w-[50%]">
-              <TextField
-                label="New Password"
-                disabled={isLoading}
-                value={changePassword.newPassword}
+              <input
+                type="email"
+                className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
+                name="email"
+                disabled={true}
+                value={formFields.email}
                 onChange={handleOnChangeInput}
-                className="w-full"
-                name="newPassword"
-                variant="outlined"
-                size="small"
               />
             </div>
           </div>
           <div className="flex items-center mt-4 gap-5">
             <div className="w-[50%]">
-              <TextField
-                label="Confirm Password"
+              <PhoneInput
+                defaultCountry="in"
+                name="mobile"
                 disabled={isLoading}
-                value={changePassword.confirmPassword}
-                onChange={handleOnChangeInput}
-                className="w-full"
-                name="confirmPassword"
-                variant="outlined"
-                size="small"
+                value={formFields.mobile || ""}
+                onChange={(mobile) => {
+                  setFormFields((prev) => ({ ...prev, mobile }));
+                }}
               />
             </div>
           </div>
           <br />
+          <div className="flex items-center justify-center p-5 border border-dashed border-gray-400 cursor-pointer hover:bg-[#e6f7ff] bg-[#f1faff]">
+            <span className="text-[14px] font-[500]">Add Address</span>
+          </div>
+          <br />
           <div className="flex items-center gap-5">
             <Button
-              disabled={!validValue2 || isLoading2}
+              disabled={!validValue || isLoading}
               type="submit"
-              className={`!w-fit ${
-                isLoading2 || !validValue2 ? "!bg-red-400" : "!bg-red-500"
+              className={`!w-full ${
+                isLoading || !validValue ? "!bg-blue-400" : "!bg-blue-500"
               }  !text-white !py-1 !capitalize hover:!bg-black`}
             >
-              {isLoading2 ? (
+              {isLoading ? (
                 <BiLoader size={"22px"} className="animate-spin" />
               ) : (
-                "Change Password"
+                "Save"
               )}
             </Button>
           </div>
         </form>
-      </Collapse>
+        <Collapse isOpened={isChangePasswordOpen}>
+          <form className="mt-8" onSubmit={handleSubmitChangePassword}>
+            <div className="flex items-center pb-3">
+              <h2 className="">Change Password</h2>
+            </div>
+            <div className="flex items-center gap-5">
+              <div className="w-[50%]">
+                <TextField
+                  label="Old Password"
+                  disabled={isLoading}
+                  value={changePassword.oldPassword}
+                  onChange={handleOnChangeInput}
+                  className="w-full"
+                  name="oldPassword"
+                  variant="outlined"
+                  size="small"
+                />
+              </div>
+              <div className="w-[50%]">
+                <TextField
+                  label="New Password"
+                  disabled={isLoading}
+                  value={changePassword.newPassword}
+                  onChange={handleOnChangeInput}
+                  className="w-full"
+                  name="newPassword"
+                  variant="outlined"
+                  size="small"
+                />
+              </div>
+            </div>
+            <div className="flex items-center mt-4 gap-5">
+              <div className="w-[50%]">
+                <TextField
+                  label="Confirm Password"
+                  disabled={isLoading}
+                  value={changePassword.confirmPassword}
+                  onChange={handleOnChangeInput}
+                  className="w-full"
+                  name="confirmPassword"
+                  variant="outlined"
+                  size="small"
+                />
+              </div>
+            </div>
+            <br />
+            <div className="flex items-center gap-5">
+              <Button
+                disabled={!validValue2 || isLoading2}
+                type="submit"
+                className={`!w-fit ${
+                  isLoading2 || !validValue2 ? "!bg-red-400" : "!bg-red-500"
+                }  !text-white !py-1 !capitalize hover:!bg-black`}
+              >
+                {isLoading2 ? (
+                  <BiLoader size={"22px"} className="animate-spin" />
+                ) : (
+                  "Change Password"
+                )}
+              </Button>
+            </div>
+          </form>
+        </Collapse>
+      </div>
+      <Address />
     </div>
   );
 }

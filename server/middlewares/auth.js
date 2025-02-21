@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const auth = async (req, res, next) => {
   try {
     const token =
-      req.cookies.accessToken || req?.headers?.authorization?.split(" ")[1];
+      req?.cookies?.accessToken || req?.headers?.authorization?.split(" ")[1];
     if (!token) {
       token = req?.query?.token;
     }
@@ -16,14 +16,6 @@ const auth = async (req, res, next) => {
     try {
       decoded = await jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN);
     } catch (err) {
-      if (err.name === "TokenExpiredError") {
-        return res.status(401).json({
-          message: "Token has expired",
-          error: true,
-          success: false,
-          expired: true,
-        });
-      }
       return res.status(401).json({
         message: "Invalid authentication token",
         error: true,

@@ -6,7 +6,7 @@ export const postData = async (url, formData) => {
   try {
     const res = await axios.post(`${apiUrl}${url}`, formData, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
     });
