@@ -6,13 +6,12 @@ import toast from "react-hot-toast";
 import { MyContext } from "../App";
 import { postData, editData, uploadImage } from "../utils/api";
 
-import { Button } from "@mui/material";
+import { Button, Radio } from "@mui/material";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 
 import TextField from "@mui/material/TextField";
 import { Collapse } from "react-collapse";
-import Address from "./Address";
 
 function Profile() {
   const [previews, setPreviews] = useState([]);
@@ -21,6 +20,19 @@ function Profile() {
   const navigate = useNavigate();
 
   const context = useContext(MyContext);
+
+  const [selectedValue, setSelectedValue] = useState(null);
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+    editData(
+      `/api/address/select/${event.target.value}`,
+      {},
+      { withCredentials: true }
+    ).then((res) => {
+      setSelectedValue(res?.data?.updatedAddress?._id);
+    });
+  };
 
   useEffect(() => {
     const userAvatar = [];
@@ -102,6 +114,11 @@ function Profile() {
       context?.adminData?._id !== undefined
     ) {
       setAdminId(context?.adminData?._id);
+      context?.adminData?.address_details?.forEach((address) => {
+        if (address?.selected === true) {
+          setSelectedValue(address?._id);
+        }
+      });
       setFormFields({
         email: context?.adminData?.email,
         fullName: context?.adminData?.fullName,
@@ -258,8 +275,36 @@ function Profile() {
             </div>
           </div>
           <br />
-          <div className="flex items-center justify-center p-5 border border-dashed border-gray-400 cursor-pointer hover:bg-[#e6f7ff] bg-[#f1faff]">
+          <div
+            onClick={() =>
+              context?.setIsOpenFullScreenPannel({
+                open: true,
+                model: "Add New Address",
+              })
+            }
+            className="flex items-center justify-center p-5 border border-dashed border-gray-400 cursor-pointer hover:bg-[#e6f7ff] bg-[#f1faff]"
+          >
             <span className="text-[14px] font-[500]">Add Address</span>
+          </div>
+          <div className="flex flex-col mt-4 gap-2">
+            {context?.adminData?.address_details?.length > 0 &&
+              context?.adminData?.address_details?.map((address, index) => (
+                <>
+                  <label className="addressBox border border-dashed border-gray-400 w-full flex items-center justify-start bg-[#f1f1f1] p-3 rounded-md cursor-pointer">
+                    <Radio
+                      value={address?._id}
+                      onChange={handleChange}
+                      checked={selectedValue === address?._id}
+                      name="address_details"
+                    />
+                    <span className="text-[14px] font-[500]">
+                      {address?.address_line1}, {address?.city},{" "}
+                      {address?.state}, {address?.pincode}, {address?.country},{" "}
+                      {address?.mobile}
+                    </span>
+                  </label>
+                </>
+              ))}
           </div>
           <br />
           <div className="flex items-center gap-5">
@@ -342,7 +387,6 @@ function Profile() {
           </form>
         </Collapse>
       </div>
-      <Address />
     </div>
   );
 }

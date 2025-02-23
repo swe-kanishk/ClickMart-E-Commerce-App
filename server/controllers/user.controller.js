@@ -582,7 +582,7 @@ export const refreshTokenController = async (req, res) => {
 export const getUserDetails = async (req, res) => {
   try {
     const userId = req.userId;
-    const user = await UserModel.findById(userId).select(
+    const user = await UserModel.findById(userId).populate('address_details').select(
       "-password -refresh_token"
     );
     return res.json({

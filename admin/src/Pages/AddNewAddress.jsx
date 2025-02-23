@@ -7,8 +7,8 @@ import { postData } from "../utils/api";
 import { BiLoader } from "react-icons/bi";
 import toast from "react-hot-toast";
 
-function Address() {
-  const [isLoading, setIsLoading] = useState(false);
+function AddNewAddress() {
+    const [isLoading, setIsLoading] = useState(false);
 
   const [formFields, setFormFields] = useState({
     address_line1: "",
@@ -18,6 +18,7 @@ function Address() {
     country: "",
     mobile: "",
     status: false,
+    selected: false,
   });
 
   const handleOnChangeInput = (e) => {
@@ -60,8 +61,7 @@ function Address() {
     });
   };
   return (
-    <section className="w-[35%] bg-white p-5 shadow-md shadow-gray-300 border rounded-md my-4">
-      <h2 className="text-[20px] font-[600]">Add Address</h2>
+    <section className="w-full p-5 rounded-md">
       <form className="form" onSubmit={handleSubmit}>
         <div className="scroll max-h-[78vh] pt-4 overflow-y-scroll">
           <div className="grid grid-cols-1 mb-3">
@@ -181,7 +181,7 @@ function Address() {
         </Button>
       </form>
     </section>
-  );
+  )
 }
 
-export default Address;
+export default AddNewAddress

@@ -31,6 +31,7 @@ import VerifyAccount from "./Pages/auth/VerifyAccount";
 import ChangePassword from "./Pages/auth/ChangePassword";
 import { getData } from "./utils/api";
 import Profile from "./Pages/Profile";
+import AddNewAddress from "./Pages/AddNewAddress";
 
 const MyContext = createContext()
 
@@ -306,6 +307,9 @@ function App() {
         }
         {
           isOpenFullScreenPannel.model === 'Add New Sub Category' && <AddNewSubCategory />
+        }
+        {
+          isOpenFullScreenPannel.model === 'Add New Address' && <AddNewAddress />
         }
       </Dialog>
       <Toaster />
