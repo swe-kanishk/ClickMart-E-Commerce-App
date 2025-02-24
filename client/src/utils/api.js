@@ -6,7 +6,7 @@ export const postData = async (url, formData) => {
   try {
     const res = await axios.post(`${apiUrl}${url}`, formData, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
     });
@@ -53,6 +53,21 @@ export const uploadImage = async (url, updatedData, credentials) => {
 export const editData = async (url, updatedData, credentials) => {
   try {
     const res = await axios.put(`${apiUrl}${url}`, updatedData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+      },
+      credentials
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const deleteData = async (url, credentials) => {
+  try {
+    const res = await axios.delete(`${apiUrl}${url}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",

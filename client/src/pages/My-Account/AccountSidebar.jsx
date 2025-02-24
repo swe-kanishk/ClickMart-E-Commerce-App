@@ -10,6 +10,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { BiLoader } from "react-icons/bi";
 import { uploadImage, getData } from "../../utils/api";
 import { MyContext } from "../../App";
+import { SlLocationPin } from "react-icons/sl";
 
 function AccountSidebar() {
   const [previews, setPreviews] = useState([]);
@@ -128,6 +129,14 @@ function AccountSidebar() {
             <Button className="!flex !w-full !text-gray-700 !rounded-none !items-center !px-5 !justify-start gap-2 !capitalize">
               <FaRegUser size={"16px"} />
               My Profile
+            </Button>
+          </NavLink>
+        </li>
+        <li className="w-full">
+          <NavLink to="/address" activeClassName="isActive">
+            <Button className="!flex !w-full !text-gray-700 !rounded-none !items-center !px-5 !justify-start gap-2 !capitalize">
+              <SlLocationPin size={"16px"} />
+              Address
             </Button>
           </NavLink>
         </li>

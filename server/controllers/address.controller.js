@@ -14,15 +14,16 @@ export const addAddress = async (req, res) => {
       mobile,
       status,
     } = req.body;
+
     if (
       !address_line1 ||
       !city ||
       !state ||
       !pincode ||
       !country ||
-      !selected ||
+      (!selected && selected !== false) ||
       !mobile ||
-      !status
+      (!status && status !== false)
     ) {
       return res.status(400).json({
         message: "Provide all the required fields",
@@ -91,6 +92,52 @@ export const selectAddress = async (req, res) => {
       error: false,
       success: true,
       updatedAddress,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const deleteAddress = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const _id = req?.params?.id;
+
+    if (!_id) {
+      return res.status(400).json({
+        message: "Provide _id!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const deleteAddress = await AddressModel.deleteOne({ _id, userId });
+    if (!deleteAddress) {
+      return res.status(404).json({
+        message: "Address is not found!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const user = await UserModel.findOne({ _id: userId });
+    const userAddress = user?.address_details;
+
+    const deletedUserAddress = userAddress.splice(
+      userAddress.indexOf(_id),
+      1
+    );
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Address deleted successfully!",
+      success: true,
+      error: false,
     });
   } catch (error) {
     return res.status(500).json({

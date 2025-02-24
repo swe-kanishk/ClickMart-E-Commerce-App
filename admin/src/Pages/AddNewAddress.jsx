@@ -8,7 +8,7 @@ import { BiLoader } from "react-icons/bi";
 import toast from "react-hot-toast";
 
 function AddNewAddress() {
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formFields, setFormFields] = useState({
     address_line1: "",
@@ -23,10 +23,12 @@ function AddNewAddress() {
 
   const handleOnChangeInput = (e) => {
     const { name, value } = e.target;
-    setFormFields(() => ({ ...formFields, [name]: value }));
+    setFormFields((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const validValue = Object.values(formFields).every((el) => el);
+  const validValue = Object.values(formFields).every(
+    (el) => el !== "" && el !== null && el !== undefined
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,15 +52,17 @@ function AddNewAddress() {
       return;
     }
     setIsLoading(true);
-    postData(`/api/address/add`, formFields, { withCredentials: true }).then((res) => {
-      if (res?.success === true) {
-        toast.success(res?.message);
-        setIsLoading(false);
-      } else {
-        toast.error(res?.message);
-        setIsLoading(false);
+    postData(`/api/address/add`, formFields, { withCredentials: true }).then(
+      (res) => {
+        if (res?.success === true) {
+          toast.success(res?.message);
+          setIsLoading(false);
+        } else {
+          toast.error(res?.message);
+          setIsLoading(false);
+        }
       }
-    });
+    );
   };
   return (
     <section className="w-full p-5 rounded-md">
@@ -170,7 +174,7 @@ function AddNewAddress() {
           disabled={!validValue || isLoading}
           type="submit"
           className={`!w-full ${
-            (isLoading || !validValue) ? "!bg-blue-400" : "!bg-blue-500"
+            isLoading || !validValue ? "!bg-blue-400" : "!bg-blue-500"
           }  !text-white !py-1 !capitalize hover:!bg-black`}
         >
           {isLoading ? (
@@ -181,7 +185,7 @@ function AddNewAddress() {
         </Button>
       </form>
     </section>
-  )
+  );
 }
 
-export default AddNewAddress
+export default AddNewAddress;

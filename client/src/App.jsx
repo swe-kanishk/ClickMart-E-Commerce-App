@@ -26,6 +26,7 @@ import Wishlist from "./pages/Wishlist/Wishlist";
 import Orders from "./pages/Order/Orders";
 import { getData } from "./utils/api";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
+import Address from "./pages/My-Account/Address";
 
 const MyContext = createContext();
 
@@ -87,6 +88,7 @@ function App() {
             <Route path={"/cart"} element={<Cart />} />
             <Route path={"/wishlist"} element={<Wishlist />} />
             <Route path={"/orders"} element={<Orders />} />
+            <Route path={"/address"} element={<Address />} />
           </Routes>
           <Footer />
         </MyContext.Provider>
