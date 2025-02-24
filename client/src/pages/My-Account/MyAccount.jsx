@@ -9,6 +9,8 @@ import { editData, postData } from "../../utils/api";
 import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
 import { Collapse } from "react-collapse";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 function MyAccount() {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +46,7 @@ function MyAccount() {
       setFormFields({
         email: context?.userData?.email,
         fullName: context?.userData?.fullName,
-        mobile: context?.userData?.mobile,
+        mobile: `${context?.userData?.mobile}`,
       });
       setChangePassword({
         email: context?.userData?.email,
@@ -163,15 +165,14 @@ function MyAccount() {
               </div>
               <div className="flex items-center mt-4 gap-5">
                 <div className="w-[50%]">
-                  <TextField
-                    label="Phone Number"
-                    disabled={isLoading}
-                    value={formFields.mobile}
-                    onChange={handleOnChangeInput}
-                    className="w-full"
+                  <PhoneInput
+                    defaultCountry="in"
                     name="mobile"
-                    variant="outlined"
-                    size="small"
+                    disabled={isLoading}
+                    value={formFields.mobile || ""}
+                    onChange={(mobile) => {
+                      setFormFields((prev) => ({ ...prev, mobile }));
+                    }}
                   />
                 </div>
               </div>
@@ -193,7 +194,7 @@ function MyAccount() {
               </div>
             </form>
           </div>
-            <Collapse isOpened={isChangePasswordOpen}>
+          <Collapse isOpened={isChangePasswordOpen}>
             <div className="card bg-white p-5 shadow-md rounded-md">
               <div className="flex items-center pb-3">
                 <h2 className="">Change Password</h2>
@@ -258,7 +259,7 @@ function MyAccount() {
                 </div>
               </form>
             </div>
-            </Collapse>
+          </Collapse>
         </div>
       </div>
     </section>
