@@ -50,9 +50,39 @@ export const uploadImage = async (url, updatedData, credentials) => {
   }
 }
 
+export const uploadImages = async (url, updatedData, credentials) => {
+  try {
+    const res = await axios.post(`${apiUrl}${url}`, updatedData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "multipart/form-data",
+      },
+      credentials
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const editData = async (url, updatedData, credentials) => {
   try {
     const res = await axios.put(`${apiUrl}${url}`, updatedData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+      },
+      credentials
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const deleteImages = async (url, imgUrl, credentials) => {
+  try {
+    const res = await axios.delete(`${apiUrl}${url}?img=${imgUrl}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",

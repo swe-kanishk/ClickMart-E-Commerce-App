@@ -184,6 +184,7 @@ export const getCategory = async (req, res) => {
 export const removeImageFromCloudinary = async (req, res) => {
   try {
     const imgUrl = req.query.img;
+    console.log(imgUrl);
     const urlArr = imgUrl.split("/");
     const image = urlArr[urlArr.length - 1];
     const imageName = image.split(".")[0];
@@ -195,7 +196,12 @@ export const removeImageFromCloudinary = async (req, res) => {
           // console.log(err, res)
         }
       );
-      if (cloudinaryRes) return res.status(200).send(cloudinaryRes);
+      if (cloudinaryRes)
+        return res.status(200).json({
+          success: true,
+          error: false,
+          message: "Image removed!",
+        });
     }
   } catch (error) {
     return res.status(500).json({

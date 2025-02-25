@@ -50,6 +50,10 @@ function App() {
         } else {
           toast.error("Something went wrong!");
         }
+      }).catch(err => {
+        toast.error(err?.message);
+        setIsLogin(false);
+        localStorage.removeItem("accessToken");
       });
     } else {
       setIsLogin(false);

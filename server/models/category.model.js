@@ -9,9 +9,6 @@ const categorySchema = new Schema({
     images: [{
         type: String
     }],
-    color: {
-        type: String
-    },
     parentCatName: {
         type: String
     },
