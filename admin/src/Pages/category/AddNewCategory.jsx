@@ -3,16 +3,16 @@ import { IoMdCloseCircle } from "react-icons/io";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import UploadProductBox from "../Components/UploadProductBox";
+import UploadProductBox from "../../Components/UploadProductBox";
 import { Button } from "@mui/material";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { useState } from "react";
-import { deleteImages, postData } from "../utils/api";
+import { deleteImages, postData } from "../../utils/api";
 import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { MyContext } from "../App";
+import { MyContext } from "../../App";
 
 function AddNewCategory() {
   const [isLoading, setIsLoading] = useState(false);

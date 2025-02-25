@@ -85,7 +85,7 @@ export const createCategory = async (req, res) => {
 
 export const getCategories = async (req, res) => {
   try {
-    const categories = CategoryModel.find();
+    const categories = await CategoryModel.find();
     const categoryMap = {};
     categories.forEach((cat) => {
       categoryMap[cat._id] = { ...cat._doc, children: [] };
@@ -167,10 +167,10 @@ export const getCategory = async (req, res) => {
         error: true,
       });
     }
-    const subCatList = [];
-    for (let cat of categories) {
-      if (cat.parentId !== undefined) subCatList.push(cat);
-    }
+    // const subCatList = [];
+    // for (let cat of category) {
+    //   if (cat.parentId !== undefined) subCatList.push(cat);
+    // }
     return res.status(200).json({ success: true, error: false, category });
   } catch (error) {
     return res.status(500).json({
@@ -299,6 +299,7 @@ export const updateCategory = async (req, res) => {
     return res.status(200).json({
       success: true,
       error: false,
+      message: 'Category updated!',
       updatedCategory,
     });
   } catch (error) {

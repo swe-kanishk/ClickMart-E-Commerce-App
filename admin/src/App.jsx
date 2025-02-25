@@ -20,8 +20,8 @@ import { IoMdClose } from "react-icons/io";
 import AddProduct from "./Pages/AddProduct";
 import HomeSliderBanners from "./Pages/HomeSliderBanners";
 import AddHomeSlide from "./Pages/AddHomeSlide";
-import AddNewCategory from "./Pages/AddNewCategory";
-import CategoryList from "./Pages/CategoryList";
+import AddNewCategory from "./Pages/category/AddNewCategory";
+import CategoryList from "./Pages/category/CategoryList";
 import SubCategoryList from "./Pages/SubCategoryList";
 import AddNewSubCategory from "./Pages/AddNewSubCategory";
 import Users from "./Pages/Users";
@@ -32,6 +32,7 @@ import ChangePassword from "./Pages/auth/ChangePassword";
 import { getData } from "./utils/api";
 import Profile from "./Pages/Profile";
 import AddNewAddress from "./Pages/AddNewAddress";
+import EditCategory from "./Pages/category/EditCategory";
 
 const MyContext = createContext()
 
@@ -89,7 +90,8 @@ function App() {
 
   const [isOpenFullScreenPannel, setIsOpenFullScreenPannel] = useState({
     open: false,
-    model: ''
+    model: '',
+    id: ''
   })
 
   const handleCloseFullScreenPannel = () => {
@@ -310,6 +312,9 @@ function App() {
         }
         {
           isOpenFullScreenPannel.model === 'Add New Address' && <AddNewAddress />
+        }
+        {
+          isOpenFullScreenPannel.model === 'Edit Category' && <EditCategory />
         }
       </Dialog>
       <Toaster />

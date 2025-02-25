@@ -94,3 +94,18 @@ export const deleteImages = async (url, imgUrl, credentials) => {
     console.log(error)
   }
 }
+
+export const deleteData = async (url, credentials) => {
+  try {
+    const res = await axios.delete(`${apiUrl}${url}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+      },
+      credentials
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
