@@ -8,14 +8,14 @@ import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
 import Products from "./Pages/Products";
 
-import Dialog from '@mui/material/Dialog';
+import Dialog from "@mui/material/Dialog";
 import toast, { Toaster } from "react-hot-toast";
 
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Slide from '@mui/material/Slide';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Slide from "@mui/material/Slide";
 import { IoMdClose } from "react-icons/io";
 import AddProduct from "./Pages/AddProduct";
 import HomeSliderBanners from "./Pages/HomeSliderBanners";
@@ -34,7 +34,7 @@ import Profile from "./Pages/Profile";
 import AddNewAddress from "./Pages/AddNewAddress";
 import EditCategory from "./Pages/category/EditCategory";
 
-const MyContext = createContext()
+const MyContext = createContext();
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -42,8 +42,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isLogin, setIsLogin] = useState(false)
-  const [adminData, setAdminData] = useState(null)
+  const [isLogin, setIsLogin] = useState(false);
+  const [adminData, setAdminData] = useState(null);
+  const [categoryData, setCategoryData] = useState([]);
 
   const checkAuthStatus = async () => {
     const token = localStorage.getItem("accessToken");
@@ -55,10 +56,9 @@ function App() {
     }
 
     try {
-      const res = await getData(
-        `/api/user/user-details?token=${token}`,
-        { withCredentials: true }
-      );
+      const res = await getData(`/api/user/user-details?token=${token}`, {
+        withCredentials: true,
+      });
       console.log(res);
 
       if (res?.success === true) {
@@ -67,7 +67,9 @@ function App() {
       } else {
         localStorage.removeItem("accessToken");
         setIsLogin(false);
-        toast.error(res.message || "Authentication failed. Please log in again.");
+        toast.error(
+          res.message || "Authentication failed. Please log in again."
+        );
       }
     } catch (error) {
       localStorage.removeItem("accessToken");
@@ -88,15 +90,28 @@ function App() {
     checkAuthStatus();
   }, [isLogin]);
 
+  const getCat = () => {
+    getData("/api/category").then((res) => {
+      if (res?.success === true) {
+        console.log(res);
+        setCategoryData(res?.data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getCat();
+  }, []);
+
   const [isOpenFullScreenPannel, setIsOpenFullScreenPannel] = useState({
     open: false,
-    model: '',
-    id: ''
-  })
+    model: "",
+    id: "",
+  });
 
   const handleCloseFullScreenPannel = () => {
-    setIsOpenFullScreenPannel({open: false, model: ''})
-  }
+    setIsOpenFullScreenPannel({ open: false, model: "" });
+  };
 
   const router = createBrowserRouter([
     {
@@ -106,10 +121,18 @@ function App() {
         <section className="main">
           <Header />
           <div className="mainContent flex">
-          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
               <Sidebar />
             </div>
-            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
               <Dashboard />
             </div>
           </div>
@@ -119,27 +142,27 @@ function App() {
     {
       path: "/login",
       exact: true,
-      element: <Login />
+      element: <Login />,
     },
     {
       path: "/forgot-password",
       exact: true,
-      element: <ForgotPassword />
+      element: <ForgotPassword />,
     },
     {
       path: "/verify-account",
       exact: true,
-      element: <VerifyAccount />
+      element: <VerifyAccount />,
     },
     {
       path: "/change-password",
       exact: true,
-      element: <ChangePassword />
+      element: <ChangePassword />,
     },
     {
       path: "/sign-up",
       exact: true,
-      element: <Signup />
+      element: <Signup />,
     },
     {
       path: "/products",
@@ -148,10 +171,18 @@ function App() {
         <section className="main">
           <Header />
           <div className="mainContent flex">
-          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
               <Sidebar />
             </div>
-            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
               <Products />
             </div>
           </div>
@@ -165,10 +196,18 @@ function App() {
         <section className="main">
           <Header />
           <div className="mainContent flex">
-          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
               <Sidebar />
             </div>
-            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
               <CategoryList />
             </div>
           </div>
@@ -182,10 +221,18 @@ function App() {
         <section className="main">
           <Header />
           <div className="mainContent flex">
-          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
               <Sidebar />
             </div>
-            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
               <HomeSliderBanners />
             </div>
           </div>
@@ -199,10 +246,18 @@ function App() {
         <section className="main">
           <Header />
           <div className="mainContent flex">
-          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
               <Sidebar />
             </div>
-            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
               <SubCategoryList />
             </div>
           </div>
@@ -216,10 +271,18 @@ function App() {
         <section className="main">
           <Header />
           <div className="mainContent flex">
-          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
               <Sidebar />
             </div>
-            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
               <Users />
             </div>
           </div>
@@ -233,10 +296,18 @@ function App() {
         <section className="main">
           <Header />
           <div className="mainContent flex">
-          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
               <Sidebar />
             </div>
-            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
               <Profile />
             </div>
           </div>
@@ -250,10 +321,18 @@ function App() {
         <section className="main">
           <Header />
           <div className="mainContent flex">
-          <div className={`sidebarWrapper overflow-hidden ${isSidebarOpen ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
               <Sidebar />
             </div>
-            <div className={`right-content p-5 ${isSidebarOpen ? 'w-[82%]' : 'w-[100%]'} transition-all`}>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
               <Orders />
             </div>
           </div>
@@ -270,58 +349,59 @@ function App() {
     adminData,
     setAdminData,
     isOpenFullScreenPannel,
-    setIsOpenFullScreenPannel
-  }
+    setIsOpenFullScreenPannel,
+    categoryData,
+    setCategoryData,
+    getCat,
+  };
 
   return (
     <>
-    <MyContext.Provider value={values}>
-      <RouterProvider router={router} />
-      <Dialog
-        fullScreen
-        open={isOpenFullScreenPannel.open}
-        onClose={handleCloseFullScreenPannel}
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{ position: 'relative' }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleCloseFullScreenPannel}
-              aria-label="close"
-            >
-              <IoMdClose className="text-gray-800" />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              <span className="text-gray-800">{isOpenFullScreenPannel?.model}</span>
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        {
-          isOpenFullScreenPannel.model === 'Add Product' && <AddProduct />
-        }
-        {
-          isOpenFullScreenPannel.model === 'Add Home Slide' && <AddHomeSlide />
-        }
-        {
-          isOpenFullScreenPannel.model === 'Add New Category' && <AddNewCategory />
-        }
-        {
-          isOpenFullScreenPannel.model === 'Add New Sub Category' && <AddNewSubCategory />
-        }
-        {
-          isOpenFullScreenPannel.model === 'Add New Address' && <AddNewAddress />
-        }
-        {
-          isOpenFullScreenPannel.model === 'Edit Category' && <EditCategory />
-        }
-      </Dialog>
-      <Toaster />
-    </MyContext.Provider>
+      <MyContext.Provider value={values}>
+        <RouterProvider router={router} />
+        <Dialog
+          fullScreen
+          open={isOpenFullScreenPannel.open}
+          onClose={handleCloseFullScreenPannel}
+          TransitionComponent={Transition}
+        >
+          <AppBar sx={{ position: "relative" }}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleCloseFullScreenPannel}
+                aria-label="close"
+              >
+                <IoMdClose className="text-gray-800" />
+              </IconButton>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                <span className="text-gray-800">
+                  {isOpenFullScreenPannel?.model}
+                </span>
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          {isOpenFullScreenPannel.model === "Add Product" && <AddProduct />}
+          {isOpenFullScreenPannel.model === "Add Home Slide" && (
+            <AddHomeSlide />
+          )}
+          {isOpenFullScreenPannel.model === "Add New Category" && (
+            <AddNewCategory />
+          )}
+          {isOpenFullScreenPannel.model === "Add New Sub Category" && (
+            <AddNewSubCategory />
+          )}
+          {isOpenFullScreenPannel.model === "Add New Address" && (
+            <AddNewAddress />
+          )}
+          {isOpenFullScreenPannel.model === "Edit Category" && <EditCategory />}
+        </Dialog>
+        <Toaster />
+      </MyContext.Provider>
     </>
   );
 }
 
 export default App;
-export { MyContext }
+export { MyContext };

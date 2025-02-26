@@ -30,7 +30,6 @@ function AddNewCategory() {
   const handleOnChangeInput = (e) => {
     const { name, value } = e.target;
     setFormFields((prevState) => ({ ...prevState, [name]: value }));
-    console.log(formFields);
   };
 
   const handleRemoveImage = (img, index) => {
@@ -48,8 +47,6 @@ function AddNewCategory() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formFields);
-    console.log(previews);
     if (formFields.name === "") {
       toast.error("Please enter category name!");
       return;
@@ -68,6 +65,7 @@ function AddNewCategory() {
             images: "",
           });
           setPreviews([]);
+          context.getCat();
           setTimeout(() => {
             context.setIsOpenFullScreenPannel({ open: false, model: "" });
           }, 1000);

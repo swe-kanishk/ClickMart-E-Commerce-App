@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { FaPlus, FaRegEye } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { BiExport } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
@@ -16,10 +16,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 import { MyContext } from "../../App";
-import { useEffect } from "react";
 import { deleteData, getData } from "../../utils/api";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
@@ -33,17 +32,8 @@ const columns = [
 function CategoryList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [categoryData, setCategoryData] = useState([]);
 
   const context = useContext(MyContext);
-
-  useEffect(() => {
-    getData("/api/category").then((res) => {
-      if (res?.success === true) {
-        setCategoryData(res?.data);
-      }
-    });
-  }, [context?.isOpenFullScreenPannel]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -56,16 +46,15 @@ function CategoryList() {
 
   const handleDeleteCat = (id) => {
     deleteData(`/api/category/${id}`).then((res) => {
-      console.log(res)
+      console.log(res);
       if (res?.data?.success === true) {
         toast.success(res?.data?.message);
-        setCategoryData((prevState) =>
+        context?.setCategoryData((prevState) =>
           prevState.filter((cat) => cat?._id !== id)
         );
       }
-    }
-    );
-  }
+    });
+  };
 
   return (
     <>
@@ -108,8 +97,8 @@ function CategoryList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {categoryData.length > 0 &&
-                categoryData?.map((cat) => {
+              {context?.categoryData?.length > 0 &&
+                context?.categoryData?.map((cat) => {
                   return (
                     <TableRow key={cat?._id}>
                       <TableCell width={60}>
@@ -131,7 +120,7 @@ function CategoryList() {
                       </TableCell>
                       <TableCell width={columns.minWidth}>
                         <div className="flex items-center gap-1">
-                          <TooltipMui title="Edit Product" placement="top">
+                          <TooltipMui title="Edit Category" placement="top">
                             <Button
                               onClick={() =>
                                 context.setIsOpenFullScreenPannel({
@@ -145,8 +134,11 @@ function CategoryList() {
                               <AiOutlineEdit size={"22px"} />
                             </Button>
                           </TooltipMui>
-                          <TooltipMui title="Remove Product" placement="top">
-                            <Button onClick={() => handleDeleteCat(cat?._id)} className="!w-[35px] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px] !h-[35px] !text-gray-500">
+                          <TooltipMui title="Remove Category" placement="top">
+                            <Button
+                              onClick={() => handleDeleteCat(cat?._id)}
+                              className="!w-[35px] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px] !h-[35px] !text-gray-500"
+                            >
                               <GoTrash size={"16px"} />
                             </Button>
                           </TooltipMui>
