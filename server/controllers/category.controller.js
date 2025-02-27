@@ -214,6 +214,7 @@ export const removeImageFromCloudinary = async (req, res) => {
 
 export const removeCategory = async (req, res) => {
   try {
+    console.log(req?.params?.id)
     const category = await CategoryModel.findById(req?.params?.id)
     if (!category) {
       return res.status(500).json({

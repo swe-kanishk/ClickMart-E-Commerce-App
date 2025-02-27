@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { GoTrash } from "react-icons/go";
 import { MyContext } from "../../App";
-import { editData } from "../../utils/api";
+import { deleteData, editData } from "../../utils/api";
 import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
 
@@ -74,6 +74,17 @@ function EditSubCategoryBox({
         }
       }
     );
+  };
+
+  const handleDeleteCat = () => {
+    alert(id)
+    deleteData(`/api/category/${id}`).then((res) => {
+      console.log(res);
+      if (res?.data?.success === true) {
+        toast.success(res?.data?.message);
+        context?.getCat()
+      }
+    });
   };
   return (
     <form
@@ -146,7 +157,7 @@ function EditSubCategoryBox({
             >
               <AiOutlineEdit size={24} />
             </Button>
-            <Button className="!min-w-[35px] !w-[35px] !h-[35px] !rounded-full !text-gray-600">
+            <Button onClick={handleDeleteCat} className="!min-w-[35px] !w-[35px] !h-[35px] !rounded-full !text-gray-600">
               <GoTrash size={16} />
             </Button>
           </div>
