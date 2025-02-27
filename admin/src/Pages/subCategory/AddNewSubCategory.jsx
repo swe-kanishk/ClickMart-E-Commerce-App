@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import UploadProductBox from "../Components/UploadProductBox";
 import { Button, MenuItem, Select } from "@mui/material";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { MyContext } from "../App";
-import { postData } from "../utils/api";
 import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
+import { MyContext } from "../../App";
+import { postData } from "../../utils/api";
 
 function AddNewSubCategory() {
   const [category, setCategory] = useState("");
@@ -204,7 +203,7 @@ function AddNewSubCategory() {
                 disabled={isLoading2}
                 size="small"
                 className="w-full !p-1 !bg-white"
-                label="Category"
+                label="subCategory"
                 onChange={handleChangeCat2}
               >
                 {context?.categoryData?.length > 0 &&

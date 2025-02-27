@@ -22,8 +22,6 @@ import HomeSliderBanners from "./Pages/HomeSliderBanners";
 import AddHomeSlide from "./Pages/AddHomeSlide";
 import AddNewCategory from "./Pages/category/AddNewCategory";
 import CategoryList from "./Pages/category/CategoryList";
-import SubCategoryList from "./Pages/SubCategoryList";
-import AddNewSubCategory from "./Pages/AddNewSubCategory";
 import Users from "./Pages/Users";
 import Orders from "./Pages/Orders";
 import ForgotPassword from "./Pages/auth/ForgotPassword";
@@ -33,6 +31,8 @@ import { getData } from "./utils/api";
 import Profile from "./Pages/Profile";
 import AddNewAddress from "./Pages/AddNewAddress";
 import EditCategory from "./Pages/category/EditCategory";
+import SubCategoryList from "./Pages/subCategory/SubCategoryList";
+import AddNewSubCategory from "./Pages/subCategory/AddNewSubCategory";
 
 const MyContext = createContext();
 
