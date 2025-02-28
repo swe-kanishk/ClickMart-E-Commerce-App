@@ -35,7 +35,6 @@ function UploadProductBox({ multiple, name, url, setPreviews }) {
             if (res?.status === 200) {
               setIsUploading(false);
               setPreviews(res?.data?.images);
-              context
             }
           });
         } else {

@@ -13,6 +13,7 @@ import { BiLoader } from "react-icons/bi";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { MyContext } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 function AddNewCategory() {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +24,7 @@ function AddNewCategory() {
     images: [],
   });
 
+  const navigate = useNavigate()
   useEffect(() => {
     setFormFields((prevState) => ({ ...prevState, images: previews }));
   }, [previews]);
@@ -59,6 +61,7 @@ function AddNewCategory() {
       (res) => {
         if (res?.success === true) {
           toast.success(res?.message);
+          navigate('/category/list')
           setIsLoading(false);
           setFormFields({
             name: "",

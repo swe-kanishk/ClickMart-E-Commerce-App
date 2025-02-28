@@ -9,7 +9,6 @@ import { FaRegBell } from "react-icons/fa";
 
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -33,6 +32,25 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     padding: "0 4px",
   },
 }));
+
+import Dialog from "@mui/material/Dialog";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Slide from "@mui/material/Slide";
+import { IoMdClose } from "react-icons/io";
+
+import AddProduct from "../Pages/AddProduct";
+import AddHomeSlide from "../Pages/AddHomeSlide";
+import AddNewCategory from "../Pages/category/AddNewCategory";
+import AddNewAddress from "../Pages/AddNewAddress";
+import EditCategory from "../Pages/category/EditCategory";
+import AddNewSubCategory from "../Pages/subCategory/AddNewSubCategory";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function Header() {
   const [anchorMyAccount, setAnchorMyAccount] = useState(false);
@@ -64,149 +82,195 @@ function Header() {
         toast.error("Logout failed. Please try again.");
       });
   };
-  console.log(context.adminData)
+  
   return (
-    <header
-      className={`w-full h-[60px] pr-5 shadow-md flex transition-all ${
-        context.isSidebarOpen ? "pl-[18%]" : "pl-7"
-      } border-b border-gray-300 items-center justify-between bg-[#fff]`}
-    >
-      <div
-        className={`col-1 flex gap-5  ${
-          context.isSidebarOpen ? "w-[400px]" : "w-[650px]"
-        }`}
+    <>
+      <header
+        className={`w-full h-[60px] pr-5 shadow-md flex transition-all ${
+          context.isSidebarOpen ? "pl-[18%]" : "pl-7"
+        } border-b border-gray-300 items-center justify-between bg-[#fff]`}
       >
-        {!context.isSidebarOpen && (
-          <div className="mr-6 border-gray-400 transition-all border-r pr-8 whitespace-nowrap">
-            <Logo />
-          </div>
-        )}
-        <Button
-          className="!w-[40px] z-50 !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
-          onClick={() => context.setIsSidebarOpen(!context.isSidebarOpen)}
+        <div
+          className={`col-1 flex gap-5  ${
+            context.isSidebarOpen ? "w-[400px]" : "w-[650px]"
+          }`}
         >
-          {context.isSidebarOpen ? (
-            <HiMenu size={"20px"} />
-          ) : (
-            <HiMenuAlt1 size={"20px"} />
+          {!context.isSidebarOpen && (
+            <div className="mr-6 border-gray-400 transition-all border-r pr-8 whitespace-nowrap">
+              <Logo />
+            </div>
           )}
-        </Button>
-        <InputBox />
-      </div>
-      <div className="col-2 flex items-center justify-end w-[30%] gap-5">
-        <IconButton aria-label="Notifications">
-          <StyledBadge badgeContent={4} color="primary">
-            <FaRegBell />
-          </StyledBadge>
-        </IconButton>
-        {context.isLogin ? (
-          <div className="relative">
-            <Button
-              className="!w-[40px] !overflow-hidden !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
-              onClick={() => setAnchorMyAccount(!anchorMyAccount)}
-            >
-              {context?.adminData?.avatar ? (
-                <img
-                  className="h-[30px] w-[30px] min-h-[30px] rounded-full min-w-[30px] object-cover"
-                  src={context?.adminData?.avatar}
-                  alt=""
-                />
-              ) : (
-                <img
-                  src={"./user-avatar.png"}
-                  alt="avatar"
-                  className="h-[30px] w-[30px] min-h-[30px] rounded-full min-w-[30px] object-cover"
-                />
-              )}
-            </Button>
-            <Menu
-              anchorEl={anchorMyAccount}
-              id="account-menu"
-              open={anchorMyAccount}
-              onClose={handleCloseMyAcc}
-              onClick={handleCloseMyAcc}
-              slotProps={{
-                paper: {
-                  elevation: 0,
-                  sx: {
-                    overflow: "visible",
-                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                    mt: 1.5,
-                    "& .MuiAvatar-root": {
-                      width: 32,
-                      height: 32,
-                      ml: -0.5,
-                      mr: 1,
-                    },
-                    "&::before": {
-                      content: '""',
-                      display: "block",
-                      position: "absolute",
-                      top: 0,
-                      right: 14,
-                      width: 10,
-                      height: 10,
-                      bgcolor: "background.paper",
-                      transform: "translateY(-50%) rotate(45deg)",
-                      zIndex: 0,
+          <Button
+            className="!w-[40px] z-50 !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
+            onClick={() => context.setIsSidebarOpen(!context.isSidebarOpen)}
+          >
+            {context.isSidebarOpen ? (
+              <HiMenu size={"20px"} />
+            ) : (
+              <HiMenuAlt1 size={"20px"} />
+            )}
+          </Button>
+          <InputBox />
+        </div>
+        <div className="col-2 flex items-center justify-end w-[30%] gap-5">
+          <IconButton aria-label="Notifications">
+            <StyledBadge badgeContent={4} color="primary">
+              <FaRegBell />
+            </StyledBadge>
+          </IconButton>
+          {context.isLogin ? (
+            <div className="relative">
+              <Button
+                className="!w-[40px] !overflow-hidden !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
+                onClick={() => setAnchorMyAccount(!anchorMyAccount)}
+              >
+                {context?.adminData?.avatar ? (
+                  <img
+                    className="h-[30px] w-[30px] min-h-[30px] rounded-full min-w-[30px] object-cover"
+                    src={context?.adminData?.avatar}
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    src={"./user-avatar.png"}
+                    alt="avatar"
+                    className="h-[30px] w-[30px] min-h-[30px] rounded-full min-w-[30px] object-cover"
+                  />
+                )}
+              </Button>
+              <Menu
+                anchorEl={anchorMyAccount}
+                id="account-menu"
+                open={anchorMyAccount}
+                onClose={handleCloseMyAcc}
+                onClick={handleCloseMyAcc}
+                slotProps={{
+                  paper: {
+                    elevation: 0,
+                    sx: {
+                      overflow: "visible",
+                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                      mt: 1.5,
+                      "& .MuiAvatar-root": {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                      },
+                      "&::before": {
+                        content: '""',
+                        display: "block",
+                        position: "absolute",
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: "background.paper",
+                        transform: "translateY(-50%) rotate(45deg)",
+                        zIndex: 0,
+                      },
                     },
                   },
-                },
-              }}
-              anchorOrigin={{ horizontal: "right", vertical: "top" }}
-            >
-              <MenuItem onClick={handleCloseMyAcc}>
-                <div className="flex items-center gap-3">
-                  <Button className="!w-[40px] !overflow-hidden !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]">
-                    <img
-                      className="h-[38px] w-[38px] min-h-[38px] rounded-full min-w-[38px] object-cover"
-                      src={context?.adminData?.avatar}
-                      alt=""
-                    />
-                  </Button>
-                  <div className="text-start">
-                    <h3 className="text-[16px] leading-5 font-[600]">
-                      {context?.adminData?.fullName}
-                    </h3>
-                    <p className="text-[14px]">{context?.adminData?.email}</p>
+                }}
+                anchorOrigin={{ horizontal: "right", vertical: "top" }}
+              >
+                <MenuItem onClick={handleCloseMyAcc}>
+                  <div className="flex items-center gap-3">
+                    <Button className="!w-[40px] !overflow-hidden !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]">
+                      <img
+                        className="h-[38px] w-[38px] min-h-[38px] rounded-full min-w-[38px] object-cover"
+                        src={context?.adminData?.avatar}
+                        alt=""
+                      />
+                    </Button>
+                    <div className="text-start">
+                      <h3 className="text-[16px] leading-5 font-[600]">
+                        {context?.adminData?.fullName}
+                      </h3>
+                      <p className="text-[14px]">{context?.adminData?.email}</p>
+                    </div>
                   </div>
-                </div>
-              </MenuItem>
-              <Divider />
-              <MenuItem
-                onClick={() => navigate("/profile")}
-                className="flex items-end gap-3"
+                </MenuItem>
+                <Divider />
+                <MenuItem
+                  onClick={() => navigate("/profile")}
+                  className="flex items-end gap-3"
+                >
+                  <LuUserRound /> <span className="text-[14px]">Profile</span>
+                </MenuItem>
+                <MenuItem
+                  onClick={handleCloseMyAcc}
+                  className="flex items-end gap-3"
+                >
+                  <IoSettingsOutline />{" "}
+                  <span className="text-[14px]">Settings</span>
+                </MenuItem>
+                <MenuItem
+                  onClick={handleCloseMyAcc}
+                  className="flex items-end gap-3"
+                >
+                  <FiActivity />{" "}
+                  <span className="text-[14px]">Activity Log</span>
+                </MenuItem>
+                <Divider />
+                <MenuItem
+                  onClick={handleLogout}
+                  className="flex items-end gap-3"
+                >
+                  <MdOutlineLogout />{" "}
+                  <span className="text-[14px]">Logout</span>
+                </MenuItem>
+              </Menu>
+            </div>
+          ) : (
+            <Link to={"/login"}>
+              <Button className="!text-white !capitalize !bg-blue-600 !px-3 !py-1 !rounded-full">
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
+      </header>
+
+      <Dialog
+          fullScreen
+          open={context?.isOpenFullScreenPannel?.open}
+          onClose={context?.handleCloseFullScreenPannel}
+          TransitionComponent={Transition}
+        >
+          <AppBar sx={{ position: "relative" }}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={context?.handleCloseFullScreenPannel}
+                aria-label="close"
               >
-                <LuUserRound /> <span className="text-[14px]">Profile</span>
-              </MenuItem>
-              <MenuItem
-                onClick={handleCloseMyAcc}
-                className="flex items-end gap-3"
-              >
-                <IoSettingsOutline />{" "}
-                <span className="text-[14px]">Settings</span>
-              </MenuItem>
-              <MenuItem
-                onClick={handleCloseMyAcc}
-                className="flex items-end gap-3"
-              >
-                <FiActivity /> <span className="text-[14px]">Activity Log</span>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleLogout} className="flex items-end gap-3">
-                <MdOutlineLogout /> <span className="text-[14px]">Logout</span>
-              </MenuItem>
-            </Menu>
-          </div>
-        ) : (
-          <Link to={"/login"}>
-            <Button className="!text-white !capitalize !bg-blue-600 !px-3 !py-1 !rounded-full">
-              Login
-            </Button>
-          </Link>
-        )}
-      </div>
-    </header>
+                <IoMdClose className="text-gray-800" />
+              </IconButton>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                <span className="text-gray-800">
+                  {context?.isOpenFullScreenPannel?.model}
+                </span>
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          {context?.isOpenFullScreenPannel?.model === "Add Product" && <AddProduct />}
+          {context?.isOpenFullScreenPannel?.model === "Add Home Slide" && (
+            <AddHomeSlide />
+          )}
+          {context?.isOpenFullScreenPannel?.model === "Add New Category" && (
+            <AddNewCategory />
+          )}
+          {context?.isOpenFullScreenPannel?.model === "Add New Sub Category" && (
+            <AddNewSubCategory />
+          )}
+          {context?.isOpenFullScreenPannel?.model === "Add New Address" && (
+            <AddNewAddress />
+          )}
+          {context?.isOpenFullScreenPannel?.model === "Edit Category" && <EditCategory />}
+        </Dialog>
+    </>
   );
 }
 

@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
 import { MyContext } from "../../App";
 import { postData } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 function AddNewSubCategory() {
   const [category, setCategory] = useState("");
@@ -26,6 +27,7 @@ function AddNewSubCategory() {
   });
 
   const context = useContext(MyContext);
+  const navigate = useNavigate()
 
   const handleChangeCat = (event) => {
     setCategory(event.target.value);
@@ -66,10 +68,10 @@ function AddNewSubCategory() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formFields.name === "" || formFields2.name === "") {
+    if (formFields.name === "") {
       toast.error("Please enter sub category name!");
       return;
-    } else if (formFields.parentCatName === null || formFields.parentCatName === null) {
+    } else if (formFields.parentCatName === null) {
       toast.error("Please select parent category!");
       return;
     }
@@ -78,6 +80,7 @@ function AddNewSubCategory() {
       (res) => {
         if (res?.success === true) {
           toast.success(res?.message);
+          navigate('/subCategory/list')
           setIsLoading(false);
           setFormFields({
             name: "",
@@ -106,6 +109,7 @@ function AddNewSubCategory() {
       (res) => {
         if (res?.success === true) {
           toast.success(res?.message);
+          navigate('/subCategory/list')
           setIsLoading2(false);
           setFormFields2({
             name: "",
