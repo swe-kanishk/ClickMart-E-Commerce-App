@@ -46,7 +46,6 @@ function CategoryList() {
 
   const handleDeleteCat = (id) => {
     deleteData(`/api/category/${id}`).then((res) => {
-      console.log(res);
       if (res?.data?.success === true) {
         toast.success(res?.data?.message);
         context?.setCategoryData((prevState) =>

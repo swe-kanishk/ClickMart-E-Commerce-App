@@ -3,16 +3,16 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 import Rating from "@mui/material/Rating";
-import UploadProductBox from "../Components/UploadProductBox";
+import UploadProductBox from "../../Components/UploadProductBox";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { IoMdCloseCircle } from "react-icons/io";
 import { Button } from "@mui/material";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { MyContext } from "../App";
+import { MyContext } from "../../App";
 import { BiLoader } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { deleteImages, postData } from "../utils/api";
+import { deleteImages, postData } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 
 function AddProduct() {
@@ -30,6 +30,7 @@ function AddProduct() {
     price: "",
     oldPrice: "",
     catName: "",
+    category: '',
     catId: "",
     subCatName: "",
     subCatId: "",
@@ -56,6 +57,7 @@ function AddProduct() {
   const handleChangeProductCat = (event) => {
     setProductCat(event.target.value);
     formFields.catId = event.target.value;
+    formFields.category = event.target.value;
   };
 
   const selectCatByName = (catName) => {

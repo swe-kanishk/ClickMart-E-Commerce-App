@@ -57,6 +57,7 @@ export const createProduct = async (req, res) => {
       catName,
       brand,
       subCat,
+      category,
       subCatId,
       subCatName,
       thirdSubCat,
@@ -83,6 +84,7 @@ export const createProduct = async (req, res) => {
       catName,
       subCat,
       subCatId,
+      category,
       subCatName,
       brand,
       thirdSubCat,
@@ -613,9 +615,9 @@ export const deleteProduct = async (req, res) => {
         error: true,
       });
     }
-    const images = product.images;
+    const images = product?.images;
     for (let img of images) {
-      const imgUrlArr = images.split("/");
+      const imgUrlArr = img.split("/");
       const image = imgUrlArr[imgUrlArr.length - 1];
       const imageName = image.split(".")[0];
 

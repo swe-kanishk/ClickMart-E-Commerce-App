@@ -7,7 +7,10 @@ const productRouter = Router();
 
 productRouter.get('/', getAllProducts)
 productRouter.post('/', auth, createProduct)
+productRouter.get('/:id', getProduct)
+productRouter.put('/:id', auth, updateProduct);
 productRouter.delete('/delete-image', auth, removeImageFromCloudinary);
+productRouter.delete('/:id', auth, deleteProduct)
 productRouter.get('/getAllProductsByCatId/:id', getAllProductsByCatId)
 productRouter.get('/getAllProductsBySubCatId/:id', getAllProductsBySubCatId)
 productRouter.get('/getAllProductsByThirdLevelCatId/:id', getAllProductsByThirdLevelCatId)
@@ -19,8 +22,5 @@ productRouter.get('/getProductsByPrice', getAllProductsByPrice)
 productRouter.get('/getProductsByRating', getAllProductsByRating)
 productRouter.get('/getProductsCount', getProductsCount)
 productRouter.get('/getFeaturedProducts', getFeaturedProducts)
-productRouter.delete('/:id', auth, deleteProduct)
-productRouter.get('/:id', getProduct)
-productRouter.put('/:id', auth, updateProduct);
 
 export default productRouter;     

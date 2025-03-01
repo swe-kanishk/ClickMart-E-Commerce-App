@@ -52,7 +52,10 @@ function UploadProductBox({ multiple, name, url, setPreviews }) {
   return (
     <div className="p-3 rounded-md h-[150px] flex-col relative w-[170px] flex items-center justify-center bg-gray-100 cursor-pointer hover:bg-gray-200 hover:border-gray-600 overflow-hidden border-dashed border border-gray-400 ">
       {isUploading ? (
+        <>
         <BiLoader size={"22px"} className="animate-spin" />
+        <span className="text-center">Uploading...</span>
+        </>
       ) : (
         <>
           <FaRegImages

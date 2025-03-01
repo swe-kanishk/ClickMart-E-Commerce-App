@@ -41,12 +41,13 @@ import Typography from "@mui/material/Typography";
 import Slide from "@mui/material/Slide";
 import { IoMdClose } from "react-icons/io";
 
-import AddProduct from "../Pages/AddProduct";
+import AddProduct from "../Pages/product/AddProduct";
 import AddHomeSlide from "../Pages/AddHomeSlide";
 import AddNewCategory from "../Pages/category/AddNewCategory";
 import AddNewAddress from "../Pages/AddNewAddress";
 import EditCategory from "../Pages/category/EditCategory";
 import AddNewSubCategory from "../Pages/subCategory/AddNewSubCategory";
+import EditProduct from "../Pages/product/EditProduct";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -269,6 +270,7 @@ function Header() {
             <AddNewAddress />
           )}
           {context?.isOpenFullScreenPannel?.model === "Edit Category" && <EditCategory />}
+          {context?.isOpenFullScreenPannel?.model === "Edit Product" && <EditProduct />}
         </Dialog>
     </>
   );

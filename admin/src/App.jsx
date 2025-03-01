@@ -6,7 +6,6 @@ import Sidebar from "./Components/Sidebar";
 import React, { createContext, useEffect, useState } from "react";
 import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
-import Products from "./Pages/Products";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -20,6 +19,7 @@ import ChangePassword from "./Pages/auth/ChangePassword";
 import { getData } from "./utils/api";
 import Profile from "./Pages/Profile";
 import SubCategoryList from "./Pages/subCategory/SubCategoryList";
+import Products from "./Pages/product/Products";
 
 const MyContext = createContext();
 
