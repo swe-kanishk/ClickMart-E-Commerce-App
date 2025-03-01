@@ -651,6 +651,65 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
+export const deleteMultipleProducts = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: "Invalid input!",
+      });
+    }
+
+    for (let i = 0; i < ids.length; i++) {
+      const product = await ProductModel.findById(ids[i]);
+
+      if (!product) {
+        return res.status(500).json({
+          message: "Product not found!",
+          success: false,
+          error: true,
+        });
+      }
+
+      const images = product?.images;
+      for (let img of images) {
+        const imgUrlArr = img.split("/");
+        const image = imgUrlArr[imgUrlArr.length - 1];
+        const imageName = image.split(".")[0];
+
+        if (imageName) {
+          await cloudinary.uploader.destroy(imageName, (err, result) => {
+            console.log(err, result);
+          });
+        }
+      }
+    }
+
+    try {
+      await ProductModel.deleteMany({ _id: { $in: ids } });
+      return res.status(200).json({
+        success: true,
+        error: false,
+        message: "Product deleted!",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message || error,
+        error: true,
+        success: false,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
 export const getProduct = async (req, res) => {
   try {
     const product = await ProductModel.findById(req.params.id).populate(
@@ -710,27 +769,31 @@ export const removeImageFromCloudinary = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const product = await ProductModel.findByIdAndUpdate(req.params.id, {
-      name: req.body.name,
-      description: req.body.description,
-      price: req.body.price,
-      oldPrice: req.body.oldPrice,
-      catId: req.body.catId,
-      catName: req.body.catName,
-      brand: req.body.brand,
-      subCat: req.body.subCat,
-      subCatId: req.body.subCatId,
-      category: req.body.category,
-      thirdSubCat: req.body.thirdSubCat,
-      thirdSubCatId: req.body.thirdSubCatId,
-      countInStock: req.body.countInStock,
-      rating: req.body.rating,
-      isFeatured: req.body.isFeatured,
-      discount: req.body.discount,
-      size: req.body.size,
-      productRam: req.body.productRam,
-      weight: req.body.weight,
-    }, {new: true});
+    const product = await ProductModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        oldPrice: req.body.oldPrice,
+        catId: req.body.catId,
+        catName: req.body.catName,
+        brand: req.body.brand,
+        subCat: req.body.subCat,
+        subCatId: req.body.subCatId,
+        category: req.body.category,
+        thirdSubCat: req.body.thirdSubCat,
+        thirdSubCatId: req.body.thirdSubCatId,
+        countInStock: req.body.countInStock,
+        rating: req.body.rating,
+        isFeatured: req.body.isFeatured,
+        discount: req.body.discount,
+        size: req.body.size,
+        productRam: req.body.productRam,
+        weight: req.body.weight,
+      },
+      { new: true }
+    );
 
     if (!product) {
       return res.status(404).json({
@@ -745,7 +808,7 @@ export const updateProduct = async (req, res) => {
     return res.status(200).json({
       success: true,
       error: false,
-      message: 'Product is updated!'
+      message: "Product is updated!",
     });
   } catch (error) {
     return res.status(500).json({

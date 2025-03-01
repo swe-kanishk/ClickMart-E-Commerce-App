@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProduct, deleteProduct, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdLevelCatId, getAllProductsByThirdLevelCatName, getFeaturedProducts, getProduct, getProductsCount, removeImageFromCloudinary, updateProduct, uploadImages } from "../controllers/product.controller.js";
+import { createProduct, deleteMultipleProducts, deleteProduct, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdLevelCatId, getAllProductsByThirdLevelCatName, getFeaturedProducts, getProduct, getProductsCount, removeImageFromCloudinary, updateProduct, uploadImages } from "../controllers/product.controller.js";
 import auth from "../middlewares/auth.js";
 import upload from "../middlewares/multer.js";
 
@@ -11,6 +11,7 @@ productRouter.get('/:id', getProduct)
 productRouter.put('/:id', auth, updateProduct);
 productRouter.delete('/delete-image', auth, removeImageFromCloudinary);
 productRouter.delete('/:id', auth, deleteProduct)
+productRouter.delete('/deleteMultiple', auth, deleteMultipleProducts)
 productRouter.get('/getAllProductsByCatId/:id', getAllProductsByCatId)
 productRouter.get('/getAllProductsBySubCatId/:id', getAllProductsBySubCatId)
 productRouter.get('/getAllProductsByThirdLevelCatId/:id', getAllProductsByThirdLevelCatId)
