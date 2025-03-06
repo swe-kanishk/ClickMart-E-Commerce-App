@@ -54,7 +54,10 @@ const columns = [
 ];
 
 function Products() {
-  const [categoryFilterVal, setCategoryFilterVal] = useState("");
+  const [productCat, setProductCat] = useState("");
+  const [productSubCat, setProductSubCat] = useState("");
+  const [productThirdSubCat, setProductThirdSubCat] = useState("");
+
   const [productsData, setProductsData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -69,8 +72,37 @@ function Products() {
     });
   }, []);
 
-  const handleChangeCatFilter = (event) => {
-    setCategoryFilterVal(event.target.value);
+  const handleChangeProductCat = (event) => {
+    setProductCat(event.target.value);
+    getData(`/api/product/getAllProductsByCatId/${event.target.value}`).then(
+      (res) => {
+        if (res?.success === true) {
+          setProductsData(res?.data);
+        }
+      }
+    );
+  };
+
+  const handleChangeProductSubCat = (event) => {
+    setProductSubCat(event.target.value);
+    getData(`/api/product/getAllProductsBySubCatId/${event.target.value}`).then(
+      (res) => {
+        if (res?.success === true) {
+          setProductsData(res?.data);
+        }
+      }
+    );
+  };
+
+  const handleChangeProductThirdSubCat = (event) => {
+    setProductThirdSubCat(event.target.value);
+    getData(
+      `/api/product/getAllProductsByThirdLevelCatId/${event.target.value}`
+    ).then((res) => {
+      if (res?.success === true) {
+        setProductsData(res?.data);
+      }
+    });
   };
 
   const handleChangePage = (event, newPage) => {
@@ -113,24 +145,91 @@ function Products() {
         </div>
       </div>
       <div className="card bg-white overflow-hidden shadow-md sm:rounded-lg rounded-md border my-4 border-gray-200 hover:border-gray-400 transition-all">
-        <div className="flex items-center w-full px-5 py-2 justify-between">
-          <div className="col w-[20%]">
+        <div className="flex items-center w-full px-5 py-2 gap-6 pb-3 justify-between">
+          <div className="col w-[15%]">
             <h4 className="font-[600] text-[13px] mb-2">Category By</h4>
             <Select
               className="w-full"
               size="small"
+              style={{ zoom: "80%" }}
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
-              value={categoryFilterVal}
-              onChange={handleChangeCatFilter}
+              value={productCat}
+              onChange={handleChangeProductCat}
               label="Category"
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Men</MenuItem>
-              <MenuItem value={20}>Women</MenuItem>
-              <MenuItem value={30}>Kids</MenuItem>
+              {context?.categoryData?.length > 0 &&
+                context?.categoryData?.map((category) => {
+                  return (
+                    <MenuItem key={category?._id} value={category?._id}>
+                      {category?.name}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
+          <div className="col w-[15%]">
+            <h4 className="font-[600] text-[13px] mb-2">Sub Category By</h4>
+            <Select
+              className="w-full"
+              size="small"
+              style={{ zoom: "80%" }}
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              value={productSubCat}
+              onChange={handleChangeProductSubCat}
+              label="Category"
+            >
+              {context?.categoryData?.length > 0 &&
+                context?.categoryData?.map((category) => {
+                  return (
+                    category?.children?.length > 0 &&
+                    category?.children?.map((subCat) => {
+                      return (
+                        <MenuItem key={subCat?._id} value={subCat?._id}>
+                          {subCat?.name}
+                        </MenuItem>
+                      );
+                    })
+                  );
+                })}
+            </Select>
+          </div>
+          <div className="col w-[15%]">
+            <h4 className="font-[600] text-[13px] mb-2">
+              Third Level Category By
+            </h4>
+            <Select
+              className="w-full"
+              size="small"
+              style={{ zoom: "80%" }}
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              value={productThirdSubCat}
+              onChange={handleChangeProductThirdSubCat}
+              label="Category"
+            >
+              {context?.categoryData?.length > 0 &&
+                context?.categoryData?.map((category) => {
+                  return (
+                    category?.children?.length > 0 &&
+                    category?.children?.map((subCat) => {
+                      return (
+                        subCat?.children?.length > 0 &&
+                        subCat?.children?.map((thirdSubCat) => {
+                          return (
+                            <MenuItem
+                              key={thirdSubCat?._id}
+                              value={thirdSubCat?._id}
+                            >
+                              {thirdSubCat?.name}
+                            </MenuItem>
+                          );
+                        })
+                      );
+                    })
+                  );
+                })}
             </Select>
           </div>
           <div className="col w-[20%] ml-auto">
@@ -225,7 +324,7 @@ function Products() {
                                 context.setIsOpenFullScreenPannel({
                                   open: true,
                                   model: "Edit Product",
-                                  id: product?._id
+                                  id: product?._id,
                                 })
                               }
                               className="!w-[35px] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px] !h-[35px] !text-gray-500"
