@@ -12,7 +12,7 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { MyContext } from "../../App";
 import { BiLoader } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { deleteImages, getData, postData } from "../../utils/api";
+import { deleteImages, editData, getData, postData } from "../../utils/api";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditProduct() {
@@ -30,7 +30,7 @@ function EditProduct() {
     price: "",
     oldPrice: "",
     catName: "",
-    category: '',
+    category: "",
     catId: "",
     subCatName: "",
     subCatId: "",
@@ -61,14 +61,45 @@ function EditProduct() {
   };
 
   useEffect(() => {
-      getData(`/api/product/${context?.isOpenFullScreenPannel?.id}`).then((res) => {
-        console.log(res)
+    getData(`/api/product/${context?.isOpenFullScreenPannel?.id}`).then(
+      (res) => {
+        console.log(res);
         if (res?.success === true) {
-          
+          setFormFields({
+            name: res?.product?.name,
+            description: res?.product?.description,
+            images: res?.product?.images,
+            brand: res?.product?.brand,
+            price: res?.product?.price,
+            oldPrice: res?.product?.oldPrice,
+            catName: res?.product?.catName,
+            category: res?.product?.category,
+            catId: res?.product?.catId,
+            subCatName: res?.product?.subCatName,
+            subCatId: res?.product?.subCatId,
+            thirdSubCatName: res?.product?.thirdSubCatName,
+            thirdSubCatId: res?.product?.thirdSubCatId,
+            countInStock: res?.product?.countInStock,
+            rating: res?.product?.rating,
+            isFeatured: res?.product?.isFeatured,
+            discount: res?.product?.discount,
+            productRam: res?.product?.productRam,
+            size: res?.product?.size,
+            weight: res?.product?.weight,
+          });
+
+          setProductCat(res?.product?.catId)
+          setProductSubCat(res?.product?.subCatId)
+          setProductThirdSubCat(res?.product?.thirdSubCatId)
+          setIsProductFeatured(res?.product?.isFeatured)
+          setProductRams(res?.product?.productRam)
+          setProductWeight(res?.product?.weight)
+          setProductSize(res?.product?.size)
+          setPreviews(res?.product?.images)
         }
-      });
-    }, []);
-  
+      }
+    );
+  }, []);
 
   const selectCatByName = (catName) => {
     formFields.catName = catName;
@@ -175,11 +206,34 @@ function EditProduct() {
       return;
     }
     setIsLoading(true);
-    postData("/api/product/", formFields, { withCredentials: true }).then(
+    editData(`/api/product/${context?.isOpenFullScreenPannel?.id}`, formFields, { withCredentials: true }).then(
       (res) => {
-        if (res?.success === true) {
-          toast.success(res?.message);
+        console.log(res)
+        if (res?.data?.success === true) {
+          toast.success(res?.data?.message);
           setIsLoading(false);
+          setFormFields({
+            name: "",
+            description: "",
+            images: [],
+            brand: "",
+            price: "",
+            oldPrice: "",
+            catName: "",
+            category: "",
+            catId: "",
+            subCatName: "",
+            subCatId: "",
+            thirdSubCatName: "",
+            thirdSubCatId: "",
+            countInStock: "",
+            rating: "",
+            isFeatured: false,
+            discount: "",
+            productRam: [],
+            size: [],
+            weight: [],
+          })
           navigate("/products");
           setTimeout(() => {
             context.setIsOpenFullScreenPannel({ open: false, model: "" });
@@ -479,9 +533,8 @@ function EditProduct() {
               </h3>
               <Rating
                 name="rating"
-                defaultValue={1}
                 disabled={isLoading}
-                value={Number(productRating)}
+                value={Number(formFields.rating)}
                 onChange={handleOnChangeRating}
               />
             </div>

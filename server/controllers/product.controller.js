@@ -692,7 +692,7 @@ export const deleteMultipleProducts = async (req, res) => {
       return res.status(200).json({
         success: true,
         error: false,
-        message: "Product deleted!",
+        message: "Products deleted successfully!",
       });
     } catch (error) {
       return res.status(500).json({
@@ -776,6 +776,7 @@ export const updateProduct = async (req, res) => {
         description: req.body.description,
         price: req.body.price,
         oldPrice: req.body.oldPrice,
+        images: req.body.images,
         catId: req.body.catId,
         catName: req.body.catName,
         brand: req.body.brand,
@@ -808,7 +809,7 @@ export const updateProduct = async (req, res) => {
     return res.status(200).json({
       success: true,
       error: false,
-      message: "Product is updated!",
+      message: "Product updated!",
     });
   } catch (error) {
     return res.status(500).json({
