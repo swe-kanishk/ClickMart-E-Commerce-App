@@ -20,6 +20,7 @@ import { getData } from "./utils/api";
 import Profile from "./Pages/Profile";
 import SubCategoryList from "./Pages/subCategory/SubCategoryList";
 import Products from "./Pages/product/Products";
+import ProductDetails from "./Pages/product/ProductDetails";
 
 const MyContext = createContext();
 
@@ -292,6 +293,31 @@ function App() {
               } transition-all`}
             >
               <Profile />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/product/:id",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
+              <Sidebar />
+            </div>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
+              <ProductDetails />
             </div>
           </div>
         </section>

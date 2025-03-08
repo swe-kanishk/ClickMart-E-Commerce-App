@@ -336,9 +336,11 @@ function Products() {
                             title="View Product Details"
                             placement="top"
                           >
+                            <Link to={`/product/${product?._id}`}>
                             <Button className="!w-[35px] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px] !h-[35px] !text-gray-500">
                               <FaRegEye size={"16px"} />
                             </Button>
+                            </Link>
                           </TooltipMui>
                           <TooltipMui title="Remove Product" placement="top">
                             <Button
