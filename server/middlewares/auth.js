@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const auth = async (req, res, next) => {
   try {
-    const token =
+    let token =
       req?.cookies?.accessToken || req?.headers?.authorization?.split(" ")[1];
     if (!token) {
       token = req?.query?.token;
@@ -25,6 +25,7 @@ const auth = async (req, res, next) => {
     req.userId = decoded._id;
     next();
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       message: "You haven't login!",
       error: true,

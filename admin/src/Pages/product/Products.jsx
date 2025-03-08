@@ -22,7 +22,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import ProductSearchbox from "../../Components/ProductSearchbox";
 import { MyContext } from "../../App";
-import { deleteData, getData } from "../../utils/api";
+import { deleteData, deleteMultipleData, getData } from "../../utils/api";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import toast from "react-hot-toast";
 
@@ -59,18 +59,28 @@ function Products() {
   const [productThirdSubCat, setProductThirdSubCat] = useState("");
 
   const [productsData, setProductsData] = useState([]);
+  const [sortedIds, setSortedIds] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const context = useContext(MyContext);
 
-  useEffect(() => {
+  const getProducts = () => {
     getData(`/api/product/?page=${page}&perPage=${rowsPerPage}`).then((res) => {
       if (res?.success === true) {
-        setProductsData(res?.data);
+        const productsArr = [];
+        for (let i = 0; i < res?.data?.length; i++) {
+          productsArr[i] = res?.data[i];
+          productsArr[i].checked = false;
+        }
+        setProductsData(productsArr);
       }
     });
-  }, []);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, [context?.isOpenFullScreenPannel]);
 
   const handleChangeProductCat = (event) => {
     setProductCat(event.target.value);
@@ -123,11 +133,65 @@ function Products() {
     });
   };
 
+  const handleSelectAll = (e) => {
+    const isChecked = e.target.checked;
+    const updatedItems = productsData.map((product) => ({
+      ...product,
+      checked: isChecked,
+    }));
+    setProductsData(updatedItems);
+
+    if (isChecked) {
+      const ids = updatedItems.map((item) => item._id).sort((a, b) => a - b);
+      setSortedIds(ids);
+    } else {
+      setSortedIds([]);
+    }
+  };
+
+  const handleCheckboxChange = (e, productId) => {
+    const updatedItems = productsData.map((product) =>
+      product._id === productId
+        ? { ...product, checked: !product.checked }
+        : product
+    );
+    setProductsData(updatedItems);
+
+    const selectedIds = updatedItems
+      .filter((item) => item.checked)
+      .map((item) => item._id)
+      .sort((a, b) => a - b);
+    setSortedIds(selectedIds);
+  };
+
+  const handleDeleteMultipleProducts = () => {
+    if (sortedIds.length === 0) {
+      toast.error("Please select products to delete!");
+      return;
+    }
+    deleteMultipleData("/api/product/deleteMultiple", sortedIds, {
+      withCredentials: true,
+    }).then((res) => {
+      if (res?.data?.success === true) {
+        toast.success(res?.data?.message);
+        getProducts();
+      }
+    });
+  };
+
   return (
     <>
       <div className="flex items-center px-2 py-0 mt-3 justify-between">
         <h2 className="text-[20px] font-[600]">Products</h2>
         <div className="col flex items-center justify-end gap-3 ml-auto">
+          {sortedIds.length > 0 && (
+            <Button
+              onClick={handleDeleteMultipleProducts}
+              className="!bg-red-500 hover:!bg-red-600 !font-medium !py-[6px] !text-[13px]  !px-[14px] !text-white !flex !items-center gap-2 !capitalize"
+            >
+              <GoTrash className="mb-1" size={"16px"} /> Delete
+            </Button>
+          )}
           <Button className="!bg-green-600 !font-medium !py-[6px] !text-[13px]  !px-[14px] !text-white !flex !items-center gap-2 !capitalize">
             <BiExport className="mb-1" size={"16px"} /> Export
           </Button>
@@ -241,7 +305,15 @@ function Products() {
             <TableHead>
               <TableRow className="!bg-gray-500">
                 <TableCell>
-                  <Checkbox {...label} size="small" />
+                  <Checkbox
+                    onChange={handleSelectAll}
+                    checked={
+                      productsData?.length > 0 &&
+                      productsData.every((product) => product.checked)
+                    }
+                    {...label}
+                    size="small"
+                  />
                 </TableCell>
                 {columns.map((column) => (
                   <TableCell
@@ -260,7 +332,14 @@ function Products() {
                   return (
                     <TableRow key={product?._id}>
                       <TableCell style={{ minWidth: columns.minWidth }}>
-                        <Checkbox {...label} size="small" />
+                        <Checkbox
+                          onChange={(e) =>
+                            handleCheckboxChange(e, product?._id)
+                          }
+                          checked={product?.checked}
+                          {...label}
+                          size="small"
+                        />
                       </TableCell>
                       <TableCell style={{ minWidth: columns.minWidth }}>
                         <div className="flex items-center gap-4 w-[300px]">
@@ -337,9 +416,9 @@ function Products() {
                             placement="top"
                           >
                             <Link to={`/product/${product?._id}`}>
-                            <Button className="!w-[35px] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px] !h-[35px] !text-gray-500">
-                              <FaRegEye size={"16px"} />
-                            </Button>
+                              <Button className="!w-[35px] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px] !h-[35px] !text-gray-500">
+                                <FaRegEye size={"16px"} />
+                              </Button>
                             </Link>
                           </TooltipMui>
                           <TooltipMui title="Remove Product" placement="top">

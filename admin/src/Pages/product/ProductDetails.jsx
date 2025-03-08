@@ -294,7 +294,7 @@ function ProductDetails() {
                 <p>
                   Jese Leos{" "}
                   <time
-                    datetime="2014-08-16 19:00"
+                    dateTime="2014-08-16 19:00"
                     className="block text-sm text-gray-500"
                   >
                     Joined on August 2014
@@ -355,7 +355,7 @@ function ProductDetails() {
             <footer className="mb-5 text-sm text-gray-500">
               <p>
                 Reviewed in the United Kingdom on{" "}
-                <time datetime="2017-03-03 19:00">March 3, 2017</time>
+                <time dateTime="2017-03-03 19:00">March 3, 2017</time>
               </p>
             </footer>
             <p className="mb-2 text-gray-500">

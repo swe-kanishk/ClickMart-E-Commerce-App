@@ -9,9 +9,9 @@ productRouter.get('/', getAllProducts)
 productRouter.post('/', auth, createProduct)
 productRouter.get('/:id', getProduct)
 productRouter.put('/:id', auth, updateProduct);
+productRouter.delete('/deleteMultiple', auth, deleteMultipleProducts)
 productRouter.delete('/delete-image', auth, removeImageFromCloudinary);
 productRouter.delete('/:id', auth, deleteProduct)
-productRouter.delete('/deleteMultiple', auth, deleteMultipleProducts)
 productRouter.get('/getAllProductsByCatId/:id', getAllProductsByCatId)
 productRouter.get('/getAllProductsBySubCatId/:id', getAllProductsBySubCatId)
 productRouter.get('/getAllProductsByThirdLevelCatId/:id', getAllProductsByThirdLevelCatId)

@@ -170,9 +170,9 @@ function AddProduct() {
         if (res?.success === true) {
           toast.success(res?.message);
           setIsLoading(false);
-          navigate("/products");
           setTimeout(() => {
             context.setIsOpenFullScreenPannel({ open: false, model: "" });
+          navigate("/products");
           }, 1000);
         }
       }

@@ -109,3 +109,19 @@ export const deleteData = async (url, credentials) => {
     console.log(error)
   }
 }
+
+export const deleteMultipleData = async (url, ids, credentials) => {
+  try {
+    const res = await axios.delete(`${apiUrl}${url}`, {
+      data: { ids },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+      },
+     credentials
+    });
+    return res;
+  } catch (error) {
+    console.error("Delete multiple data error:", error);
+  }
+};
