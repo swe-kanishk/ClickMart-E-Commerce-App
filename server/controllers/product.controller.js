@@ -1,4 +1,5 @@
 import ProductModel from "../models/product.model.js";
+import ProductRAMSModel from "../models/productRams.model.js";
 
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
@@ -810,6 +811,63 @@ export const updateProduct = async (req, res) => {
       success: true,
       error: false,
       message: "Product updated!",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const addProductRam = async (req, res) => {
+  try {
+    let productRam = new ProductRAMSModel({
+      name: req.body.name,
+    });
+
+    productRam = await productRam.save();
+
+    if (!productRam) {
+      return res.status(500).json({
+        message: "product RAM not added!",
+        error: true,
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "product RAM added successfully!",
+      error: false,
+      success: true,
+      productRam
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const getProductRams = async (req, res) => {
+  try {
+    const productRams = await ProductRAMSModel.find();
+
+    if (!productRams) {
+      return res.status(500).json({
+        message: "product RAM not found!",
+        error: true,
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      productRams
     });
   } catch (error) {
     return res.status(500).json({
