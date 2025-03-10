@@ -841,7 +841,7 @@ export const addProductRam = async (req, res) => {
       message: "product RAM added successfully!",
       error: false,
       success: true,
-      productRam
+      productRam,
     });
   } catch (error) {
     return res.status(500).json({
@@ -867,8 +867,79 @@ export const getProductRams = async (req, res) => {
     return res.status(200).json({
       error: false,
       success: true,
-      productRams
+      productRams,
     });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const deleteProductRAM = async (req, res) => {
+  try {
+    const productRam = await ProductRAMSModel.findById(req.params.id);
+
+    if (!productRam) {
+      return res.status(500).json({
+        message: "Product RAM not found!",
+        success: false,
+        error: true,
+      });
+    }
+
+    const deleteProductRAM = await ProductRAMSModel.findByIdAndDelete(
+      req.params.id
+    );
+    if (!deleteProductRAM) {
+      return res.status(500).json({
+        message: "Product RAM not deleted!",
+        success: false,
+        error: true,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      message: "Product RAM deleted!",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const deleteMultipleRAMS = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: "Invalid input!",
+      });
+    }
+
+    try {
+      await ProductRAMSModel.deleteMany({ _id: { $in: ids } });
+      return res.status(200).json({
+        success: true,
+        error: false,
+        message: "Products RAMS deleted successfully!",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message || error,
+        error: true,
+        success: false,
+      });
+    }
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
