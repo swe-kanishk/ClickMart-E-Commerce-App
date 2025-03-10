@@ -948,3 +948,36 @@ export const deleteMultipleRAMS = async (req, res) => {
     });
   }
 };
+
+export const updateProductRAM = async (req, res) => {
+  try {
+    const productRAM = await ProductRAMSModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name,
+      },
+      { new: true }
+    );
+
+    if (!productRAM) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "Product RAM cannot be updated!",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      message: "Product RAM updated!",
+      productRAM
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};

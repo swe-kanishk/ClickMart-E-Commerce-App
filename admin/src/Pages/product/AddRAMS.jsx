@@ -1,0 +1,243 @@
+import { Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { BiLoader } from "react-icons/bi";
+import { MdOutlineFileUpload } from "react-icons/md";
+import TooltipMui from "@mui/material/Tooltip";
+import { GoTrash } from "react-icons/go";
+import { AiOutlineEdit } from "react-icons/ai";
+import { deleteData, editData, getData, postData } from "../../utils/api";
+import toast from "react-hot-toast";
+import Checkbox from "@mui/material/Checkbox";
+
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
+function AddRAMS() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [newProductRam, setNewProductRam] = useState("");
+  const [productRamsData, setProductRamsData] = useState([]);
+  const [editRAM, setEditRAM] = useState(null);
+
+  const getProductRams = () => {
+    getData("/api/product/rams").then((res) => {
+      if (res?.success === true) {
+        setProductRamsData(res?.productRams);
+        productRamsData;
+      }
+    });
+  };
+
+  useEffect(() => {
+    getProductRams();
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    if (!newProductRam) {
+      toast.error("Please Enter Product RAM");
+      return;
+    }
+
+    if (editRAM) {
+      editData(
+        `/api/product/rams/${editRAM?._id}`,
+        { name: newProductRam },
+        { withCredentials: true }
+      )
+        .then((res) => {
+          console.log(res);
+          if (res?.data?.success === true) {
+            toast.success(res?.data?.message);
+            const updatedProductRamsData = productRamsData.map((item) =>
+              item?._id === editRAM?._id ? res?.data?.productRAM : item
+            );
+            setProductRamsData(updatedProductRamsData);
+            setNewProductRam("");
+            setEditRAM(null);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      postData("/api/product/rams", { name: newProductRam })
+        .then((res) => {
+          if (res.success === true) {
+            toast?.success(res?.message);
+            setNewProductRam("");
+            setProductRamsData((prevState) => [...prevState, res?.productRam]);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  };
+
+  useEffect(() => {
+    setNewProductRam(editRAM?.name);
+  }, [editRAM]);
+
+  const handleDelete = (id) => {
+    deleteData(`/api/product/rams/${id}`, { withCredentials: true }).then(
+      (res) => {
+        if (res?.data?.success === true) {
+          toast.success(res?.data?.message);
+          const newProductRamsData = productRamsData.filter(
+            (item) => item?._id !== id
+          );
+          setProductRamsData(newProductRamsData);
+        }
+      }
+    );
+  };
+  return (
+    <>
+      <div className="flex items-center px-2 py-0 mt-3 justify-between">
+        <h2 className="text-[20px] font-[600]">Add Product RAMS</h2>
+      </div>
+      <div className="flex items-start gap-8">
+        <div className="card bg-white w-[60%] overflow-hidden shadow-md sm:rounded-lg rounded-md border my-4 border-gray-200 hover:border-gray-400 transition-all">
+          <form className="form py-3 px-4" onSubmit={handleSubmit}>
+            <div className="col mb-4">
+              <h3 className="text-[14px] text-black font-[500] mb-2">
+                Product Ram
+              </h3>
+              <input
+                onChange={(e) => setNewProductRam(e.target.value)}
+                value={newProductRam}
+                name="name"
+                disabled={isLoading}
+                type="text"
+                className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
+              />
+            </div>
+            {editRAM ? (
+              <div className="flex items-center gap-8">
+                <Button
+                  disabled={isLoading || !newProductRam}
+                  type="submit"
+                  className={`${
+                    isLoading || !newProductRam
+                      ? "!bg-blue-500"
+                      : "!bg-blue-600"
+                  } mt-3 !text-white !capitalize !max-w-full !w-1/2 !p-2 !text-center !font-[500] gap-1`}
+                >
+                  {isLoading ? (
+                    <BiLoader size={"22px"} className="animate-spin" />
+                  ) : (
+                    <>
+                      <MdOutlineFileUpload size={"20px"} className="mb-1" />{" "}
+                      Update and View
+                    </>
+                  )}
+                </Button>
+                <Button
+                  disabled={!editRAM}
+                  onClick={() => {
+                    setEditRAM(null);
+                    setNewProductRam("");
+                  }}
+                  type="submit"
+                  className={`${
+                    isLoading || !newProductRam
+                      ? "!bg-gray-200"
+                      : "!bg-gray-100"
+                  } mt-3 !text-gray-700 !capitalize !max-w-full !w-1/2 !p-2 !text-center !font-[500] gap-1`}
+                >
+                  Cancel
+                </Button>
+              </div>
+            ) : (
+              <Button
+                disabled={isLoading || !newProductRam}
+                type="submit"
+                className={`${
+                  isLoading || !newProductRam ? "!bg-blue-500" : "!bg-blue-600"
+                } mt-3 !text-white !capitalize !max-w-full !w-full !p-2 !text-center !font-[500] gap-1`}
+              >
+                {isLoading ? (
+                  <BiLoader size={"22px"} className="animate-spin" />
+                ) : (
+                  <>
+                    <MdOutlineFileUpload size={"20px"} className="mb-1" />{" "}
+                    Publish and View
+                  </>
+                )}
+              </Button>
+            )}
+          </form>
+        </div>
+        <div className="card bg-white w-[40%] overflow-hidden shadow-md sm:rounded-lg rounded-md border my-4 border-gray-200 hover:border-gray-400 transition-all">
+          <div className="relative w-full overflow-x-auto">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+              <thead className="text-xs text-gray-600 uppercase bg-gray-100  ">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 w-[10%] whitespace-nowrap py-3"
+                  >
+                    <Checkbox {...label} size="small" />
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 w-[60%] whitespace-nowrap py-3"
+                  >
+                    Product Rams
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 w-[30%] whitespace-nowrap py-3"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {productRamsData?.length > 0 &&
+                  productRamsData?.map((item) => {
+                    return (
+                      <tr className="bg-white border-b">
+                        <td className="px-6 py-4">
+                          <Checkbox {...label} size="small" />
+                        </td>
+                        <td className="px-6 py-4">{item?.name}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-start">
+                            <TooltipMui
+                              title="Edit Product Ram"
+                              placement="top"
+                            >
+                              <Button onClick={() => setEditRAM(item)}>
+                                <AiOutlineEdit
+                                  size={"22px"}
+                                  className="text-gray-400"
+                                />
+                              </Button>
+                            </TooltipMui>
+                            <TooltipMui
+                              title="Remove Product Ram"
+                              placement="top"
+                            >
+                              <Button
+                                onClick={() => handleDelete(item?._id)}
+                                className="!w-[35px] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px] !h-[35px] !text-gray-500"
+                              >
+                                <GoTrash size={"16px"} />
+                              </Button>
+                            </TooltipMui>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default AddRAMS;

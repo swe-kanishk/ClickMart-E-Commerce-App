@@ -21,6 +21,7 @@ import Profile from "./Pages/Profile";
 import SubCategoryList from "./Pages/subCategory/SubCategoryList";
 import Products from "./Pages/product/Products";
 import ProductDetails from "./Pages/product/ProductDetails";
+import AddRAMS from "./Pages/product/AddRAMS";
 
 const MyContext = createContext();
 
@@ -343,6 +344,31 @@ function App() {
               } transition-all`}
             >
               <Orders />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/product/addRams",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
+              <Sidebar />
+            </div>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
+              <AddRAMS />
             </div>
           </div>
         </section>

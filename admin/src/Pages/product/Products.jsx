@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
 import { FaPlus, FaRegEye } from "react-icons/fa6";
-import { BiExport } from "react-icons/bi";
+import { BiExport, BiLoader } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
@@ -57,6 +57,7 @@ function Products() {
   const [productCat, setProductCat] = useState("");
   const [productSubCat, setProductSubCat] = useState("");
   const [productThirdSubCat, setProductThirdSubCat] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
 
   const [productsData, setProductsData] = useState([]);
   const [sortedIds, setSortedIds] = useState([]);
@@ -66,6 +67,7 @@ function Products() {
   const context = useContext(MyContext);
 
   const getProducts = () => {
+    setIsLoading(true)
     getData(`/api/product/?page=${page}&perPage=${rowsPerPage}`).then((res) => {
       if (res?.success === true) {
         const productsArr = [];
@@ -75,6 +77,8 @@ function Products() {
         }
         setProductsData(productsArr);
       }
+    }).finally(() => {
+      setIsLoading(false)
     });
   };
 
@@ -84,34 +88,49 @@ function Products() {
 
   const handleChangeProductCat = (event) => {
     setProductCat(event.target.value);
+    setProductSubCat('');
+    setProductThirdSubCat('');
+    setIsLoading(true)
     getData(`/api/product/getAllProductsByCatId/${event.target.value}`).then(
       (res) => {
         if (res?.success === true) {
           setProductsData(res?.data);
         }
       }
-    );
+    ).finally(() => {
+      setIsLoading(false)
+    });
   };
 
   const handleChangeProductSubCat = (event) => {
     setProductSubCat(event.target.value);
+    setProductThirdSubCat('');
+    setProductCat('');
+    setIsLoading(true)
     getData(`/api/product/getAllProductsBySubCatId/${event.target.value}`).then(
       (res) => {
         if (res?.success === true) {
           setProductsData(res?.data);
         }
       }
-    );
+    ).finally(() => {
+      setIsLoading(false)
+    });
   };
 
   const handleChangeProductThirdSubCat = (event) => {
     setProductThirdSubCat(event.target.value);
+    setProductCat('');
+    setProductSubCat('');
+    setIsLoading(true)
     getData(
       `/api/product/getAllProductsByThirdLevelCatId/${event.target.value}`
     ).then((res) => {
       if (res?.success === true) {
         setProductsData(res?.data);
       }
+    }).finally(() => {
+      setIsLoading(false)
     });
   };
 
@@ -327,7 +346,7 @@ function Products() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {productsData?.length > 0 &&
+              {productsData?.length > 0  && (
                 productsData?.map((product) => {
                   return (
                     <TableRow key={product?._id}>
@@ -433,7 +452,17 @@ function Products() {
                       </TableCell>
                     </TableRow>
                   );
-                })}
+                })
+              )} 
+              {isLoading && (
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <div className="flex items-center justify-center w-full">
+                      <BiLoader className="animate-spin text-gray-500" size={30} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
