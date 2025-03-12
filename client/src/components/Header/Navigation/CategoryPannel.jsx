@@ -6,7 +6,7 @@ import { MdClose } from "react-icons/md";
 import "./style.css";
 import CategoryCollapse from "../CategoryCollapse";
 
-function CategoryPannel({ setIsOpenCategory, isOpenCategory }) {
+function CategoryPannel({ setIsOpenCategory, isOpenCategory, categoryData }) {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" className="categoryPanel">
       <h3 className="p-3 text-[18px] font-medium flex items-center justify-between">
@@ -16,7 +16,7 @@ function CategoryPannel({ setIsOpenCategory, isOpenCategory }) {
           onClick={() => setIsOpenCategory(false)}
         />
       </h3>
-      <CategoryCollapse />
+      <CategoryCollapse categoryData={categoryData} />
     </Box>
   );
 

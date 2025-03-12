@@ -77,7 +77,6 @@ function EditSubCategoryBox({
   };
 
   const handleDeleteCat = () => {
-    alert(id)
     deleteData(`/api/category/${id}`).then((res) => {
       console.log(res);
       if (res?.data?.success === true) {

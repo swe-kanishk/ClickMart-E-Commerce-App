@@ -1299,7 +1299,7 @@ export const updateProductSize = async (req, res) => {
       success: true,
       error: false,
       message: "Product size updated!",
-      productRAM,
+      productSize,
     });
   } catch (error) {
     return res.status(500).json({

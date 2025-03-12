@@ -22,6 +22,7 @@ import SubCategoryList from "./Pages/subCategory/SubCategoryList";
 import Products from "./Pages/product/Products";
 import ProductDetails from "./Pages/product/ProductDetails";
 import AddRAMS from "./Pages/product/AddRAMS";
+import AddSizes from "./Pages/product/AddSizes";
 
 const MyContext = createContext();
 
@@ -369,6 +370,31 @@ function App() {
               } transition-all`}
             >
               <AddRAMS />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/product/addSizes",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
+              <Sidebar />
+            </div>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
+              <AddSizes />
             </div>
           </div>
         </section>

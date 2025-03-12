@@ -104,7 +104,7 @@ function CategoryList() {
                         <Checkbox {...label} size="small" />
                       </TableCell>
                       <TableCell width={columns.minWidth}>
-                        <div className="img-section w-[80px] rounded-md overflow-hidden group">
+                        <div className="img-section w-[60px] rounded-md overflow-hidden group">
                           <Link to="/products/1342421" data-discover="true">
                             <img
                               className="w-full group-hover:scale-110 transition-all object-cover"
