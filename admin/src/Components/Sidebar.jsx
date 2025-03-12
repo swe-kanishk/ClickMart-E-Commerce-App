@@ -210,6 +210,12 @@ function Sidebar() {
                     Product Sizes
                   </Button>
                 </Link>
+                <Link to={"/product/addWeight"}>
+                  <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500">
+                    <span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span>{" "}
+                    Product Weight
+                  </Button>
+                </Link>
                 <Button
                   onClick={() =>
                     context.setIsOpenFullScreenPannel({

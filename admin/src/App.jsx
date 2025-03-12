@@ -23,6 +23,7 @@ import Products from "./Pages/product/Products";
 import ProductDetails from "./Pages/product/ProductDetails";
 import AddRAMS from "./Pages/product/AddRAMS";
 import AddSizes from "./Pages/product/AddSizes";
+import AddWeight from "./Pages/product/AddWeight";
 
 const MyContext = createContext();
 
@@ -395,6 +396,31 @@ function App() {
               } transition-all`}
             >
               <AddSizes />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/product/addWeight",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
+              <Sidebar />
+            </div>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
+              <AddWeight />
             </div>
           </div>
         </section>

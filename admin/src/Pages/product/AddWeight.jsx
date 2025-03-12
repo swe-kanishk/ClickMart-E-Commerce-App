@@ -11,61 +11,61 @@ import Checkbox from "@mui/material/Checkbox";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-function AddRAMS() {
+function AddWeight() {
   const [isLoading, setIsLoading] = useState(false);
-  const [newProductRam, setNewProductRam] = useState("");
-  const [productRamsData, setProductRamsData] = useState([]);
-  const [editRAM, setEditRAM] = useState(null);
+  const [newProductWeight, setNewProductWeight] = useState("");
+  const [productWeightsData, setProductWeightsData] = useState([]);
+  const [editWeight, setEditWeight] = useState(null);
 
-  const getProductRams = () => {
-    getData("/api/product/rams").then((res) => {
+  const getProductWeights = () => {
+    getData("/api/product/weights").then((res) => {
       if (res?.success === true) {
-        setProductRamsData(res?.productRams);
-        productRamsData;
+        setProductWeightsData(res?.productWeights);
+        productWeightsData;
       }
     });
   };
 
   useEffect(() => {
-    getProductRams();
+    getProductWeights();
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    if (!newProductRam) {
-      toast.error("Please Enter Product RAM");
+    if (!newProductWeight) {
+      toast.error("Please Enter Product Weight");
       return;
     }
 
-    if (editRAM) {
+    if (editWeight) {
       editData(
-        `/api/product/rams/${editRAM?._id}`,
-        { name: newProductRam },
+        `/api/product/weights/${editWeight?._id}`,
+        { name: newProductWeight },
         { withCredentials: true }
       )
         .then((res) => {
           console.log(res);
           if (res?.data?.success === true) {
             toast.success(res?.data?.message);
-            const updatedProductRamsData = productRamsData.map((item) =>
-              item?._id === editRAM?._id ? res?.data?.productRAM : item
+            const updatedProductWeightsData = productWeightsData.map((item) =>
+              item?._id === editWeight?._id ? res?.data?.productWeight : item
             );
-            setProductRamsData(updatedProductRamsData);
-            setNewProductRam("");
-            setEditRAM(null);
+            setProductWeightsData(updatedProductWeightsData);
+            setNewProductWeight("");
+            setEditWeight(null);
           }
         })
         .finally(() => {
           setIsLoading(false);
         });
     } else {
-      postData("/api/product/rams", { name: newProductRam })
+      postData("/api/product/weight", { name: newProductWeight })
         .then((res) => {
           if (res.success === true) {
             toast?.success(res?.message);
-            setNewProductRam("");
-            setProductRamsData((prevState) => [...prevState, res?.productRam]);
+            setNewProductWeight("");
+            setProductWeightsData((prevState) => [...prevState, res?.productWeight]);
           }
         })
         .finally(() => {
@@ -75,18 +75,18 @@ function AddRAMS() {
   };
 
   useEffect(() => {
-    setNewProductRam(editRAM?.name);
-  }, [editRAM]);
+    setNewProductWeight(editWeight?.name);
+  }, [editWeight]);
 
   const handleDelete = (id) => {
-    deleteData(`/api/product/rams/${id}`, { withCredentials: true }).then(
+    deleteData(`/api/product/weights/${id}`, { withCredentials: true }).then(
       (res) => {
         if (res?.data?.success === true) {
           toast.success(res?.data?.message);
-          const newProductRamsData = productRamsData.filter(
+          const newProductWeightsData = productWeightsData.filter(
             (item) => item?._id !== id
           );
-          setProductRamsData(newProductRamsData);
+          setProductWeightsData(newProductWeightsData);
         }
       }
     );
@@ -94,31 +94,31 @@ function AddRAMS() {
   return (
     <>
       <div className="flex items-center px-2 py-0 mt-3 justify-between">
-        <h2 className="text-[20px] font-[600]">Add Product RAMS</h2>
+        <h2 className="text-[20px] font-[600]">Add Product Weight</h2>
       </div>
       <div className="flex items-start gap-8">
         <div className="card bg-white w-[60%] overflow-hidden shadow-md sm:rounded-lg rounded-md border my-4 border-gray-200 hover:border-gray-400 transition-all">
           <form className="form py-3 px-4" onSubmit={handleSubmit}>
             <div className="col mb-4">
               <h3 className="text-[14px] text-black font-[500] mb-2">
-                Product Ram
+                Product Weight
               </h3>
               <input
-                onChange={(e) => setNewProductRam(e.target.value)}
-                value={newProductRam}
+                onChange={(e) => setNewProductWeight(e.target.value)}
+                value={newProductWeight}
                 name="name"
                 disabled={isLoading}
                 type="text"
                 className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
               />
             </div>
-            {editRAM ? (
+            {editWeight ? (
               <div className="flex items-center gap-8">
                 <Button
-                  disabled={isLoading || !newProductRam}
+                  disabled={isLoading || !newProductWeight}
                   type="submit"
                   className={`${
-                    isLoading || !newProductRam
+                    isLoading || !newProductWeight
                       ? "!bg-blue-500"
                       : "!bg-blue-600"
                   } mt-3 !text-white !capitalize !max-w-full !w-1/2 !p-2 !text-center !font-[500] gap-1`}
@@ -133,14 +133,14 @@ function AddRAMS() {
                   )}
                 </Button>
                 <Button
-                  disabled={!editRAM}
+                  disabled={!editWeight}
                   onClick={() => {
-                    setEditRAM(null);
-                    setNewProductRam("");
+                    setEditWeight(null);
+                    setNewProductWeight("");
                   }}
                   type="submit"
                   className={`${
-                    isLoading || !newProductRam
+                    isLoading || !newProductWeight
                       ? "!bg-gray-200"
                       : "!bg-gray-100"
                   } mt-3 !text-gray-700 !capitalize !max-w-full !w-1/2 !p-2 !text-center !font-[500] gap-1`}
@@ -150,10 +150,10 @@ function AddRAMS() {
               </div>
             ) : (
               <Button
-                disabled={isLoading || !newProductRam}
+                disabled={isLoading || !newProductWeight}
                 type="submit"
                 className={`${
-                  isLoading || !newProductRam ? "!bg-blue-500" : "!bg-blue-600"
+                  isLoading || !newProductWeight ? "!bg-blue-500" : "!bg-blue-600"
                 } mt-3 !text-white !capitalize !max-w-full !w-full !p-2 !text-center !font-[500] gap-1`}
               >
                 {isLoading ? (
@@ -183,7 +183,7 @@ function AddRAMS() {
                     scope="col"
                     className="px-6 w-[60%] whitespace-nowrap py-3"
                   >
-                    Product Rams
+                    Product Weights
                   </th>
                   <th
                     scope="col"
@@ -194,8 +194,8 @@ function AddRAMS() {
                 </tr>
               </thead>
               <tbody>
-                {productRamsData?.length > 0 &&
-                  productRamsData?.map((item) => {
+                {productWeightsData?.length > 0 &&
+                  productWeightsData?.map((item) => {
                     return (
                       <tr key={item?._id} className="bg-white border-b">
                         <td className="px-6 py-4">
@@ -205,10 +205,10 @@ function AddRAMS() {
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-start">
                             <TooltipMui
-                              title="Edit Product Ram"
+                              title="Edit Product Weight"
                               placement="top"
                             >
-                              <Button onClick={() => setEditRAM(item)}>
+                              <Button onClick={() => setEditWeight(item)}>
                                 <AiOutlineEdit
                                   size={"22px"}
                                   className="text-gray-400"
@@ -216,7 +216,7 @@ function AddRAMS() {
                               </Button>
                             </TooltipMui>
                             <TooltipMui
-                              title="Remove Product Ram"
+                              title="Remove Product Weight"
                               placement="top"
                             >
                               <Button
@@ -240,4 +240,4 @@ function AddRAMS() {
   );
 }
 
-export default AddRAMS;
+export default AddWeight;

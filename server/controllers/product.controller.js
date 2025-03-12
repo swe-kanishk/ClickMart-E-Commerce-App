@@ -1019,11 +1019,11 @@ export const addProductWeight = async (req, res) => {
 
 export const getProductWeights = async (req, res) => {
   try {
-    const productWeights = await ProductRAMSModel.find();
+    const productWeights = await ProductWeightModel.find();
 
     if (!productWeights) {
       return res.status(500).json({
-        message: "product RAM not found!",
+        message: "product weight not found!",
         error: true,
         success: false,
       });
@@ -1045,7 +1045,7 @@ export const getProductWeights = async (req, res) => {
 
 export const deleteProductWeight = async (req, res) => {
   try {
-    const productWeight = await ProductRAMSModel.findById(req.params.id);
+    const productWeight = await ProductWeightModel.findById(req.params.id);
 
     if (!productWeight) {
       return res.status(500).json({
@@ -1136,7 +1136,7 @@ export const updateProductWeight = async (req, res) => {
       success: true,
       error: false,
       message: "Product weight updated!",
-      productRAM,
+      productWeight,
     });
   } catch (error) {
     return res.status(500).json({
