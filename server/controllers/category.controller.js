@@ -223,7 +223,7 @@ export const removeCategory = async (req, res) => {
         message: "Category not found!",
       });
     }
-    const images = category.images;
+    const images = category?.images;
     for (let img of images) {
       const urlArr = img.split("/");
       const image = urlArr[urlArr.length - 1];
@@ -239,11 +239,12 @@ export const removeCategory = async (req, res) => {
     const subCategories = await CategoryModel.find({
       parentId: req?.params?.id,
     });
-    for (let i = 0; i < subCategories.length; i++) {
+    for (let i = 0; i < subCategories?.length; i++) {
       const thirdSubCategories = await CategoryModel.find({
         parentId: subCategories[i]?._id,
       });
-      for (let i = 0; i < subCategories.length; i++) {
+      for (let i = 0; i < thirdSubCategories?.length; i++) {
+        console.log(thirdSubCategories[i])
         const deletedThirdSubCategories = await CategoryModel.findByIdAndDelete(
           thirdSubCategories[i]._id
         );

@@ -11,8 +11,8 @@ categoryRouter.get('/:id', getCategory);
 categoryRouter.post('/upload-images', auth, upload.array('images'), uploadImages);
 categoryRouter.post('/get/count', getCategoriesCount);
 categoryRouter.post('/get/count/subCat', getSubCategoriesCount);
-categoryRouter.delete('/delete-image', auth, removeImageFromCloudinary);
 categoryRouter.delete('/:id', auth, removeCategory);
+categoryRouter.delete('/delete-image', auth, removeImageFromCloudinary);
 categoryRouter.put('/:id', auth, updateCategory);
 
 export default categoryRouter;
