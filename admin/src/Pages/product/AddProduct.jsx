@@ -12,7 +12,7 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { MyContext } from "../../App";
 import { BiLoader } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { deleteImages, postData } from "../../utils/api";
+import { deleteImages, getData, postData } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 
 function AddProduct() {
@@ -30,7 +30,7 @@ function AddProduct() {
     price: "",
     oldPrice: "",
     catName: "",
-    category: '',
+    category: "",
     catId: "",
     subCatName: "",
     subCatId: "",
@@ -52,7 +52,42 @@ function AddProduct() {
   const [productRams, setProductRams] = useState([]);
   const [productWeight, setProductWeight] = useState([]);
   const [productSize, setProductSize] = useState([]);
+  const [productRamsData, setProductRamsData] = useState([]);
+  const [productSizesData, setProductSizesData] = useState([]);
+  const [productWeightsData, setProductWeightsData] = useState([]);
   const [productRating, setProductRating] = useState(2);
+
+  useEffect(() => {
+    getProductWeights();
+    getProductRams();
+    getProductSizes();
+  }, []);
+
+  const getProductWeights = () => {
+    getData("/api/product/weights").then((res) => {
+      if (res?.success === true) {
+        setProductWeightsData(res?.productWeights);
+      }
+    });
+  };
+
+  const getProductRams = () => {
+    getData("/api/product/rams").then((res) => {
+      if (res?.success === true) {
+        setProductRamsData(res?.productRams);
+        productRamsData;
+      }
+    });
+  };
+
+  const getProductSizes = () => {
+    getData("/api/product/sizes").then((res) => {
+      if (res?.success === true) {
+        setProductSizesData(res?.productSizes);
+        productSizesData;
+      }
+    });
+  };
 
   const handleChangeProductCat = (event) => {
     setProductCat(event.target.value);
@@ -172,7 +207,7 @@ function AddProduct() {
           setIsLoading(false);
           setTimeout(() => {
             context.setIsOpenFullScreenPannel({ open: false, model: "" });
-          navigate("/products");
+            navigate("/products");
           }, 1000);
         }
       }
@@ -400,67 +435,79 @@ function AddProduct() {
                 className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
               />
             </div>
-            <div className="col">
-              <h3 className="text-[14px] text-black font-[500] mb-1">
-                Product RAMS
-              </h3>
-              <Select
-                multiple
-                labelId="demo-simple-select-label"
-                id="productCatDropDown"
-                disabled={isLoading}
-                value={productRams}
-                size="small"
-                className="w-full !p-1 !bg-white"
-                label="Category"
-                onChange={handleChangeProductRams}
-              >
-                <MenuItem value={"4G"}>4G</MenuItem>
-                <MenuItem value={"6G"}>6G</MenuItem>
-                <MenuItem value={"8G"}>8G</MenuItem>
-              </Select>
-            </div>
-            <div className="col">
-              <h3 className="text-[14px] text-black font-[500] mb-1">
-                Product Weight
-              </h3>
-              <Select
-                multiple
-                labelId="demo-simple-select-label"
-                id="productCatDropDown"
-                value={productWeight}
-                disabled={isLoading}
-                size="small"
-                className="w-full !p-1 !bg-white"
-                label="Category"
-                onChange={handleChangeProductWeight}
-              >
-                <MenuItem value={"2kG"}>2kG</MenuItem>
-                <MenuItem value={"5kG"}>5kG</MenuItem>
-                <MenuItem value={"10kG"}>10kG</MenuItem>
-              </Select>
-            </div>
-            <div className="col">
-              <h3 className="text-[14px] text-black font-[500] mb-1">
-                Product Size
-              </h3>
-              <Select
-                multiple
-                labelId="demo-simple-select-label"
-                id="productCatDropDown"
-                value={productSize}
-                disabled={isLoading}
-                size="small"
-                className="w-full !p-1 !bg-white"
-                label="Category"
-                onChange={handleChangeProductSize}
-              >
-                <MenuItem value={"s"}>s</MenuItem>
-                <MenuItem value={"m"}>m</MenuItem>
-                <MenuItem value={"l"}>l</MenuItem>
-                <MenuItem value={"xl"}>xl</MenuItem>
-              </Select>
-            </div>
+            {productRamsData?.length > 0 && (
+              <div className="col">
+                <h3 className="text-[14px] text-black font-[500] mb-1">
+                  Product RAMS
+                </h3>
+                <Select
+                  multiple
+                  labelId="demo-simple-select-label"
+                  id="productCatDropDown"
+                  disabled={isLoading}
+                  value={productRams}
+                  size="small"
+                  className="w-full !p-1 !bg-white"
+                  label="Category"
+                  onChange={handleChangeProductRams}
+                >
+                  {productRamsData?.map((item) => (
+                    <MenuItem key={item?._id} value={item?.name}>
+                      {item?.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+            )}
+            {productWeightsData?.length > 0 && (
+              <div className="col">
+                <h3 className="text-[14px] text-black font-[500] mb-1">
+                  Product Weight
+                </h3>
+                <Select
+                  multiple
+                  labelId="demo-simple-select-label"
+                  id="productCatDropDown"
+                  value={productWeight}
+                  disabled={isLoading}
+                  size="small"
+                  className="w-full !p-1 !bg-white"
+                  label="Category"
+                  onChange={handleChangeProductWeight}
+                >
+                  {productWeightsData?.map((item) => (
+                    <MenuItem key={item?._id} value={item?.name}>
+                      {item?.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+            )}
+
+            {productSizesData?.length > 0 && (
+              <div className="col">
+                <h3 className="text-[14px] text-black font-[500] mb-1">
+                  Product Size
+                </h3>
+                <Select
+                  multiple
+                  labelId="demo-simple-select-label"
+                  id="productCatDropDown"
+                  value={productSize}
+                  disabled={isLoading}
+                  size="small"
+                  className="w-full !p-1 !bg-white"
+                  label="Category"
+                  onChange={handleChangeProductSize}
+                >
+                  {productSizesData?.map((item) => (
+                    <MenuItem key={item?._id} value={item?.name}>
+                      {item?.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-4 gap-4 mb-3">
             <div className="col">
