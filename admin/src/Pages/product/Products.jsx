@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Rating } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
 import { FaPlus, FaRegEye } from "react-icons/fa6";
@@ -44,6 +44,11 @@ const columns = [
   {
     id: "sales",
     label: "SALES",
+    minWidth: 100,
+  },
+  {
+    id: "rating",
+    label: "RATING",
     minWidth: 100,
   },
   {
@@ -387,7 +392,7 @@ function Products() {
                                 {product?.name}
                               </Link>
                             </h3>
-                            <span className="text-[12px]">Zara</span>
+                            <span className="text-[12px] text-gray-500">{product?.brand}</span>
                           </div>
                         </div>
                       </TableCell>
@@ -413,6 +418,9 @@ function Products() {
                           Sale
                         </p>
                         <ProgressBar value={40} type="success" />
+                      </TableCell>
+                      <TableCell style={{ minWidth: columns.minWidth }}>
+                        <Rating readOnly defaultValue={product?.rating} size="small" />
                       </TableCell>
                       <TableCell style={{ minWidth: columns.minWidth }}>
                         <div className="flex items-center justify-start gap-1">
