@@ -48,7 +48,7 @@ export const uploadImages = async (req, res) => {
 export const addHomeSlide = async (req, res) => {
   try {
     let slide = new HomeSliderModel({
-      images: imagesArr,
+      images: req?.body?.images
     });
 
     if (!slide) {
@@ -205,43 +205,10 @@ export const removeSlide = async (req, res) => {
   }
 };
 
-export const updateSlide = async (req, res) => {
-  try {
-    const { images } = req.body;
-    const slide = await HomeSliderModel.findByIdAndUpdate(
-      req?.params?.id,
-      {
-        images: imagesArr.length ? imagesArr[0] : images,
-      },
-      { new: true }
-    );
-
-    if (!slide) {
-      return res.status(500).json({
-        message: "Slide cannot be updated!",
-        success: false,
-        error: true,
-      });
-    }
-    imagesArr = [];
-    return res.status(200).json({
-      success: true,
-      error: false,
-      message: 'Slide updated!',
-      updatedCategory,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error.message || error,
-      error: true,
-      success: false,
-    });
-  }
-};
-
 export const deleteMultipleSlides = async (req, res) => {
   try {
     const { ids } = req.body;
+    console.log(req)
     if (!ids || !Array.isArray(ids)) {
       return res.status(400).json({
         success: false,

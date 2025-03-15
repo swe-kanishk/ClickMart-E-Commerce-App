@@ -70,7 +70,7 @@ function UploadProductBox({ multiple, name, url, setPreviews }) {
             name={name}
             onChange={(e) => handleOnChangeFile(e, url)}
             accept="image/*"
-            multiple={multiple !== "undefined" ? true : false}
+            multiple={multiple || false}
             className="absolute top-0 opacity-0 left-0 w-full h-full z-50"
           />
         </>
