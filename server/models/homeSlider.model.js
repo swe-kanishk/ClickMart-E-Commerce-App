@@ -1,3 +1,5 @@
+import { model, Schema } from "mongoose";
+
 const homeSliderSchema = new Schema({
     images: {
         type: String,
