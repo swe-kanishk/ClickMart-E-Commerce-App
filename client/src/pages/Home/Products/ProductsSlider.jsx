@@ -6,12 +6,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 
-
 // import required modules
 import { Navigation } from "swiper/modules";
 import ProductItem from "../Products/ProductItem";
 
-function ProductsSlider() {
+function ProductsSlider({ data }) {
   return (
     <div className="py-3">
       <Swiper
@@ -24,37 +23,13 @@ function ProductsSlider() {
         modules={[Navigation]}
         className="mySwiper"
       >
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        <SwiperSlide className="!w-[250px] py-3 px-1 h-auto">
-          <ProductItem />
-        </SwiperSlide>
-        
+        {data?.map((product) => {
+          return (
+            <SwiperSlide key={product?._id} className="!w-[250px] py-3 px-1 h-auto">
+              <ProductItem product={product} />
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );

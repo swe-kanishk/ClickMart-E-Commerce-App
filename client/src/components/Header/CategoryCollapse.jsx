@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaAngleDown } from "react-icons/fa6";
 import Button from "@mui/material/Button";
 
 import { Link } from "react-router-dom";
+import { MyContext } from "../../App";
 
-function CategoryCollapse({ categoryData }) {
+function CategoryCollapse() {
+  const context = useContext(MyContext)
   const [submenu, setSubmenu] = useState(null);
   const [innerSubmenu, setInnerSubmenu] = useState(null);
 
@@ -25,8 +27,8 @@ function CategoryCollapse({ categoryData }) {
   };
   return (
     <ul className="w-full bg-white">
-      {categoryData?.length > 0 &&
-        categoryData?.map((catData) => {
+      {context?.categoryData?.length > 0 &&
+        context?.categoryData?.map((catData) => {
           return (
             <li key={catData?._id} className="list-none relative">
               <Link to={"/"} className="w-full">

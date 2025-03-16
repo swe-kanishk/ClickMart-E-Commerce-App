@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import HomeSlider from "./HomeSlider";
 import HomeCategorySlider from "./HomeCategorySlider/HomeCategorySlider";
 import { FaShippingFast } from "react-icons/fa";
@@ -17,12 +17,37 @@ import Tab from "@mui/material/Tab";
 import ProductsSlider from "./products/ProductsSlider";
 import BlogItem from "../BlogItem";
 import HomeBanner from "./HomeBanner";
+import { MyContext } from "../../App";
+import { getData } from "../../utils/api";
 
 function Home() {
   const [value, setValue] = useState(0);
+  const [productsData, setProductsData] = useState([]);
+  const [popularProductsData, setPopularProductsData] = useState([]);
+
+  const context = useContext(MyContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  useEffect(() => {
+    getData(
+      `/api/product/getAllProductsByCatId/${context?.categoryData[0]?._id}`
+    ).then((res) => {
+      console.log(res)
+      if (res?.success === true) {
+        setPopularProductsData(res?.data);
+      }
+    });
+  }, [context?.categoryData]);
+
+  const filterProductsByCat = (id) => {
+    getData(`/api/product/getAllProductsByCatId/${id}`).then((res) => {
+      if (res?.success === true) {
+        setPopularProductsData(res?.data);
+      }
+    });
   };
 
   return (
@@ -37,7 +62,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <HomeCategorySlider />
+      {context?.categoryData?.length > 0 && <HomeCategorySlider />}
       <section className="bg-white py-8">
         <div className="container">
           <div className="flex items-center justify-between">
@@ -47,26 +72,31 @@ function Home() {
                 Don't miss the current offers until the end of this month.
               </p>
             </div>
-            <div className="right-section w-[60%]">
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                variant="scrollable"
-                scrollButtons="auto"
-                aria-label="scrollable auto tabs example"
-              >
-                <Tab label="Fashion" />
-                <Tab label="Bags" />
-                <Tab label="Footwear" />
-                <Tab label="Electronics" />
-                <Tab label="Groceries" />
-                <Tab label="Beauty" />
-                <Tab label="Jewellery" />
-                <Tab label="Wellness" />
-              </Tabs>
-            </div>
+            {context?.categoryData?.length > 0 && (
+              <div className="right-section w-[60%]">
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  variant="scrollable"
+                  scrollButtons="auto"
+                  aria-label="scrollable auto tabs example"
+                >
+                  {context?.categoryData?.map((cat) => {
+                    return (
+                      <Tab
+                        key={cat?._id}
+                        label={cat?.name}
+                        onClick={() => filterProductsByCat(cat?._id)}
+                      />
+                    );
+                  })}
+                </Tabs>
+              </div>
+            )}
           </div>
-          <ProductsSlider />
+          {    
+            popularProductsData?.length > 0 && <ProductsSlider data={popularProductsData} />
+          }
         </div>
       </section>
       <section className="py-5 bg-white">

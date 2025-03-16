@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -11,8 +11,11 @@ import "./style.css";
 // import required modules
 import { Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
+import { MyContext } from "../../../App";
 
 function HomeCategorySlider() {
+  const context = useContext(MyContext);
+
   return (
     <div className="container homeCatSlider py-6">
       <Swiper
@@ -25,172 +28,24 @@ function HomeCategorySlider() {
         modules={[Navigation]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <Link to={'/#'} className="overflow-hidden">
-          <div className="item relative text-center p-3 bg-white !rounded-lg !overflow-hidden flex items-center justify-center flex-col">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/12-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Crepe T-Shirt</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Link to={'/#'} className="overflow-hidden">
-          <div className="item p-3 bg-white !rounded-lg !overflow-hidden">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/11-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Smart Tablet</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link to={'/#'} className="overflow-hidden">
-          <div className="item relative text-center p-3 bg-white !rounded-lg !overflow-hidden flex items-center justify-center flex-col">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/12-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Crepe T-Shirt</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Link to={'/#'} className="overflow-hidden">
-          <div className="item p-3 bg-white !rounded-lg !overflow-hidden">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/11-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Smart Tablet</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link to={'/#'} className="overflow-hidden">
-          <div className="item relative text-center p-3 bg-white !rounded-lg !overflow-hidden flex items-center justify-center flex-col">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/12-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Crepe T-Shirt</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Link to={'/#'} className="overflow-hidden">
-          <div className="item p-3 bg-white !rounded-lg !overflow-hidden">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/11-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Smart Tablet</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link to={'/#'} className="overflow-hidden">
-          <div className="item relative text-center p-3 bg-white !rounded-lg !overflow-hidden flex items-center justify-center flex-col">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/12-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Crepe T-Shirt</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Link to={'/#'} className="overflow-hidden">
-          <div className="item p-3 bg-white !rounded-lg !overflow-hidden">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/11-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Smart Tablet</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link to={'/#'} className="overflow-hidden">
-          <div className="item relative text-center p-3 bg-white !rounded-lg !overflow-hidden flex items-center justify-center flex-col">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/12-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Crepe T-Shirt</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Link to={'/#'} className="overflow-hidden">
-          <div className="item p-3 bg-white !rounded-lg !overflow-hidden">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/11-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Smart Tablet</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link to={'/#'} className="overflow-hidden">
-          <div className="item relative text-center p-3 bg-white !rounded-lg !overflow-hidden flex items-center justify-center flex-col">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/12-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Crepe T-Shirt</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Link to={'/#'} className="overflow-hidden">
-          <div className="item p-3 bg-white !rounded-lg !overflow-hidden">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/11-cz_categoryimagelist.jpg"
-              alt=""
-              className="transition-all"
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Smart Tablet</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link to={'/#'} className="overflow-hidden">
-          <div className="item relative text-center p-3 bg-white !rounded-lg !overflow-hidden flex items-center justify-center flex-col">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/12-cz_categoryimagelist.jpg"
-              alt=""
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Crepe T-Shirt</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Link to={'/#'} className="overflow-hidden">
-          <div className="item p-3 bg-white !rounded-lg !overflow-hidden">
-            <img
-              src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_categoryimagelist/views/img/11-cz_categoryimagelist.jpg"
-              alt=""
-            />
-            <h3 className="absolute bottom-3 text-center w-full left-0 text-[15px] font-medium">Smart Tablet</h3>
-          </div>
-          </Link>
-        </SwiperSlide>
+        {context?.categoryData?.map((cat) => {
+          return (
+            <SwiperSlide key={cat?._id}>
+              <Link to={"/#"} className="overflow-hidden">
+                <div className="item relative text-center p-3 bg-white !rounded-lg !overflow-hidden flex items-center justify-center flex-col">
+                  <img
+                    src={cat?.images}
+                    alt=""
+                    className="transition-all !w-[100px] pb-4"
+                  />
+                  <h3 className="text-center w-full text-[15px] font-medium">
+                   {cat?.name}
+                  </h3>
+                </div>
+              </Link>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );

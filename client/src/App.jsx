@@ -35,6 +35,19 @@ function App() {
   const [openCartPanel, setOpenCartPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [categoryData, setCategoryData] = useState([]);
+
+  const getCat = () => {
+    getData("/api/category").then((res) => {
+      if (res?.success === true) {
+        setCategoryData(res?.data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getCat();
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -72,6 +85,7 @@ function App() {
     setIsLogin,
     userData,
     setUserData,
+    categoryData
   };
 
   return (

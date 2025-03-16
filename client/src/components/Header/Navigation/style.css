@@ -8,3 +8,20 @@
     left: 100% !important;
     transition: ease-in-out !important;
 }
+
+nav .submenu,
+nav .inner-submenu {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+nav .group:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+}
+
+nav .group/sub:hover .inner-submenu {
+  opacity: 1;
+  visibility: visible;
+}
