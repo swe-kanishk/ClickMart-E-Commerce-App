@@ -17,7 +17,7 @@ import ProductDetailsContent from "./components/ProductDetailsContent";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Cart from "./pages/Cart/Cart";
-import Verify from "./pages/Auth/verify";
+import Verify from "./pages/Auth/Verify";
 
 import toast, { Toaster } from "react-hot-toast";
 import Checkout from "./pages/Checkout/Checkout";
@@ -31,7 +31,10 @@ import Address from "./pages/My-Account/Address";
 const MyContext = createContext();
 
 function App() {
-  const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
+  const [openProductDetailsModal, setOpenProductDetailsModal] = useState({
+    open: false,
+    product: {},
+  });
   const [openCartPanel, setOpenCartPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -56,25 +59,27 @@ function App() {
       getData(
         `/api/user/user-details?token=${localStorage.getItem("accessToken")}`,
         { withCredentials: true }
-      ).then((res) => {
-        console.log(res);
-        if (res?.success) {
-          setUserData(res.data);
-        } else {
-          toast.error("Something went wrong!");
-        }
-      }).catch(err => {
-        toast.error(err?.message);
-        setIsLogin(false);
-        localStorage.removeItem("accessToken");
-      });
+      )
+        .then((res) => {
+          console.log(res);
+          if (res?.success) {
+            setUserData(res.data);
+          } else {
+            toast.error("Something went wrong!");
+          }
+        })
+        .catch((err) => {
+          toast.error(err?.message);
+          setIsLogin(false);
+          localStorage.removeItem("accessToken");
+        });
     } else {
       setIsLogin(false);
     }
   }, [isLogin]);
 
   const handleCloseProductDetailsModal = () => {
-    setOpenProductDetailsModal(false);
+    setOpenProductDetailsModal({ open: false, product: {} });
   };
 
   const value = {
@@ -85,7 +90,7 @@ function App() {
     setIsLogin,
     userData,
     setUserData,
-    categoryData
+    categoryData,
   };
 
   return (
@@ -114,7 +119,7 @@ function App() {
 
       <Toaster />
       <Dialog
-        open={openProductDetailsModal}
+        open={openProductDetailsModal?.open}
         maxWidth={"lg"}
         onClose={handleCloseProductDetailsModal}
         aria-labelledby="alert-dialog-title"
@@ -130,12 +135,18 @@ function App() {
             >
               <IoMdClose size={"22px"} />
             </Button>
-            <div className="col-1 w-[40%]">
-              <ProductZoom />
-            </div>
-            <div className="col-2 w-[60%] flex-1">
-              <ProductDetailsContent />
-            </div>
+            {openProductDetailsModal?.product && (
+              <>
+                <div className="col-1 w-[40%]">
+                  <ProductZoom images={openProductDetailsModal?.product?.images} />
+                </div>
+                <div className="col-2 w-[60%] flex-1">
+                  <ProductDetailsContent
+                    product={openProductDetailsModal?.product}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </DialogContent>
       </Dialog>

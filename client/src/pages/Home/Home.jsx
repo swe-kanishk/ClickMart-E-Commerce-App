@@ -23,6 +23,7 @@ import { getData } from "../../utils/api";
 function Home() {
   const [value, setValue] = useState(0);
   const [productsData, setProductsData] = useState([]);
+  const [featuredProductsData, setFeaturedProductsData] = useState([]);
   const [popularProductsData, setPopularProductsData] = useState([]);
 
   const context = useContext(MyContext);
@@ -35,12 +36,24 @@ function Home() {
     getData(
       `/api/product/getAllProductsByCatId/${context?.categoryData[0]?._id}`
     ).then((res) => {
-      console.log(res)
       if (res?.success === true) {
         setPopularProductsData(res?.data);
       }
     });
   }, [context?.categoryData]);
+
+  useEffect(() => {
+    getData(`/api/product/`).then((res) => {
+      if (res?.success === true) {
+        setProductsData(res?.data);
+      }
+    });
+    getData(`/api/product/getFeaturedProducts`).then((res) => {
+      if (res?.success === true) {
+        setFeaturedProductsData(res?.featuredProducts);
+      }
+    });
+  }, []);
 
   const filterProductsByCat = (id) => {
     getData(`/api/product/getAllProductsByCatId/${id}`).then((res) => {
@@ -94,9 +107,9 @@ function Home() {
               </div>
             )}
           </div>
-          {    
-            popularProductsData?.length > 0 && <ProductsSlider data={popularProductsData} />
-          }
+          {popularProductsData?.length > 0 && (
+            <ProductsSlider data={popularProductsData} />
+          )}
         </div>
       </section>
       <section className="py-5 bg-white">
@@ -119,18 +132,23 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="py-5 pt-0 bg-white">
-        <div className="container">
-          <h2 className="text-[20px] font-[600]">Latest Products</h2>
-          <ProductsSlider />
-        </div>
-      </section>
-      <section className="py-5 pt-0 bg-white">
-        <div className="container">
-          <h2 className="text-[20px] font-[600]">Featured Products</h2>
-          <ProductsSlider />
-        </div>
-      </section>
+      {productsData?.length > 0 && (
+        <section className="py-5 pt-0 bg-white">
+          <div className="container">
+            <h2 className="text-[20px] font-[600]">Latest Products</h2>
+            <ProductsSlider data={productsData} />
+          </div>
+        </section>
+      )}
+
+      {featuredProductsData?.length > 0 && (
+        <section className="py-5 pt-0 bg-white">
+          <div className="container">
+            <h2 className="text-[20px] font-[600]">Featured Products</h2>
+            <ProductsSlider data={featuredProductsData} />
+          </div>
+        </section>
+      )}
       <section className="pb-8 pt-0 bg-white blogSection">
         <div className="container">
           <h2 className="text-[20px] font-[600] mb-4">From the Blog</h2>
