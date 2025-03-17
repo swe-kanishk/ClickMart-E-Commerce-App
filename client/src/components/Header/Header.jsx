@@ -9,7 +9,7 @@ import { IoIosGitCompare } from "react-icons/io";
 import { BsCart3 } from "react-icons/bs";
 import Tooltip from "@mui/material/Tooltip";
 import Navigation from "./Navigation/Navigation";
-import Logo from "./logo";
+import Logo from "./logo.png";
 import { MyContext } from "../../App";
 import CartPanel from "../../pages/Cart/CartPanel";
 import { Button } from "@mui/material";
@@ -17,7 +17,6 @@ import { FaRegUser } from "react-icons/fa";
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Divider from "@mui/material/Divider";
 import { HiClipboardCheck } from "react-icons/hi";
 import { IoLogOutOutline } from "react-icons/io5";
 import { getData } from "../../utils/api";
