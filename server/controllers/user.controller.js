@@ -230,6 +230,65 @@ export const logoutController = async (req, res) => {
   }
 };
 
+export const authWithGoogle = async (req, res) => {
+  try {
+    const { fullName, email, mobile, avatar, role } = req.body;
+
+    if (!fullName || !email) {
+      return res.status(400).json({
+        message: `provide email, fullName`,
+        error: true,
+        success: false,
+      });
+    }
+    let user = await UserModel.findOne({ email });
+    if (!user) {
+      user = await UserModel.create({
+        fullName,
+        email,
+        avatar,
+        mobile,
+        role,
+        signUpWithGoogle: true,
+        verify_email: true,
+        password: "null",
+      });
+    }
+
+    const accessToken = await generateAccessToken(user._id);
+    const refreshToken = await generateRefreshToken(user._id);
+
+    await UserModel.findByIdAndUpdate(user?._id, {
+      last_login_date: new Date(),
+    });
+
+    const cookiesOption = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    };
+
+    res.cookie("accessToken", accessToken, cookiesOption);
+    res.cookie("refreshToken", refreshToken, cookiesOption);
+
+    return res.json({
+      message: "Login Successfully",
+      error: false,
+      success: true,
+      data: {
+        accessToken,
+        refreshToken,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
 var imagesArr = [];
 export const userAvatarController = async (req, res) => {
   try {
@@ -503,17 +562,23 @@ export const resetPasswordController = async (req, res) => {
       });
     }
 
-    const isPasswordMatched = await bcrypt.compare(oldPassword, user.password);
-    if (!isPasswordMatched) {
-      return res.json({
-        message: "Incorrect old password!",
-        error: true,
-        success: false,
-      });
+    if (user.signUpWithGoogle === false) {
+      const isPasswordMatched = await bcrypt.compare(
+        oldPassword,
+        user.password
+      );
+      if (!isPasswordMatched) {
+        return res.json({
+          message: "Incorrect old password!",
+          error: true,
+          success: false,
+        });
+      }
     }
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
+    user.signUpWithGoogle = false
     await user.save();
 
     return res.json({
@@ -582,9 +647,9 @@ export const refreshTokenController = async (req, res) => {
 export const getUserDetails = async (req, res) => {
   try {
     const userId = req.userId;
-    const user = await UserModel.findById(userId).populate('address_details').select(
-      "-password -refresh_token"
-    );
+    const user = await UserModel.findById(userId)
+      .populate("address_details")
+      .select("-password -refresh_token");
     return res.json({
       message: "user details!",
       data: user,

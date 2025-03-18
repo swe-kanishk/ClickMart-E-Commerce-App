@@ -42,13 +42,13 @@ export const uploadImage = async (url, updatedData, credentials) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "multipart/form-data",
       },
-      credentials
-    })
-    return res
+      credentials,
+    });
+    return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const uploadImages = async (url, updatedData, credentials) => {
   try {
@@ -57,13 +57,13 @@ export const uploadImages = async (url, updatedData, credentials) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "multipart/form-data",
       },
-      credentials
-    })
-    return res
+      credentials,
+    });
+    return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const editData = async (url, updatedData, credentials) => {
   try {
@@ -72,13 +72,13 @@ export const editData = async (url, updatedData, credentials) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
-      credentials
-    })
-    return res
+      credentials,
+    });
+    return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const deleteImages = async (url, imgUrl, credentials) => {
   try {
@@ -87,13 +87,13 @@ export const deleteImages = async (url, imgUrl, credentials) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
-      credentials
-    })
-    return res
+      credentials,
+    });
+    return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const deleteData = async (url, credentials) => {
   try {
@@ -102,13 +102,13 @@ export const deleteData = async (url, credentials) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
-      credentials
-    })
-    return res
+      credentials,
+    });
+    return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const deleteMultipleData = async (url, ids, credentials) => {
   try {
@@ -118,7 +118,7 @@ export const deleteMultipleData = async (url, ids, credentials) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
-     credentials
+      credentials,
     });
     return res;
   } catch (error) {

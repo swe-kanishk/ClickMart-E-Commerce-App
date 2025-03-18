@@ -328,20 +328,25 @@ function Profile() {
             <div className="flex items-center pb-3">
               <h2 className="">Change Password</h2>
             </div>
-            <div className="flex items-center gap-5">
-              <div className="w-[50%]">
-                <TextField
-                  label="Old Password"
-                  disabled={isLoading}
-                  value={changePassword.oldPassword}
-                  onChange={handleOnChangeInput}
-                  className="w-full"
-                  name="oldPassword"
-                  variant="outlined"
-                  size="small"
-                />
-              </div>
-              <div className="w-[50%]">
+            <div className="grid grid-cols-2 gap-5">
+              {
+                console.log(context?.adminData)
+              }
+              {context?.adminData?.signUpWithGoogle === false && (
+                <div className="col">
+                  <TextField
+                    label="Old Password"
+                    disabled={isLoading}
+                    value={changePassword.oldPassword}
+                    onChange={handleOnChangeInput}
+                    className="w-full"
+                    name="oldPassword"
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
+              )}
+              <div className="col">
                 <TextField
                   label="New Password"
                   disabled={isLoading}
@@ -353,9 +358,7 @@ function Profile() {
                   size="small"
                 />
               </div>
-            </div>
-            <div className="flex items-center mt-4 gap-5">
-              <div className="w-[50%]">
+              <div className="col">
                 <TextField
                   label="Confirm Password"
                   disabled={isLoading}

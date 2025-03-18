@@ -197,6 +197,7 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     getProducts();
   }, [context?.isOpenFullScreenPannel]);
 

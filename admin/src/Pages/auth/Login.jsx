@@ -13,14 +13,57 @@ import { postData } from "../../utils/api";
 import toast from "react-hot-toast";
 import { MyContext } from "../../App";
 
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { firebaseApp } from "../../firebase";
+const auth = getAuth(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
 function Login() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingFacebook, setLoadingFacebook] = useState(false);
 
   const context = useContext(MyContext);
 
-  function handleClickGoogle() {
+  function handleGoogleSignup() {
     setLoadingGoogle(true);
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        console.log(result);
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        
+        const fields = {
+          fullName: user?.providerData?.[0]?.displayName,
+          email: user?.providerData?.[0]?.email,
+          avatar: user?.providerData?.[0]?.photoURL,
+          mobile: user?.providerData?.[0]?.phoneNumber,
+        }
+
+        postData("/api/user/authWithGoogle", fields).then((res) => {
+          console.log(res);
+          if (res?.success === true) {
+            localStorage.setItem("accessToken", res.data.accessToken);
+            localStorage.setItem("refreshToken", res.data.refreshToken);
+            context.setIsLogin(true);
+            toast.success(res?.message);
+            navigate("/");
+          } else {
+            toast.error(res?.message);
+          }
+        });
+
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.customData.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        toast.error(errorMessage);
+      })
+      .finally(() => {
+        setLoadingGoogle(false);
+      });
   }
 
   function handleClickFacebook() {
@@ -138,14 +181,14 @@ function Login() {
         <div className="flex items-center mt-5 justify-center gap-4">
           <LoadingButton
             size="small"
-            onClick={handleClickGoogle}
+            onClick={handleGoogleSignup}
             endIcon={<FcGoogle size={"25px"} />}
             loading={loadingGoogle}
             loadingPosition="end"
             variant="outlined"
             className="!capitalize !px-5 !text-[15px] !py-2 !font-medium !text-gray-700"
           >
-            Login with Google
+            Sign-up with Google
           </LoadingButton>
 
           <LoadingButton
@@ -157,7 +200,7 @@ function Login() {
             variant="outlined"
             className="!capitalize !px-5 !text-[15px] !py-2 !font-medium !text-gray-700"
           >
-            Login with Facebook
+            Sign-up with Facebook
           </LoadingButton>
         </div>
         <br />
