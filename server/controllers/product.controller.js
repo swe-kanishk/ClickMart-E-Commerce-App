@@ -1,5 +1,5 @@
 import ProductModel from "../models/product.model.js";
-import ProductRAMSModel from "../models/productRams.model.js";
+import ProductRAMSModel from "../models/productRAMS.model.js";
 import ProductWeightModel from "../models/productWeight.model.js";
 import ProductSizeModel from "../models/productSize.model.js";
 
