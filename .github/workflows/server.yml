@@ -8,19 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # ✅ This uses a predefined action
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3  # ✅ Uses a predefined action
         with: 
           node-version: '16'
 
       - name: Install dependencies
         run: |
           cd server
-          npm install
+          npm install  # ✅ Run script directly
 
-      # Debugging: Check if secrets are set correctly
       - name: Debug Secrets
         run: |
           echo "RENDER_API_KEY length: ${#RENDER_API_KEY}"
