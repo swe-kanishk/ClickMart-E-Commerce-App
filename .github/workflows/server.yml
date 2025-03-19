@@ -9,18 +9,43 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
-        with: { node-version: '16' }
+        with: 
+          node-version: '16'
+
       - name: Install dependencies
-        run: cd server && npm install
+        run: |
+          cd server
+          npm install
+
+      # Debugging: Check if secrets are set correctly
+      - name: Debug Secrets
+        run: |
+          echo "RENDER_API_KEY length: ${#RENDER_API_KEY}"
+          echo "RENDER_SERVICE_ID length: ${#RENDER_SERVICE_ID}"
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+
       - name: Deploy to Render
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
         run: |
-          curl -X POST \
+          response=$(curl -X POST \
           -H "Authorization: Bearer $RENDER_API_KEY" \
           -H "Content-Type: application/json" \
-          -d '{"clearCache": true}' \
-          "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys"
+          -d '{"clearCache": false}' \
+          -w "\nHTTP_STATUS:%{http_code}" \
+          "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys")
+          
+          echo "Render API Response: $response"
+          
+          http_status=$(echo "$response" | grep "HTTP_STATUS" | cut -d':' -f2)
+          
+          if [ "$http_status" -ne 200 ] && [ "$http_status" -ne 201 ]; then
+            echo "Deployment failed with HTTP status: $http_status"
+            exit 1
+          fi
