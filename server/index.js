@@ -40,3 +40,4 @@ connectDB().then(() => {
     console.log(`App is running on ${PORT}`);
   });
 });
+// Test CI/CD for backend deployment
