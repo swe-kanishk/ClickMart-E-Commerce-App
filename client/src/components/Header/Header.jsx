@@ -9,7 +9,7 @@ import { IoIosGitCompare } from "react-icons/io";
 import { BsCart3 } from "react-icons/bs";
 import Tooltip from "@mui/material/Tooltip";
 import Navigation from "./Navigation/Navigation";
-import Logo from "./logo.png";
+import Logo from "./logo";
 import { MyContext } from "../../App";
 import CartPanel from "../../pages/Cart/CartPanel";
 import { Button } from "@mui/material";
@@ -69,7 +69,7 @@ function Header() {
 
   return (
     <>
-      <header className="bg-white">
+      <header className="bg-white sticky -top-[110px] z-[100] w-full">
         <div className="top-strip py-2 border-t-[1px] border-b-[1px] border-gray-200">
           <div className="container">
             <div className="flex items-center justify-between">

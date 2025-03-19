@@ -14,6 +14,9 @@ import { BiLoader } from "react-icons/bi";
 import toast from "react-hot-toast";
 import { deleteImages, getData, postData } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
+import Switch from '@mui/material/Switch';
+
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 function AddProduct() {
   const context = useContext(MyContext);
@@ -21,6 +24,7 @@ function AddProduct() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [previews, setPreviews] = useState([]);
+  const [bannerPreviews, setBannerPreviews] = useState([]);
 
   const [formFields, setFormFields] = useState({
     name: "",
@@ -43,6 +47,10 @@ function AddProduct() {
     productRam: [],
     size: [],
     weight: [],
+    bannerDescription: "",
+    bannerTitle: "",
+    bannerImages: [],
+    isDisplayOnHomeBanner: false
   });
 
   const [productCat, setProductCat] = useState("");
@@ -95,6 +103,10 @@ function AddProduct() {
     formFields.category = event.target.value;
   };
 
+  const handleOnChangeSwitch = () => {
+    setFormFields((prevState) => ({...prevState, isDisplayOnHomeBanner: !prevState.isDisplayOnHomeBanner}))
+  };
+
   const selectCatByName = (catName) => {
     formFields.catName = catName;
   };
@@ -142,12 +154,33 @@ function AddProduct() {
 
   const handleOnChangeInput = (e) => {
     const { name, value } = e.target;
+    console.log(name, value)
     setFormFields((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  useEffect(() => {
-    setFormFields((prevState) => ({ ...prevState, images: previews }));
-  }, [previews]);
+  const setPreviewsfunction = (previewsArr) => {
+    const imgArr = previews;
+    for (let i = 0; i < previewsArr?.length; i++) {
+      imgArr.push(previewsArr[i]);
+    }
+    setPreviews([]);
+    setTimeout(() => {
+      setPreviews(imgArr);
+      formFields.images = imgArr;
+    }, 100);
+  };
+
+  const setBannerPreviewsfunction = (bannerPreviewsArr) => {
+    const imgArr = bannerPreviews;
+    for (let i = 0; i < bannerPreviewsArr?.length; i++) {
+      imgArr.push(bannerPreviewsArr[i]);
+    }
+    setBannerPreviews([]);
+    setTimeout(() => {
+      setBannerPreviews(imgArr);
+      formFields.bannerImages = imgArr;
+    }, 100);
+  };
 
   const handleOnChangeRating = (e) => {
     const { name, value } = e.target;
@@ -162,6 +195,17 @@ function AddProduct() {
       if (res?.data?.success === true) {
         toast.success(res?.data?.message);
         setPreviews((prevState) => prevState.toSpliced(index, 1));
+      }
+    });
+  };
+
+  const handleRemoveBannerImage = (img, index) => {
+    deleteImages("/api/product/delete-image", img, {
+      withCredentials: true,
+    }).then((res) => {
+      if (res?.data?.success === true) {
+        toast.success(res?.data?.message);
+        setBannerPreviews((prevState) => prevState.toSpliced(index, 1));
       }
     });
   };
@@ -199,6 +243,7 @@ function AddProduct() {
       toast.error("Please add product images!");
       return;
     }
+    console.log(formFields)
     setIsLoading(true);
     postData("/api/product/", formFields, { withCredentials: true }).then(
       (res) => {
@@ -216,8 +261,8 @@ function AddProduct() {
 
   return (
     <section className="p-5 bg-gray-50">
-      <form className="form py-3 px-2" onSubmit={handleSubmit}>
-        <div className="scroll max-h-[78vh] px-6 overflow-y-scroll">
+      <form className="form py-3 scroll max-h-[78vh] px-2" onSubmit={handleSubmit}>
+        <div className="px-6 overflow-y-scroll">
           <div className="grid grid-cols-1 mb-3">
             <div className="col">
               <h3 className="text-[14px] text-black font-[500] mb-1">
@@ -550,7 +595,7 @@ function AddProduct() {
                   );
                 })}
               <UploadProductBox
-                setPreviews={setPreviews}
+                setPreviewsfunction={setPreviewsfunction}
                 multiple={true}
                 name={"images"}
                 url={"/api/product/upload-images"}
@@ -558,6 +603,75 @@ function AddProduct() {
             </div>
           </div>
         </div>
+          <div className="flex px-6 py-3 rounded-md bg-white flex-col">
+            <div className="grid grid-cols-1 mb-3">
+              <div className="col">
+                <h3 className="text-[14px] text-black font-[500] mb-1">
+                  Banner Title
+                </h3>
+                <input
+                  onChange={handleOnChangeInput}
+                  value={formFields.bannerTitle}
+                  name="bannerTitle"
+                  disabled={isLoading}
+                  type="text"
+                  className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 mb-3">
+              <div className="col">
+                <h3 className="text-[14px] text-black font-[500] mb-1">
+                  Banner Description
+                </h3>
+                <textarea
+                  type="text"
+                  onChange={handleOnChangeInput}
+                  disabled={isLoading}
+                  value={formFields.bannerDescription}
+                  name="bannerDescription"
+                  className="w-full h-[140px] p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
+                />
+              </div>
+            </div>
+            <div className="col w-full py-5">
+              <div className="flex items-center gap-8">
+              <h3 className="font-[600] text-[18px] mb-3">Banner Images</h3>
+              <Switch {...label} checked={formFields.isDisplayOnHomeBanner}  onChange={handleOnChangeSwitch} />
+              </div>
+              <div className="grid grid-cols-7 gap-4">
+                {bannerPreviews?.length > 0 &&
+                  bannerPreviews.map((image, index) => {
+                    return (
+                      <div key={index} className="uploadBoxWrapper relative">
+                        <IoMdCloseCircle
+                          onClick={() => handleRemoveBannerImage(image, index)}
+                          className="text-red-500 z-50 absolute -top-2 -right-2 cursor-pointer"
+                          size={"30px"}
+                        />
+                        <div className="p-0 rounded-md h-[150px] flex-col w-[100%] flex items-center justify-center bg-gray-100 cursor-pointer hover:bg-gray-200 hover:border-gray-600 overflow-hidden border-dashed border border-gray-400">
+                          <LazyLoadImage
+                            alt={"banner image"}
+                            className="w-full h-full object-cover"
+                            effect="blur"
+                            src={image}
+                            wrapperProps={{
+                              style: { transitionDelay: "1s" },
+                            }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                <UploadProductBox
+                  setPreviewsfunction={setBannerPreviewsfunction}
+                  multiple={true}
+                  name={"bannerImages"}
+                  url={"/api/product/uploadBannerImages"}
+                />
+              </div>
+            </div>
+          </div>
         <hr />
         <br />
         <Button

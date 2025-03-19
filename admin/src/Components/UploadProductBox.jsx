@@ -5,16 +5,17 @@ import { uploadImages } from "../utils/api";
 import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
 
-function UploadProductBox({ multiple, name, url, setPreviews }) {
+function UploadProductBox({ multiple, name, url, setPreviewsfunction }) {
   const [isUploading, setIsUploading] = useState(false);
 
-  const formData = new FormData();
-
   const handleOnChangeFile = async (e, apiEndPoint) => {
+    const formData = new FormData(); // Create a new FormData instance
     try {
-      setPreviews([]);
+      setPreviewsfunction([]); // Clear previous previews
       const files = e.target.files;
       setIsUploading(true);
+  
+      // Validate and append all files to formData
       for (let i = 0; i < files?.length; i++) {
         if (
           files[i] &&
@@ -23,25 +24,22 @@ function UploadProductBox({ multiple, name, url, setPreviews }) {
             files[i].type === "image/png" ||
             files[i].type === "image/webp")
         ) {
-          const file = files[i];
-          formData.append(name, file);
-          for (const [key, value] of Object.entries(formData)) {
-            console.log(`${key}: ${value}`);
-          }
-
-          uploadImages(apiEndPoint, formData, {
-            withCredentials: true,
-          }).then((res) => {
-            if (res?.status === 200) {
-              setIsUploading(false);
-              setPreviews(res?.data?.images);
-            }
-          });
+          formData.append(name, files[i]); // Append each file to formData
         } else {
-          toast.error("Please select a valid JPG, webp or PNG image file!");
+          toast.error("Please select a valid JPG, webp, or PNG image file!");
           setIsUploading(false);
           return false;
         }
+      }
+  
+      // Send formData to the server in a single request
+      const res = await uploadImages(apiEndPoint, formData, {
+        withCredentials: true,
+      });
+  
+      if (res?.status === 200) {
+        setIsUploading(false);
+        setPreviewsfunction(res?.data?.images); // Update previews with uploaded images
       }
     } catch (error) {
       console.log(error);

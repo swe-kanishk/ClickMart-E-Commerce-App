@@ -67,6 +67,7 @@ function Products() {
   const [productsData, setProductsData] = useState([]);
   const [sortedIds, setSortedIds] = useState([]);
   const [page, setPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const context = useContext(MyContext);
@@ -81,6 +82,8 @@ function Products() {
           productsArr[i].checked = false;
         }
         setProductsData(productsArr);
+        setPage(res?.page)
+        setTotalPage(res?.totalPages)
       }
     }).finally(() => {
       setIsLoading(false)
@@ -89,7 +92,7 @@ function Products() {
 
   useEffect(() => {
     getProducts();
-  }, [context?.isOpenFullScreenPannel]);
+  }, [context?.isOpenFullScreenPannel, page, rowsPerPage]);
 
   const handleChangeProductCat = (event) => {
     setProductCat(event.target.value);
@@ -140,12 +143,11 @@ function Products() {
   };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setPage(parseInt(newPage, 10));
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
   };
 
   const handleDeleteProduct = (id) => {
@@ -477,7 +479,7 @@ function Products() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
           component="div"
-          count={productsData?.length}
+          count={totalPage}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

@@ -49,6 +49,42 @@ export const uploadImages = async (req, res) => {
   }
 };
 
+var bannerImagesArr = [];
+export const uploadBannerImages = async (req, res) => {
+  try {
+    bannerImagesArr = [];
+    const images = req.files;
+
+    const options = {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: false,
+    };
+
+    for (let i = 0; i < images?.length; i++) {
+      const img = await cloudinary.uploader
+        .upload(images[i].path, options, (err, result) => {
+          bannerImagesArr.push(result.secure_url);
+          fs.unlinkSync(`uploads/${images[i].filename}`);
+          console.log(images[i].filename);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    return res.status(200).json({
+      images: bannerImagesArr,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
 export const createProduct = async (req, res) => {
   try {
     const {
@@ -61,6 +97,9 @@ export const createProduct = async (req, res) => {
       brand,
       subCat,
       category,
+      bannerTitle,
+      bannerDescription,
+      isDisplayOnHomeBanner,     
       subCatId,
       subCatName,
       thirdSubCat,
@@ -81,6 +120,9 @@ export const createProduct = async (req, res) => {
       name,
       description,
       images: imagesArr,
+      bannerImages: bannerImagesArr,
+      bannerTitle,
+      bannerDescription,
       price,
       oldPrice,
       catId,
@@ -94,6 +136,7 @@ export const createProduct = async (req, res) => {
       thirdSubCatId,
       thirdSubCatName,
       countInStock,
+      isDisplayOnHomeBanner,
       rating,
       isFeatured,
       discount,
@@ -780,6 +823,9 @@ export const updateProduct = async (req, res) => {
         price: req.body.price,
         oldPrice: req.body.oldPrice,
         images: req.body.images,
+        bannerImages: req.body.bannerImages,
+        bannerTitle: req.body.bannerTitle,
+        bannerDescription: req.body.bannerDescription,
         catId: req.body.catId,
         catName: req.body.catName,
         brand: req.body.brand,
@@ -788,6 +834,7 @@ export const updateProduct = async (req, res) => {
         category: req.body.category,
         thirdSubCat: req.body.thirdSubCat,
         thirdSubCatId: req.body.thirdSubCatId,
+        isDisplayOnHomeBanner: req.body.isDisplayOnHomeBanner,
         countInStock: req.body.countInStock,
         rating: req.body.rating,
         isFeatured: req.body.isFeatured,

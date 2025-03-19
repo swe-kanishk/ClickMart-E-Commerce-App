@@ -84,7 +84,7 @@ const productSchema = new Schema(
     ],
     sale: {
       type: Number,
-      default: 0
+      default: 0,
     },
     size: [
       {
@@ -98,10 +98,21 @@ const productSchema = new Schema(
         default: null,
       },
     ],
-    dateCreated: {
-      type: Date,
-      default: Date.now(),
+    bannerTitle: {
+      type: String,
     },
+    bannerDescription: {
+      type: String,
+    },
+    bannerImages: [
+      {
+        type: String,
+      },
+    ],
+    isDisplayOnHomeBanner: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import HomeSlider from "./HomeSlider";
+import HomeSlider from "./HomeBanners/HomeSlider";
 import HomeCategorySlider from "./HomeCategorySlider/HomeCategorySlider";
 import { FaShippingFast } from "react-icons/fa";
 
@@ -16,9 +16,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import ProductsSlider from "./products/ProductsSlider";
 import BlogItem from "../BlogItem";
-import HomeBanner from "./HomeBanner";
+import HomeBanner from "./HomeBanners/HomeBanner";
 import { MyContext } from "../../App";
 import { getData } from "../../utils/api";
+import ProductSkelton from "./Products/ProductSkelton";
+import HomeBannerSliderSkelton from "./HomeBanners/HomeBannerSliderSkelton";
 
 function Home() {
   const [value, setValue] = useState(0);
@@ -56,6 +58,7 @@ function Home() {
   }, []);
 
   const filterProductsByCat = (id) => {
+    setPopularProductsData([]);
     getData(`/api/product/getAllProductsByCatId/${id}`).then((res) => {
       if (res?.success === true) {
         setPopularProductsData(res?.data);
@@ -67,8 +70,8 @@ function Home() {
     <>
       <section className="py-6">
         <div className="container flex gap-2 justify-between">
-          <div className="part-1 w-[75%] flex flex-col">
-            <HomeSlider />
+          <div className="part-1 w-[75%]">
+            {productsData?.length > 0 ? <HomeSlider productsData={productsData} /> : <HomeBannerSliderSkelton animate={true} />}
           </div>
           <div className="part-2 w-[25%] flex flex-col">
             <HomeBanner />
@@ -107,8 +110,10 @@ function Home() {
               </div>
             )}
           </div>
-          {popularProductsData?.length > 0 && (
+          {popularProductsData?.length > 0 ? (
             <ProductsSlider data={popularProductsData} />
+          ) : (
+            <ProductSkelton length={6} />
           )}
         </div>
       </section>
@@ -132,22 +137,26 @@ function Home() {
           </div>
         </div>
       </section>
-      {productsData?.length > 0 && (
+      {productsData?.length > 0 ? (
         <section className="py-5 pt-0 bg-white">
           <div className="container">
             <h2 className="text-[20px] font-[600]">Latest Products</h2>
             <ProductsSlider data={productsData} />
           </div>
         </section>
+      ) : (
+        <ProductSkelton length={6} />
       )}
 
-      {featuredProductsData?.length > 0 && (
+      {featuredProductsData?.length > 0 ? (
         <section className="py-5 pt-0 bg-white">
           <div className="container">
             <h2 className="text-[20px] font-[600]">Featured Products</h2>
             <ProductsSlider data={featuredProductsData} />
           </div>
         </section>
+      ) : (
+        <ProductSkelton length={6} />
       )}
       <section className="pb-8 pt-0 bg-white blogSection">
         <div className="container">

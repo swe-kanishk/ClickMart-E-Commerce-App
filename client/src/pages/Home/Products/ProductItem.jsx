@@ -13,7 +13,7 @@ function ProductItem({ product }) {
   const context = useContext(MyContext);
   return (
     <div className="productItem border rounded-md w-[250px] max-h-[410px] min-h-[400px] overflow-hidden shadow-lg">
-      <div className="img-wrapper group w-[250px] h-[250px] rounded-md overflow-hidden relative">
+      <div className="img-wrapper group h-[250px] max-w-[250px] rounded-md overflow-hidden relative">
         <span className="discout flex items-center absolute top-[10px] left-[10px] z-50 bg-red-500 rounded-[0.2rem] text-white text-[12px] px-1 py-[2px]">
           {product?.discount}% off
         </span>
@@ -21,13 +21,13 @@ function ProductItem({ product }) {
           <img
             src={product?.images?.[0]}
             alt=""
-            className={`w-full h-full ${product?.images?.[1] && 'group-hover:opacity-0 group-hover:hidden'}  duration-700 transition-all object-cover`}
+            className={` ${product?.images?.[1] && 'group-hover:opacity-0 group-hover:hidden'}  duration-700 transition-all object-cover`}
           />
           {product?.images?.[1] && (
             <img
               src={product?.images?.[1]}
               alt=""
-              className="w-full h-full group-hover:scale-105 transition-all duration-700 object-cover hidden group-hover:flex"
+              className="w-full h-full group-hover:scale-105 transition-all duration-700  opacity-0 group-hover:opacity-100 hidden group-hover:flex"
             />
           )}
         </Link>
@@ -65,7 +65,7 @@ function ProductItem({ product }) {
         </h6>
         <h3 className="text-[15px] text-start title my-2 font-[500] text-[black]">
           <Link to={`/productDetails/${product?._id}`} className="link transition-all">
-            {product?.name?.length > 55 ? product?.name?.slice(0,55).concat('...') : product?.name}
+            {product?.name?.length > 55 ? product?.name?.substr(0,55).concat('...') : product?.name}
           </Link>
         </h3>
         <Rating
