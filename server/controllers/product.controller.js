@@ -172,7 +172,7 @@ export const createProduct = async (req, res) => {
 export const getAllProducts = async (req, res) => {
   try {
     const page = parseInt(req?.query?.page) || 1;
-    const perPage = parseInt(req?.query.perPage);
+    const perPage = parseInt(req?.query.perPage) || 5;
     const totalProducts = await ProductModel.countDocuments();
     const totalPages = Math.ceil(totalProducts / perPage);
 
@@ -184,7 +184,7 @@ export const getAllProducts = async (req, res) => {
 
     const products = await ProductModel.find()
       .populate("category")
-      .skip((page - 1) * perPage)
+      .skip((page-1) * perPage)
       .limit(perPage)
       .exec();
     if (!products) {

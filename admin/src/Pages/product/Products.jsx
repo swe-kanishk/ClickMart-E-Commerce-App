@@ -66,9 +66,9 @@ function Products() {
 
   const [productsData, setProductsData] = useState([]);
   const [sortedIds, setSortedIds] = useState([]);
-  const [page, setPage] = useState(0);
-  const [totalPage, setTotalPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const context = useContext(MyContext);
 
@@ -76,6 +76,7 @@ function Products() {
     setIsLoading(true)
     getData(`/api/product/?page=${page}&perPage=${rowsPerPage}`).then((res) => {
       if (res?.success === true) {
+        console.log(res)
         const productsArr = [];
         for (let i = 0; i < res?.data?.length; i++) {
           productsArr[i] = res?.data[i];
@@ -83,7 +84,18 @@ function Products() {
         }
         setProductsData(productsArr);
         setPage(res?.page)
-        setTotalPage(res?.totalPages)
+      }
+    }).finally(() => {
+      setIsLoading(false)
+    });
+  };
+
+  const getProductsCount = () => {
+    setIsLoading(true)
+    getData(`/api/product/getProductsCount`).then((res) => {
+      console.log(res)
+      if (res?.success === true) {
+        setTotalCount(res?.productsCount)
       }
     }).finally(() => {
       setIsLoading(false)
@@ -92,6 +104,7 @@ function Products() {
 
   useEffect(() => {
     getProducts();
+    getProductsCount();
   }, [context?.isOpenFullScreenPannel, page, rowsPerPage]);
 
   const handleChangeProductCat = (event) => {
@@ -143,7 +156,7 @@ function Products() {
   };
 
   const handleChangePage = (event, newPage) => {
-    setPage(parseInt(newPage, 10));
+    setPage(parseInt(newPage+1, 10));
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -479,9 +492,9 @@ function Products() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
           component="div"
-          count={totalPage}
+          count={totalCount}
           rowsPerPage={rowsPerPage}
-          page={page}
+          page={page-1}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
