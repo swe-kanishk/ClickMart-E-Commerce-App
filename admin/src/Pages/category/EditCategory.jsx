@@ -23,9 +23,17 @@ function EditCategory() {
     images: [],
   });
 
-  useEffect(() => {
-    setFormFields((prevState) => ({ ...prevState, images: previews }));
-  }, [previews]);
+  const setPreviewsfunction = (previewsArr) => {
+    const imgArr = previews;
+    for (let i = 0; i < previewsArr?.length; i++) {
+      imgArr.push(previewsArr[i]);
+    }
+    setPreviews([]);
+    setTimeout(() => {
+      setPreviews(imgArr);
+      formFields.images = imgArr;
+    }, 100);
+  };
 
   useEffect(() => {
     getData(`/api/category/${context?.isOpenFullScreenPannel?.id}`).then(
@@ -140,7 +148,7 @@ function EditCategory() {
                 );
               })}
             <UploadProductBox
-              setPreviews={setPreviews}
+              setPreviewsfunction={setPreviewsfunction}
               multiple={true}
               name={"images"}
               url={"/api/category/upload-images"}

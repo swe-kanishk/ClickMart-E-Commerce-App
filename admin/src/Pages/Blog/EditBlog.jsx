@@ -7,20 +7,22 @@ import UploadProductBox from "../../Components/UploadProductBox";
 import { Button } from "@mui/material";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { useState } from "react";
-import { deleteImages, postData } from "../../utils/api";
+import { deleteImages, editData, getData } from "../../utils/api";
 import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { MyContext } from "../../App";
 import { useNavigate } from "react-router-dom";
+import Editor from "react-simple-wysiwyg";
 
-function AddNewCategory() {
+function EditBlog() {
   const [isLoading, setIsLoading] = useState(false);
   const [previews, setPreviews] = useState([]);
   const context = useContext(MyContext);
   const [formFields, setFormFields] = useState({
-    name: "",
+    title: "",
+    content: "",
     images: [],
   });
 
@@ -43,13 +45,37 @@ function AddNewCategory() {
     setFormFields((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  const getBlog = () => {
+    getData(`/api/blogs/${context?.isOpenFullScreenPannel?.id}`).then((res) => {
+      if (res?.success === true) {
+        setFormFields({
+          title: res?.blog?.title,
+          content: res?.blog?.content,
+          images: res?.blog?.images,
+        });
+        setPreviews(res?.blog?.images);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getBlog();
+  }, []);
+
   const handleRemoveImage = (img, index) => {
-    deleteImages("/api/category/delete-image", img, {
+    deleteImages("/api/blogs/deleteImage", img, {
       withCredentials: true,
     }).then((res) => {
       if (res?.data?.success === true) {
         toast.success(res?.data?.message);
-        setPreviews((prevState) => prevState.toSpliced(index, 1));
+        setPreviews((prevState) => {
+          const updatedPreviews = prevState.toSpliced(index, 1);
+          setFormFields((prevFormFields) => ({
+            ...prevFormFields,
+            images: updatedPreviews, // Update formFields.images as well
+          }));
+          return updatedPreviews;
+        });
       }
     });
   };
@@ -58,58 +84,77 @@ function AddNewCategory() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formFields.name === "") {
-      toast.error("Please enter category name!");
+    if (formFields.title === "") {
+      toast.error("Please enter blog title!");
       return;
     } else if (formFields.images.length === 0) {
       toast.error("Please add images!");
       return;
+    } else if (formFields.content === "") {
+      toast.error("Please add blog content!");
+      return;
     }
     setIsLoading(true);
-    postData("/api/category", formFields, { withCredentials: true }).then(
-      (res) => {
-        if (res?.success === true) {
-          toast.success(res?.message);
-          navigate("/category/list");
-          setIsLoading(false);
-          setFormFields({
-            name: "",
-            images: "",
+    editData(`/api/blogs/${context?.isOpenFullScreenPannel?.id}`, formFields, {
+      withCredentials: true,
+    }).then((res) => {
+      if (res?.data?.success === true) {
+        toast.success(res?.data?.message);
+        navigate("/blogs");
+        setIsLoading(false);
+        setFormFields({
+          title: "",
+          content: "",
+          images: [],
+        });
+        setPreviews([]);
+        setTimeout(() => {
+          context.setIsOpenFullScreenPannel({
+            open: false,
+            model: "",
+            id: "",
           });
-          setPreviews([]);
-          context.getCat();
-          setTimeout(() => {
-            context.setIsOpenFullScreenPannel({ open: false, model: "" });
-          }, 1000);
-        }
+        }, 1000);
       }
-    );
+    });
   };
 
   return (
     <section className="p-5 bg-gray-50">
       <form className="form px-2" onSubmit={handleSubmit}>
-        <div className="scroll max-h-[78vh] pt-4 overflow-y-scroll">
+        <div className="scroll max-h-[90vh] pt-4 overflow-y-scroll">
           <div className="grid grid-cols-1 mb-3">
-            <div className="col w-[25%]">
+            <div className="col w-full">
               <h3 className="text-[14px] text-black font-[500] mb-1">
-                Category Name
+                Blog title
               </h3>
               <input
                 type="text"
                 onChange={handleOnChangeInput}
                 disabled={isLoading}
-                name="name"
-                placeholder="Category Name"
-                value={formFields.name}
+                name="title"
+                placeholder="title"
+                value={formFields?.title}
                 className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
               />
             </div>
           </div>
+          <div className="grid grid-cols-1 mb-3">
+            <div className="col w-full">
+              <h3 className="text-[14px] text-black font-[500] mb-1">
+                Blog Content
+              </h3>
+              <Editor
+                value={formFields.content}
+                disabled={isLoading}
+                containerProps={{ style: { resize: "vertical" } }}
+                name="content"
+                onChange={handleOnChangeInput}
+              />
+            </div>
+          </div>
           <br />
-          <h3 className="text-[14px] text-black font-[500] mb-1">
-            Category Image
-          </h3>
+          <h3 className="text-[14px] text-black font-[500] mb-1">Blog Image</h3>
           <div className="grid grid-cols-7 gap-4">
             {previews?.length > 0 &&
               previews.map((image, index) => {
@@ -138,7 +183,7 @@ function AddNewCategory() {
               setPreviewsfunction={setPreviewsfunction}
               multiple={true}
               name={"images"}
-              url={"/api/category/upload-images"}
+              url={"/api/blogs/uploadImages"}
             />
           </div>
         </div>
@@ -164,4 +209,4 @@ function AddNewCategory() {
   );
 }
 
-export default AddNewCategory;
+export default EditBlog;

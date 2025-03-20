@@ -241,7 +241,14 @@ function EditProduct() {
     }).then((res) => {
       if (res?.data?.success === true) {
         toast.success(res?.data?.message);
-        setPreviews((prevState) => prevState.toSpliced(index, 1));
+        setPreviews((prevState) => {
+          const updatedPreviews = prevState.toSpliced(index, 1);
+          setFormFields((prevFormFields) => ({
+            ...prevFormFields,
+            images: updatedPreviews, // Update formFields.images as well
+          }));
+          return updatedPreviews;
+        });
       }
     });
   };

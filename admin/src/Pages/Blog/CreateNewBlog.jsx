@@ -14,17 +14,19 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { MyContext } from "../../App";
 import { useNavigate } from "react-router-dom";
+import Editor from "react-simple-wysiwyg";
 
-function AddNewCategory() {
+function CreateNewBlog() {
   const [isLoading, setIsLoading] = useState(false);
   const [previews, setPreviews] = useState([]);
   const context = useContext(MyContext);
   const [formFields, setFormFields] = useState({
-    name: "",
+    title: "",
+    content: "",
     images: [],
   });
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const setPreviewsfunction = (previewsArr) => {
     const imgArr = previews;
@@ -44,7 +46,7 @@ function AddNewCategory() {
   };
 
   const handleRemoveImage = (img, index) => {
-    deleteImages("/api/category/delete-image", img, {
+    deleteImages("/api/blogs/deleteImage", img, {
       withCredentials: true,
     }).then((res) => {
       if (res?.data?.success === true) {
@@ -58,23 +60,28 @@ function AddNewCategory() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formFields.name === "") {
-      toast.error("Please enter category name!");
+    if (formFields.title === "") {
+      toast.error("Please enter blog title!");
       return;
     } else if (formFields.images.length === 0) {
       toast.error("Please add images!");
       return;
+    } else if (formFields.content === "") {
+      toast.error("Please add blog content!");
+      return;
     }
     setIsLoading(true);
-    postData("/api/category", formFields, { withCredentials: true }).then(
+    postData("/api/blogs", formFields, { withCredentials: true }).then(
       (res) => {
+        console.log(res)
         if (res?.success === true) {
           toast.success(res?.message);
-          navigate("/category/list");
+          navigate('/blogs')
           setIsLoading(false);
           setFormFields({
-            name: "",
-            images: "",
+            title: "",
+            content: "",
+            images: []
           });
           setPreviews([]);
           context.getCat();
@@ -89,26 +96,34 @@ function AddNewCategory() {
   return (
     <section className="p-5 bg-gray-50">
       <form className="form px-2" onSubmit={handleSubmit}>
-        <div className="scroll max-h-[78vh] pt-4 overflow-y-scroll">
+        <div className="scroll max-h-[90vh] pt-4 overflow-y-scroll">
           <div className="grid grid-cols-1 mb-3">
-            <div className="col w-[25%]">
+            <div className="col w-full">
               <h3 className="text-[14px] text-black font-[500] mb-1">
-                Category Name
+                Blog title
               </h3>
               <input
                 type="text"
                 onChange={handleOnChangeInput}
                 disabled={isLoading}
-                name="name"
-                placeholder="Category Name"
-                value={formFields.name}
+                name="title"
+                placeholder="title"
+                value={formFields.title}
                 className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
               />
             </div>
           </div>
+          <div className="grid grid-cols-1 mb-3">
+            <div className="col w-full">
+              <h3 className="text-[14px] text-black font-[500] mb-1">
+                Blog Content
+              </h3>
+                <Editor value={formFields.content} disabled={isLoading} containerProps={{style: {resize: 'vertical'}}} name="content" onChange={handleOnChangeInput} />
+            </div>
+          </div>
           <br />
           <h3 className="text-[14px] text-black font-[500] mb-1">
-            Category Image
+            Blog Image
           </h3>
           <div className="grid grid-cols-7 gap-4">
             {previews?.length > 0 &&
@@ -138,7 +153,7 @@ function AddNewCategory() {
               setPreviewsfunction={setPreviewsfunction}
               multiple={true}
               name={"images"}
-              url={"/api/category/upload-images"}
+              url={"/api/blogs/uploadImages"}
             />
           </div>
         </div>
@@ -164,4 +179,4 @@ function AddNewCategory() {
   );
 }
 
-export default AddNewCategory;
+export default CreateNewBlog;

@@ -17,6 +17,7 @@ import { Collapse } from "react-collapse";
 import { MyContext } from "../App";
 import Logo from "./Logo";
 import { getData } from "../utils/api";
+import { GrBlog } from "react-icons/gr";
 
 function Sidebar() {
   const [submenuIndex, setSubmenuIndex] = useState(null);
@@ -239,6 +240,46 @@ function Sidebar() {
               <span className="text-[16px]">Orders</span>
             </Button>
           </Link>
+        </li>
+        <li>
+          <Button
+            onClick={() => isOpenSubmenu(4)}
+            className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end"
+          >
+            <GrBlog size={"18px"} />{" "}
+            <span className="text-[16px]">Blogs</span>
+            <span className="ml-auto">
+              <FaAngleDown
+                className={`transition-all duration-400 ${
+                  submenuIndex === 4 ? "rotate-0" : "-rotate-90"
+                }`}
+              />
+            </span>
+          </Button>
+          <Collapse isOpened={submenuIndex === 4 ? true : false}>
+            <ul className="w-full">
+              <li className="w-full">
+                <Link to="/blogs">
+                  <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500">
+                    <span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span>{" "}
+                    Blogs List
+                  </Button>
+                </Link>
+                <Button
+                  onClick={() =>
+                    context.setIsOpenFullScreenPannel({
+                      open: true,
+                      model: "Create Blog",
+                    })
+                  }
+                  className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"
+                >
+                  <span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span>{" "}
+                  Create Blog
+                </Button>
+              </li>
+            </ul>
+          </Collapse>
         </li>
         <li>
           <Button

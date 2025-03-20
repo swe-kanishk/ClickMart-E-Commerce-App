@@ -5,9 +5,9 @@ import { createBlog, deleteBlog, getBlog, getBlogs, removeImageFromCloudinary, u
 
 const blogRouter = Router();
 
-blogRouter.get('/', getBlogs);
 blogRouter.post('/', auth, createBlog);
 blogRouter.get('/:id', getBlog);
+blogRouter.get('/', getBlogs);
 blogRouter.post('/uploadImages', auth, upload.array('images'), uploadImages);
 blogRouter.delete('/deleteImage', auth, removeImageFromCloudinary);
 blogRouter.delete('/:id', auth, deleteBlog);

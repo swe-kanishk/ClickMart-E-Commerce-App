@@ -214,12 +214,13 @@ export const deleteBlog = async (req, res) => {
 
 export const updateBlog = async (req, res) => {
   try {
+    console.log(req.body)
     const blog = await BlogModel.findByIdAndUpdate(
       req.params.id,
       {
-        title: req.body.title,
-        content: req.body.content,
-        images: req.body.images,
+        title: req?.body?.title,
+        content: req?.body?.content,
+        images: req?.body?.images,
       },
       { new: true }
     );

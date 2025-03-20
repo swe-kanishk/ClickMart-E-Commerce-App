@@ -48,6 +48,8 @@ import AddNewAddress from "../Pages/AddNewAddress";
 import EditCategory from "../Pages/category/EditCategory";
 import AddNewSubCategory from "../Pages/subCategory/AddNewSubCategory";
 import EditProduct from "../Pages/product/EditProduct";
+import CreateNewBlog from "../Pages/Blog/CreateNewBlog";
+import EditBlog from "../Pages/Blog/EditBlog";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -271,6 +273,8 @@ function Header() {
           )}
           {context?.isOpenFullScreenPannel?.model === "Edit Category" && <EditCategory />}
           {context?.isOpenFullScreenPannel?.model === "Edit Product" && <EditProduct />}
+          {context?.isOpenFullScreenPannel?.model === "Create Blog" && <CreateNewBlog />}
+          {context?.isOpenFullScreenPannel?.model === "Edit Blog" && <EditBlog />}
         </Dialog>
     </>
   );
