@@ -99,7 +99,7 @@ export const createProduct = async (req, res) => {
       category,
       bannerTitle,
       bannerDescription,
-      isDisplayOnHomeBanner,     
+      isDisplayOnHomeBanner,
       subCatId,
       subCatName,
       thirdSubCat,
@@ -184,7 +184,7 @@ export const getAllProducts = async (req, res) => {
 
     const products = await ProductModel.find()
       .populate("category")
-      .skip((page-1) * perPage)
+      .skip((page - 1) * perPage)
       .limit(perPage)
       .exec();
     if (!products) {
@@ -1347,6 +1347,61 @@ export const updateProductSize = async (req, res) => {
       error: false,
       message: "Product size updated!",
       productSize,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const filterProducts = async (req, res) => {
+  const {
+    catId,
+    subCatId,
+    thirdSubCatId,
+    minPrice = 0,
+    maxPrice = Infinity,
+    rating,
+    page,
+    limit,
+  } = req.body;
+  const filters = {};
+  if (catId?.length) {
+    filters.catId = { $in: catId };
+  }
+  if (subCatId?.length) {
+    filters.subCatId = { $in: subCatId };
+  }
+  if (thirdSubCatId?.length) {
+    filters.thirdSubCatId = { $in: thirdSubCatId };
+  }
+  if (minPrice || maxPrice) {
+    filters.price = { $gte: +minPrice, $lte: +maxPrice };
+  }
+  if (rating?.length) {
+    filters.rating = { $in: rating };
+  }
+  try {
+    const filteredProducts = await ProductModel.find(filters).populate('category').skip((page - 1) * parseInt(limit)).limit(parseInt(limit)).exec();
+    if (!filteredProducts) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "No Product found!",
+      });
+    }
+
+    const total = await ProductModel.countDocuments(filters);
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      filteredProducts,
+      totalPages: Math.ceil(total/limit),
+      page
     });
   } catch (error) {
     return res.status(500).json({

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addProductRam, addProductSize, addProductWeight, createProduct, deleteMultipleProducts, deleteMultipleRAMS, deleteMultipleSizes, deleteMultipleWeights, deleteProduct, deleteProductRAM, deleteProductSize, deleteProductWeight, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdLevelCatId, getAllProductsByThirdLevelCatName, getFeaturedProducts, getProduct, getProductRams, getProductsCount, getProductSizes, getProductWeights, removeImageFromCloudinary, updateProduct, updateProductRAM, updateProductSize, updateProductWeight, uploadBannerImages, uploadImages } from "../controllers/product.controller.js";
+import { addProductRam, addProductSize, addProductWeight, createProduct, deleteMultipleProducts, deleteMultipleRAMS, deleteMultipleSizes, deleteMultipleWeights, deleteProduct, deleteProductRAM, deleteProductSize, deleteProductWeight, filterProducts, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdLevelCatId, getAllProductsByThirdLevelCatName, getFeaturedProducts, getProduct, getProductRams, getProductsCount, getProductSizes, getProductWeights, removeImageFromCloudinary, updateProduct, updateProductRAM, updateProductSize, updateProductWeight, uploadBannerImages, uploadImages } from "../controllers/product.controller.js";
 import auth from "../middlewares/auth.js";
 import upload from "../middlewares/multer.js";
 
@@ -14,6 +14,7 @@ productRouter.post('/uploadBannerImages', auth, upload.array('bannerImages'), up
 productRouter.get('/getProductsByPrice', getAllProductsByPrice)
 productRouter.get('/getProductsByRating', getAllProductsByRating)
 productRouter.get('/getProductsCount', getProductsCount)
+productRouter.get('/filters', filterProducts)
 productRouter.get('/getFeaturedProducts', getFeaturedProducts)
 productRouter.get('/:id', getProduct)
 productRouter.put('/:id', auth, updateProduct);
