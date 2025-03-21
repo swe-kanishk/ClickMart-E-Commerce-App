@@ -151,7 +151,7 @@ function CreateNewBlog() {
               })}
             <UploadProductBox
               setPreviewsfunction={setPreviewsfunction}
-              multiple={true}
+              multiple={false}
               name={"images"}
               url={"/api/blogs/uploadImages"}
             />
