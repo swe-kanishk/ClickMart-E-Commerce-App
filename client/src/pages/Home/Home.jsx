@@ -27,6 +27,7 @@ function Home() {
   const [productsData, setProductsData] = useState([]);
   const [featuredProductsData, setFeaturedProductsData] = useState([]);
   const [popularProductsData, setPopularProductsData] = useState([]);
+  const [blogsData, setBlogsData] = useState([]);
 
   const context = useContext(MyContext);
 
@@ -55,6 +56,11 @@ function Home() {
         setFeaturedProductsData(res?.featuredProducts);
       }
     });
+    getData(`/api/blogs/`).then((res) => {
+      if (res?.success === true) {
+        setBlogsData(res?.blogs);
+      }
+    });
   }, []);
 
   const filterProductsByCat = (id) => {
@@ -71,7 +77,11 @@ function Home() {
       <section className="py-6">
         <div className="container flex gap-2 justify-between">
           <div className="part-1 w-[75%]">
-            {productsData?.length > 0 ? <HomeSlider productsData={productsData} /> : <HomeBannerSliderSkelton animate={true} />}
+            {productsData?.length > 0 ? (
+              <HomeSlider productsData={productsData} />
+            ) : (
+              <HomeBannerSliderSkelton animate={true} />
+            )}
           </div>
           <div className="part-2 w-[25%] flex flex-col">
             <HomeBanner />
@@ -158,52 +168,32 @@ function Home() {
       ) : (
         <ProductSkelton length={6} />
       )}
-      <section className="pb-8 pt-0 bg-white blogSection">
-        <div className="container">
-          <h2 className="text-[20px] font-[600] mb-4">From the Blog</h2>
-          <Swiper
-            slidesPerView={4}
-            spaceBetween={20}
-            navigation={true}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Navigation]}
-            className="blogSlider"
-          >
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-          </Swiper>
-        </div>
-      </section>
+
+      {blogsData?.length > 0 && (
+        <section className="pb-8 pt-0 bg-white blogSection">
+          <div className="container">
+            <h2 className="text-[20px] font-[600] mb-4">From the Blog</h2>
+            <Swiper
+              slidesPerView={4}
+              spaceBetween={20}
+              navigation={true}
+              pagination={{
+                clickable: true,
+              }}
+              modules={[Navigation]}
+              className="blogSlider"
+            >
+              {blogsData?.map((blog) => {
+                return (
+                  <SwiperSlide key={blog?._id}>
+                    <BlogItem blog={blog} />
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </div>
+        </section>
+      )}
     </>
   );
 }

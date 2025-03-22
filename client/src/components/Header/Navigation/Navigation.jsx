@@ -32,7 +32,7 @@ function Navigation() {
                   return (
                     <li key={cat?._id} className="list-none relative group">
                       <Link
-                        to="/home"
+                        to={`/productListing?catId=${cat?._id}`}
                         className="transition text-[15px] flex items-center font-[600]"
                       >
                         <img src={cat?.images} className="h-[16px]" alt="" />
@@ -49,7 +49,7 @@ function Navigation() {
                                   key={subCat?._id}
                                   className="list-none group/sub"
                                 >
-                                  <Link to={"/#"} className="w-full">
+                                  <Link to={`/productListing?subCatId=${subCat?._id}`} className="w-full">
                                     <Button className="hover:!text-[rgba(0,0,0,0.8)] !w-full !justify-start !rounded-none !px-3">
                                       {subCat?.name}
                                     </Button>
@@ -65,7 +65,7 @@ function Navigation() {
                                                 className="list-none"
                                               >
                                                 <Link
-                                                  to={"/#"}
+                                                  to={`/productListing?thirdLevelSubCatId=${thirdLevelSubCat?._id}`}
                                                   className="w-full"
                                                 >
                                                   <Button className="hover:!text-[rgba(0,0,0,0.8)] !w-full !justify-start !rounded-none !px-3">

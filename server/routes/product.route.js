@@ -14,7 +14,7 @@ productRouter.post('/uploadBannerImages', auth, upload.array('bannerImages'), up
 productRouter.get('/getProductsByPrice', getAllProductsByPrice)
 productRouter.get('/getProductsByRating', getAllProductsByRating)
 productRouter.get('/getProductsCount', getProductsCount)
-productRouter.get('/filters', filterProducts)
+productRouter.post('/filters', filterProducts)
 productRouter.get('/getFeaturedProducts', getFeaturedProducts)
 productRouter.get('/:id', getProduct)
 productRouter.put('/:id', auth, updateProduct);
