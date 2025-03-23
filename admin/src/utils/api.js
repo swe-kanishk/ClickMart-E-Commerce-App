@@ -91,7 +91,7 @@ export const deleteImages = async (url, imgUrl, credentials) => {
     });
     return res;
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 

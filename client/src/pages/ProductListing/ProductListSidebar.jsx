@@ -112,7 +112,7 @@ function ProductListSidebar({
   }, [price]);
 
   return (
-    <aside className="sidebar w-full h-full">
+    <aside className="sidebar sticky top-[60px] z-[99] ">
       <div className="box mb-2 mt-3">
         <h3 className="mb-3 w-full text-[18px] font-[600] gap-2 flex items-center">
           <FaShopify size={"18px"} /> Shop By Category{" "}

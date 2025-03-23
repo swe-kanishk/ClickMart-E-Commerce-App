@@ -18,6 +18,7 @@ import { MyContext } from "../App";
 import Logo from "./Logo";
 import { getData } from "../utils/api";
 import { GrBlog } from "react-icons/gr";
+import { TfiLayoutSlider } from "react-icons/tfi";
 
 function Sidebar() {
   const [submenuIndex, setSubmenuIndex] = useState(null);
@@ -74,7 +75,7 @@ function Sidebar() {
             onClick={() => isOpenSubmenu(1)}
             className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end"
           >
-            <IoImagesOutline size={"18px"} />{" "}
+            <TfiLayoutSlider size={"18px"} />{" "}
             <span className="text-[16px]">Home Slides</span>
             <span className="ml-auto">
               <FaAngleDown
@@ -240,6 +241,46 @@ function Sidebar() {
               <span className="text-[16px]">Orders</span>
             </Button>
           </Link>
+        </li>
+        <li>
+          <Button
+            onClick={() => isOpenSubmenu(5)}
+            className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end"
+          >
+            <IoImagesOutline size={"18px"} />{" "}
+            <span className="text-[16px]">Banners</span>
+            <span className="ml-auto">
+              <FaAngleDown
+                className={`transition-all duration-400 ${
+                  submenuIndex === 5 ? "rotate-0" : "-rotate-90"
+                }`}
+              />
+            </span>
+          </Button>
+          <Collapse isOpened={submenuIndex === 5 ? true : false}>
+            <ul className="w-full">
+              <li className="w-full">
+                <Link to="/bannerV1/list">
+                  <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500">
+                    <span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span>{" "}
+                    Banner V1 List
+                  </Button>
+                </Link>
+                <Button
+                  onClick={() =>
+                    context.setIsOpenFullScreenPannel({
+                      open: true,
+                      model: "Add Banner1",
+                    })
+                  }
+                  className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"
+                >
+                  <span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span>{" "}
+                  Add Banner v1
+                </Button>
+              </li>
+            </ul>
+          </Collapse>
         </li>
         <li>
           <Button

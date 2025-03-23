@@ -25,6 +25,7 @@ import AddRAMS from "./Pages/product/AddRAMS";
 import AddSizes from "./Pages/product/AddSizes";
 import AddWeight from "./Pages/product/AddWeight";
 import BlogList from "./Pages/Blog/BlogList";
+import BannerV1List from "./Pages/banners/BannerV1List";
 
 const MyContext = createContext();
 
@@ -447,6 +448,31 @@ function App() {
               } transition-all`}
             >
               <AddWeight />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/bannerV1/list",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
+              <Sidebar />
+            </div>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
+              <BannerV1List />
             </div>
           </div>
         </section>

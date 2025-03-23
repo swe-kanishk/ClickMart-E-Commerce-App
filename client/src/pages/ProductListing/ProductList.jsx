@@ -98,7 +98,7 @@ function ProductList() {
             />
           </div>
           <div className="rightContent w-[80%] py-3">
-            <div className="bg-[#f1f1f1] mb-6 p-2 w-full rounded-md flex items-center justify-between">
+            <div className="bg-[#f1f1f1] sticky z-[99] top-[45px] shadow-sm mb-6 p-2 w-full rounded-md flex items-center justify-between">
               <div className="col-1 flex items-center gap-1">
                 <Button
                   onClick={() => setItemView("list")}

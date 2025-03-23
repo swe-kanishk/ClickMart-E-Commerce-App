@@ -50,6 +50,8 @@ import AddNewSubCategory from "../Pages/subCategory/AddNewSubCategory";
 import EditProduct from "../Pages/product/EditProduct";
 import CreateNewBlog from "../Pages/Blog/CreateNewBlog";
 import EditBlog from "../Pages/Blog/EditBlog";
+import AddBannerV1 from "../Pages/banners/AddBannerV1";
+import EditBannerV1 from "../Pages/banners/EditBannerV1";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -275,6 +277,8 @@ function Header() {
           {context?.isOpenFullScreenPannel?.model === "Edit Product" && <EditProduct />}
           {context?.isOpenFullScreenPannel?.model === "Create Blog" && <CreateNewBlog />}
           {context?.isOpenFullScreenPannel?.model === "Edit Blog" && <EditBlog />}
+          {context?.isOpenFullScreenPannel?.model === "Add Banner1" && <AddBannerV1 />}
+          {context?.isOpenFullScreenPannel?.model === "Edit Banner1" && <EditBannerV1 />}
         </Dialog>
     </>
   );
