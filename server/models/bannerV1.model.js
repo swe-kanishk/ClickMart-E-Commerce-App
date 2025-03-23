@@ -25,10 +25,10 @@ const bannerV1Schema = new Schema({
     default: "",
     required: true,
   },
-  images: {
-    type: Array,
-    required: true,
-  },
+  images: [{
+    type: String,
+    required: [true, 'Please provide banner images'],
+  }],
 }, {timestamps: true});
 
 const BannerV1Model = model('BannerV1', bannerV1Schema);
