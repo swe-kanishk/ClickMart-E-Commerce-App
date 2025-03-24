@@ -28,6 +28,7 @@ function AddBannerV1() {
     subCatId: "",
     thirdLevelSubCatId: "",
     images: [],
+    textAlignment: '',
     price: "",
   });
 
@@ -105,6 +106,7 @@ function AddBannerV1() {
             thirdLevelSubCatId: "",
             images: [],
             price: "",
+            textAlignment: ''
           });
           setPreviews([]);
           context.getCat();
@@ -249,6 +251,18 @@ function AddBannerV1() {
                 name="price"
                 placeholder="price"
                 value={formFields.price}
+                className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
+              />
+            </div>
+            <div className="col">
+              <h3 className="text-[14px] text-black font-[500] mb-1">Text Alignment</h3>
+              <input
+                type="text"
+                onChange={handleOnChangeInput}
+                disabled={isLoading}
+                name="textAlignment"
+                placeholder="alignment"
+                value={formFields.textAlignment}
                 className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
               />
             </div>

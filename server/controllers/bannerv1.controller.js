@@ -84,6 +84,7 @@ export const addBanner = async (req, res) => {
       price: req?.body?.price,
       catId: req?.body?.catId,
       subCatId: req?.body?.subCatId,
+      textAlignment: req?.body?.textAlignment,
       thirdLevelSubCatId: req?.body?.thirdLevelSubCatId,
       images: imagesArr,
     });
@@ -216,6 +217,7 @@ export const updateBanner = async (req, res) => {
         catId: req?.body?.catId,
         subCatId: req?.body?.subCatId,
         thirdLevelSubCatId: req?.body?.thirdLevelSubCatId,
+        textAlignment: req?.body?.textAlignment,
         images: req?.body?.images,
       },
       { new: true }

@@ -1,38 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function HomeBanner() {
+function HomeBanner({banner}) {
   return (
-    <div className="flex w-full h-[100%] m-auto flex-col overflow-hidden items-end justify-between gap-3">
-      <div className="group overflow-hidden h-1/2 rounded-lg relative">
-        <div className="absolute flex flex-col items-start justify-center h-[100%] z-50 left-[1rem]">
-          <h3 className="font-medium pb-2 text-xl flex">
-            Samsung Gear <br /> VR Camera
+      <div className="group overflow-hidden w-full rounded-lg relative">
+        <div className={`absolute flex flex-col px-4 justify-center w-[55%] h-[100%] z-50 ${banner?.textAlignment}-0`}>
+          <h3 className="font-medium pb-2 text-xl">
+            {banner?.title}
           </h3>
-          <span className="text-red-500 font-medium text-[20px]">$129.00</span>
-          <Link to="/" className="btn text-black hover:text-red-500 block underline underline-offset-2 mt-4">Shop Now</Link>
+          <span className="text-red-500 font-medium text-[20px]">&#8377;{banner?.price}</span>
+          <Link to={`/productListing?catId=${banner?.catId}&subCatId=${banner?.subCatId}&thirdLevelSubCatId=${banner?.thirdLevelSubCatId}`} className="btn text-black hover:text-red-500 block underline underline-offset-2 mt-4">Shop Now</Link>
         </div>
         <img
-          src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/img/cms/sub-banner-1.jpg"
+          src={banner?.images?.[0]}
           alt=""
-          className="group-hover:scale-105 min-h-[100%] max-h-[100%] duration-500 transition-all object-cover"
+          className="group-hover:scale-105 min-h-[100%] rounded-lg max-h-[100%] duration-500 transition-all object-cover"
         />
       </div>
-      <div className="group overflow-hidden h-1/2 rounded-lg relative">
-      <div className="absolute flex flex-col justify-center items-start h-full z-50 right-[1rem]">
-          <h3 className="font-medium pb-2 text-xl flex-wrap">
-            Marcel Dining <br /> Room Chair
-          </h3>
-          <span className="text-red-500 font-medium text-[20px]">$44.05</span>
-          <Link to="/" className="btn text-black hover:text-red-500 block underline underline-offset-2 mt-4">Shop Now</Link>
-        </div>
-        <img
-          src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/img/cms/sub-banner-2.jpg"
-          alt=""
-          className="group-hover:scale-105 min-h-[100%] max-h-[100%] duration-500 transition-all object-cover"
-        />
-      </div>
-    </div>
   );
 }
 

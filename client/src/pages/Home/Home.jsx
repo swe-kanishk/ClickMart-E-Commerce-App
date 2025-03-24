@@ -21,6 +21,7 @@ import { MyContext } from "../../App";
 import { getData } from "../../utils/api";
 import ProductSkelton from "./Products/ProductSkelton";
 import HomeBannerSliderSkelton from "./HomeBanners/HomeBannerSliderSkelton";
+import AdsBannerSlider from "./HomeBanners/AdsBannerSlider";
 
 function Home() {
   const [value, setValue] = useState(0);
@@ -28,6 +29,7 @@ function Home() {
   const [featuredProductsData, setFeaturedProductsData] = useState([]);
   const [popularProductsData, setPopularProductsData] = useState([]);
   const [blogsData, setBlogsData] = useState([]);
+  const [bannersV1Data, setBannersV1Data] = useState([]);
 
   const context = useContext(MyContext);
 
@@ -61,6 +63,11 @@ function Home() {
         setBlogsData(res?.blogs);
       }
     });
+    getData(`/api/bannerV1/`).then((res) => {
+      if (res?.success === true) {
+        setBannersV1Data(res?.banners);
+      }
+    });
   }, []);
 
   const filterProductsByCat = (id) => {
@@ -83,9 +90,13 @@ function Home() {
               <HomeBannerSliderSkelton animate={true} />
             )}
           </div>
-          <div className="part-2 w-[25%] flex flex-col">
-            <HomeBanner />
-          </div>
+          {bannersV1Data?.length > 0 && (
+            <div className="part-2 w-[25%] gap-2 overflow-hidden flex flex-col">
+              {bannersV1Data?.slice(0, 2).map((banner) => {
+                return <HomeBanner banner={banner} />;
+              })}
+            </div>
+          )}
         </div>
       </section>
       {context?.categoryData?.length > 0 && <HomeCategorySlider />}
@@ -168,6 +179,12 @@ function Home() {
       ) : (
         <ProductSkelton length={6} />
       )}
+
+      <section className="pb-8 pt-0 bg-white blogSection">
+        <div className="container">
+          <AdsBannerSlider />
+        </div>
+      </section>
 
       {blogsData?.length > 0 && (
         <section className="pb-8 pt-0 bg-white blogSection">

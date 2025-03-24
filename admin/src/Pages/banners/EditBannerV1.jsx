@@ -29,6 +29,7 @@ function EditBannerV1() {
     subCatId: "",
     thirdLevelSubCatId: "",
     images: [],
+    textAlignment: "",
     price: "",
   });
 
@@ -62,6 +63,7 @@ function EditBannerV1() {
             thirdLevelSubCatId: res?.banner?.thirdLevelSubCatId,
             images: res?.banner?.images,
             price: res?.banner?.price,
+            textAlignment: res?.banner?.textAlignment,
           });
           setPreviews(res?.banner?.images);
           setCat(res?.banner?.catId);
@@ -70,7 +72,7 @@ function EditBannerV1() {
         }
       }
     );
-  }, [context?.isOpenFullScreenPannel?.id])
+  }, [context?.isOpenFullScreenPannel?.id]);
 
   const handleRemoveImage = (img, index) => {
     deleteImages("/api/bannerV1/deleteImage", img, {
@@ -98,7 +100,8 @@ function EditBannerV1() {
     formFields.thirdLevelSubCatId = event.target.value;
   };
 
-  const validValue = (formFields.title && formFields.price && formFields?.images?.length > 0);
+  const validValue =
+    formFields.title && formFields.price && formFields?.images?.length > 0;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -113,29 +116,32 @@ function EditBannerV1() {
       return;
     }
     setIsLoading(true);
-    editData(`/api/bannerV1/${context?.isOpenFullScreenPannel.id}`, formFields, { withCredentials: true }).then(
-      (res) => {
-        console.log(res)
-        if (res?.data?.success === true) {
-          toast.success(res?.data?.message);
-            navigate("/bannerV1/list");
-          setIsLoading(false);
-          setFormFields({
-            title: "",
-            catId: "",
-            subCatId: "",
-            thirdLevelSubCatId: "",
-            images: [],
-            price: "",
-          });
-          setPreviews([]);
-          context.getCat();
-          setTimeout(() => {
-            context.setIsOpenFullScreenPannel({ open: false, model: "", id: '' });
-          }, 1000);
-        }
+    editData(
+      `/api/bannerV1/${context?.isOpenFullScreenPannel.id}`,
+      formFields,
+      { withCredentials: true }
+    ).then((res) => {
+      console.log(res);
+      if (res?.data?.success === true) {
+        toast.success(res?.data?.message);
+        navigate("/bannerV1/list");
+        setIsLoading(false);
+        setFormFields({
+          title: "",
+          catId: "",
+          subCatId: "",
+          thirdLevelSubCatId: "",
+          textAlignment: '',
+          images: [],
+          price: "",
+        });
+        setPreviews([]);
+        context.getCat();
+        setTimeout(() => {
+          context.setIsOpenFullScreenPannel({ open: false, model: "", id: "" });
+        }, 1000);
       }
-    );
+    });
   };
 
   return (
@@ -271,6 +277,20 @@ function EditBannerV1() {
                 name="price"
                 placeholder="price"
                 value={formFields.price}
+                className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
+              />
+            </div>
+            <div className="col">
+              <h3 className="text-[14px] text-black font-[500] mb-1">
+                Text Alignment
+              </h3>
+              <input
+                type="text"
+                onChange={handleOnChangeInput}
+                disabled={isLoading}
+                name="textAlignment"
+                placeholder="alignment"
+                value={formFields.textAlignment}
                 className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
               />
             </div>

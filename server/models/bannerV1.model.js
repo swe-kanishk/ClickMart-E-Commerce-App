@@ -15,6 +15,11 @@ const bannerV1Schema = new Schema(
       type: String,
       default: "",
     },
+    textAlignment: {
+        type: String,
+        default: '',
+        enum: ['left', 'right']
+    },
     subCatId: {
       type: String,
       default: "",
