@@ -76,6 +76,12 @@ const productSchema = new Schema(
       type: Number,
       required: [true, "Product discount is required!"],
     },
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
     productRam: [
       {
         type: String,

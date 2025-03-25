@@ -760,7 +760,13 @@ export const getProduct = async (req, res) => {
   try {
     const product = await ProductModel.findById(req.params.id).populate(
       "category"
-    );
+    ).populate("reviews").populate({
+      path: "reviews",
+      populate: {
+        path: 'user',
+        select: "fullName avatar _id createdAt",
+      }
+    });
     if (!product) {
       return res.status(404).json({
         success: false,

@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@mui/material";
+import { Breadcrumbs, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ProductZoom from "../../components/ProductZoom";
@@ -9,20 +9,31 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { IoIosStar } from "react-icons/io";
 import ProductDetailsContent from "../../components/ProductDetailsContent";
-import { getData } from "../../utils/api";
+import { getData, postData } from "../../utils/api";
+import { BiLoader } from "react-icons/bi";
+import { MdOutlineRateReview } from "react-icons/md";
+import toast from "react-hot-toast";
 
 function ProductDetails() {
   const [activeTab, setActiveTab] = useState(1);
   const [ratingValue, setRatingValue] = useState(70);
   const [productData, setProductData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { id } = useParams();
+
+  const [formFields, setFormFields] = useState({
+    rating: 4,
+    title: "",
+    review: "",
+    productId: id,
+  });
 
   useEffect(() => {
     setIsLoading(true);
     getData(`/api/product/${id}`)
       .then((res) => {
+        console.log(res);
         if (res?.success === true) {
           setProductData(res?.product);
         }
@@ -31,6 +42,49 @@ function ProductDetails() {
         setIsLoading(false);
       });
   }, [id]);
+
+  const handleOnChangeInput = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    setFormFields((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      formFields.rating === "" ||
+      formFields.rating === 0 ||
+      formFields.rating === null ||
+      formFields.rating === undefined
+    ) {
+      toast.error("Please rate the product!");
+      return;
+    } else if (formFields.title === "") {
+      toast.error("Please enter review title!");
+      return;
+    } else if (formFields.review === "") {
+      toast.error("Please enter review!");
+      return;
+    }
+    console.log(formFields);
+    setIsLoading(true);
+    postData("/api/user/addReview", formFields, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res?.success === true) {
+          toast.success(res?.message);
+          setFormFields({
+            rating: 4,
+            title: "",
+            review: "",
+            productId: id,
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <>
@@ -99,7 +153,7 @@ function ProductDetails() {
               </p>
             </div>
           )}
-         
+
           {activeTab === 2 && (
             <div
               className={`shadow-md border gap-8 items-start justify-between h-full flex w-full p-5 rounded-md`}
@@ -166,37 +220,70 @@ function ProductDetails() {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col w-full mt-5">
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex bg-gray-100 rounded-lg pb-4 p-3 flex-col gap-2 w-full mt-5"
+                >
                   <h2 className="my-4 font-[500] text-[18px]">
                     Share Your Review and Provide a Rating
                   </h2>
                   <Box
                     sx={{ "& > legend": { mt: 2 } }}
-                    className="flex items-center gap-4"
+                    className="flex items-center gap-4 mb-3"
                   >
                     <span className="text-sm text-gray-600">
                       Rate this Product:
                     </span>
                     <Rating
-                      name="simple-controlled"
-                      value={ratingValue}
-                      onChange={(event, newValue) => {
-                        setRatingValue(newValue);
-                      }}
+                      name="rating"
+                      value={formFields.rating}
+                      disabled={isLoading}
+                      onChange={handleOnChangeInput}
                     />
                     <span className="text-sm text-gray-600 text-center">
-                      ({ratingValue})
+                      ({formFields?.rating})
                     </span>
                   </Box>
+                  <input
+                    onChange={handleOnChangeInput}
+                    value={formFields.title}
+                    placeholder="Title of your review"
+                    name="title"
+                    disabled={isLoading}
+                    type="text"
+                    className="w-full  p-3 text-sm border rounded-md border-gray-300 outline-none focus:border-gray-800"
+                  />
                   <TextField
-                    id="standard-multiline-flexible"
+                    id="review-input"
                     label="Your Review"
                     multiline
+                    value={formFields.review}
+                    onChange={handleOnChangeInput}
                     maxRows={4}
+                    name="review"
+                    disabled={isLoading}
                     variant="standard"
-                    className="w-full !mt-3"
+                    className="w-full !px-3 !mt-3 !bg-white"
                   />
-                </div>
+                  <hr />
+                  <br />
+                  <Button
+                    disabled={isLoading}
+                    type="submit"
+                    className={`${
+                      isLoading ? "!bg-blue-500" : "!bg-blue-600"
+                    } mt-3 !text-white !capitalize !max-w-full !w-full !p-2 !text-center !font-[500] gap-1`}
+                  >
+                    {isLoading ? (
+                      <BiLoader size={"22px"} className="animate-spin" />
+                    ) : (
+                      <>
+                        <MdOutlineRateReview size={"20px"} className="mb-1" />{" "}
+                        Add Review
+                      </>
+                    )}
+                  </Button>
+                </form>
               </div>
 
               <div className="w-[40%]">
@@ -207,7 +294,7 @@ function ProductDetails() {
                   <p className="ms-2 font-medium text-gray-900">Excellent</p>
                   <span className="w-1 h-1 mx-2 bg-gray-900 rounded-full dark:bg-gray-500"></span>
                   <p className="text-sm font-medium text-gray-500">
-                    376 reviews
+                    {productData?.reviews?.length} reviews
                   </p>
                   <Link
                     to="/"
@@ -216,120 +303,80 @@ function ProductDetails() {
                     Read all reviews
                   </Link>
                 </div>
-                <article>
-                  <div className="flex items-center mb-4">
-                    <img
-                      className="w-10 h-10 me-4 rounded-full"
-                      src="https://static-00.iconduck.com/assets.00/user-icon-1024x1024-dtzturco.png"
-                      alt=""
-                    />
-                    <div className="font-medium">
-                      <p>
-                        Jese Leos{" "}
-                        <time
-                          datetime="2014-08-16 19:00"
-                          className="block text-sm text-gray-500"
+                {productData?.reviews?.length > 0 &&
+                  productData?.reviews?.map((review, index) => {
+                    return (
+                      <article key={review?._id}>
+                        <div className="flex items-center gap-2 mb-4">
+                          <img
+                            className="w-10 h-10 object-cover rounded-full"
+                            src={
+                              review?.user?.avatar ||
+                              "https://static-00.iconduck.com/assets.00/user-icon-1024x1024-dtzturco.png"
+                            }
+                            alt=""
+                          />
+                          <div className="font-medium">
+                            <p>
+                              {review?.user?.fullName}{" "}
+                              <time
+                                datetime="2014-08-16 19:00"
+                                className="block text-sm text-gray-500"
+                              >
+                                Joined on{" "}
+                                {review?.user?.createdAt?.split("T")[0]}
+                              </time>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center mb-1 space-x-1 rtl:space-x-reverse">
+                          {[...Array(5)].map((_, index) => (
+                            <svg
+                              className={`w-4 h-4 ${
+                                index < review?.rating
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 22 20"
+                            >
+                              <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                            </svg>
+                          ))}
+                          <h3 className="ms-2 text-sm font-semibold text-gray-900">
+                            {review?.title}
+                          </h3>
+                        </div>
+                        <footer className="mb-5 text-sm text-gray-500">
+                          <p>Reviewed on {review?.createdAt?.split("T")[0]}</p>
+                        </footer>
+                        <p className="mb-2 text-gray-500 whitespace-pre-wrap">
+                          {review?.review?.substring(0, 200)}...
+                        </p>
+                        <a
+                          href="#"
+                          className="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
                         >
-                          Joined on August 2014
-                        </time>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center mb-1 space-x-1 rtl:space-x-reverse">
-                    <svg
-                      className="w-4 h-4 text-yellow-300"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 22 20"
-                    >
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                    <svg
-                      className="w-4 h-4 text-yellow-300"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 22 20"
-                    >
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                    <svg
-                      className="w-4 h-4 text-yellow-300"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 22 20"
-                    >
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                    <svg
-                      className="w-4 h-4 text-yellow-300"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 22 20"
-                    >
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                    <svg
-                      className="w-4 h-4 text-gray-300 dark:text-gray-500"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 22 20"
-                    >
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                    <h3 className="ms-2 text-sm font-semibold text-gray-900">
-                      Thinking to buy another one!
-                    </h3>
-                  </div>
-                  <footer className="mb-5 text-sm text-gray-500">
-                    <p>
-                      Reviewed in the United Kingdom on{" "}
-                      <time datetime="2017-03-03 19:00">March 3, 2017</time>
-                    </p>
-                  </footer>
-                  <p className="mb-2 text-gray-500">
-                    This is my third Invicta Pro Diver. They are just fantastic
-                    value for money. This one arrived yesterday and the first
-                    thing I did was set the time, popped on an identical strap
-                    from another Invicta and went in the shower with it to test
-                    the waterproofing.... No problems.
-                  </p>
-                  <p className="mb-3 text-gray-500">
-                    It is obviously not the same build quality as those very
-                    expensive watches. But that is like comparing a Citroën to a
-                    Ferrari. This watch was well under £100! An absolute
-                    bargain.
-                  </p>
-                  <a
-                    href="#"
-                    className="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-                  >
-                    Read more
-                  </a>
-                  <aside>
-                    <p className="mt-1 text-xs text-gray-500">
-                      19 people found this helpful
-                    </p>
-                    <div className="flex items-center mt-3">
-                      <a
-                        href="#"
-                        className="px-2 py-1.5 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
-                      >
-                        Helpful
-                      </a>
-                      <a
-                        href="#"
-                        className="ps-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 border-gray-200 ms-4 border-s md:mb-0 "
-                      >
-                        Report abuse
-                      </a>
-                    </div>
-                  </aside>
-                </article>
+                          Read more
+                        </a>
+                        <aside>
+                          <p className="mt-1 text-xs text-gray-500">
+                            19 people found this helpful
+                          </p>
+                          <div className="flex items-center mt-3">
+                            <a
+                              href="#"
+                              className="px-2 py-1.5 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                            >
+                              Helpful
+                            </a>
+                          </div>
+                        </aside>
+                      </article>
+                    );
+                  })}
               </div>
             </div>
           )}

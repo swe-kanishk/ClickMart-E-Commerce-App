@@ -5,9 +5,11 @@ import sendEmailFun from "../config/sendEmail.js";
 import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
+import ReviewModel from "../models/review.model.js";
 
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+import ProductModel from "../models/product.model.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CONFIG_CLOUD_NAME,
@@ -578,7 +580,7 @@ export const resetPasswordController = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
-    user.signUpWithGoogle = false
+    user.signUpWithGoogle = false;
     await user.save();
 
     return res.json({
@@ -653,6 +655,51 @@ export const getUserDetails = async (req, res) => {
     return res.json({
       message: "user details!",
       data: user,
+      success: true,
+      error: false,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+// review
+export const addReview = async (req, res) => {
+  try {
+    const { rating, title, review, productId } = req.body;
+    const product = await ProductModel.findById(productId);
+    if (!product) {
+      return res.status(400).json({
+        message: "Product not found!",
+        error: true,
+        success: false,
+      });
+    }
+    if (!rating || !title || !review || !productId) {
+      return res.status(400).json({
+        message: "Provide required field rating, title, review, productId!",
+        error: true,
+        success: false,
+      });
+    }
+    const reviewData = await ReviewModel.create({
+      rating,
+      title,
+      review,
+      user: req?.userId,
+      product: productId,
+    });
+    await ProductModel
+      .findByIdAndUpdate(productId, {
+        $push: { reviews: reviewData._id }
+      }).exec();
+    return res.json({
+      message: "Review Added!",
+      reviewData,
       success: true,
       error: false,
     });
