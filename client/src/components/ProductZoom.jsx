@@ -101,7 +101,7 @@ function ProductZoom({images}) {
   return (
     <>
           <div className="flex gap-3">
-            <div className="slider w-[15%]">
+            <div className="slider max-w-[75px] w-[15%]">
               <Swiper
                 ref={zoomSliderSmall}
                 slidesPerView={5}
@@ -132,20 +132,22 @@ function ProductZoom({images}) {
                   })}
               </Swiper>
             </div>
-            <div className="zoomContainer w-[85%] h-[500px] overflow-hidden rounded-md">
+            <div className="zoomContainer w-[85%] h-[500px] rounded-md">
               <Swiper
                 ref={zoomSliderBig}
                 slidesPerView={1}
                 spaceBetween={0}
                 navigation={false}
+                allowTouchMove={false}
+                grabCursor={false}
               >
                 {images?.length > 0 &&
                   images?.map((img, index) => {
                     return (
-                      <SwiperSlide key={index}>
+                      <SwiperSlide key={index} >
                         <InnerImageZoom
                           zoomType="hover"
-                          zoomScale={1}
+                          zoomScale={1.5}
                           src={img}
                         />
                       </SwiperSlide>

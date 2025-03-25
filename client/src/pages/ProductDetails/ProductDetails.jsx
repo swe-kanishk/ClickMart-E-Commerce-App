@@ -1,6 +1,6 @@
 import { Breadcrumbs } from "@mui/material";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import ProductZoom from "../../components/ProductZoom";
 
 import { Rating } from "@mui/material";
@@ -9,10 +9,28 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { IoIosStar } from "react-icons/io";
 import ProductDetailsContent from "../../components/ProductDetailsContent";
+import { getData } from "../../utils/api";
 
 function ProductDetails() {
   const [activeTab, setActiveTab] = useState(1);
   const [ratingValue, setRatingValue] = useState(70);
+  const [productData, setProductData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData(`/api/product/${id}`)
+      .then((res) => {
+        if (res?.success === true) {
+          setProductData(res?.product);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [id]);
 
   return (
     <>
@@ -48,12 +66,11 @@ function ProductDetails() {
       </div>
       <section className="py-5 bg-white">
         <div className="container flex gap-8">
-          <div className="productZoomContainer w-[40%] overflow-hidden">
-            <ProductZoom />
+          <div className="productZoomContainer w-[40%]">
+            <ProductZoom images={productData?.images} />
           </div>
-    <div className="productContent w-[60%] pr-10">
-
-          <ProductDetailsContent />
+          <div className="productContent w-[60%] pr-10">
+            <ProductDetailsContent productData={productData} />
           </div>
         </div>
         <div className="container pt-10">
@@ -69,14 +86,6 @@ function ProductDetails() {
             <span
               onClick={() => setActiveTab(2)}
               className={`link text-[18px] cursor-pointer px-2 rounded-[4px] py-[3px] text-[500] ${
-                activeTab === 2 && "bg-primary hover:!text-white text-white"
-              }`}
-            >
-              Product Details
-            </span>
-            <span
-              onClick={() => setActiveTab(3)}
-              className={`link text-[18px] cursor-pointer px-2 rounded-[4px] py-[3px] text-[500] ${
                 activeTab === 3 && "bg-primary hover:!text-white text-white"
               }`}
             >
@@ -86,96 +95,12 @@ function ProductDetails() {
           {activeTab === 1 && (
             <div className={`shadow-md border w-full p-5 rounded-md`}>
               <p className="text-[14px] text-gray-500 mb-3">
-                The best is yet to come! Give your walls a voice with a framed
-                poster. This aesthethic, optimistic poster will look great in
-                your desk or in an open-space office. Painted wooden frame with
-                passe-partout for more depth.
-              </p>
-              <h4 className="mb-1 font-medium">Lightweight Design</h4>
-              <p className="text-[14px] text-gray-500 mb-3">
-                Designed with a super light geometric case, the Versa family
-                watches are slim, casual and comfortable enough to wear all day
-                and night. Switch up your look with classic, leather, metal and
-                woven accessory bands. Ut elit tellus, luctus nec ullamcorper
-                mattis, pulvinar dapibus leo.
-              </p>
-              <h4 className="mb-1 font-medium">Free Shipping & Return</h4>
-              <p className="text-[14px] text-gray-500 mb-3">
-                We offer free shipping for products on orders above 50$ and
-                offer free delivery for all orders in US.
-              </p>
-              <h4 className="mb-1 font-medium">Money Back Guarantee</h4>
-              <p className="text-[14px] text-gray-500 mb-3">
-                We guarantee our products and you could get back all of your
-                money anytime you want in 30 days.
-              </p>
-              <h4 className="mb-1 font-medium">Online Support</h4>
-              <p className="text-[14px] text-gray-500 mb-3">
-                You will get 24 hour support with this purchase product and you
-                can return it within 30 days for an exchange.
+                {productData?.description}
               </p>
             </div>
           )}
+         
           {activeTab === 2 && (
-            <div className={`shadow-md border w-full p-5 rounded-md`}>
-              <div className="relative overflow-x-auto">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-100  ">
-                    <tr>
-                      <th scope="col" className="px-6 py-3">
-                        Product name
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Color
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Category
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Price
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="bg-white border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                      >
-                        Apple MacBook Pro 17"
-                      </th>
-                      <td className="px-6 py-4">Silver</td>
-                      <td className="px-6 py-4">Laptop</td>
-                      <td className="px-6 py-4">$2999</td>
-                    </tr>
-                    <tr className="bg-white border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                      >
-                        Microsoft Surface Pro
-                      </th>
-                      <td className="px-6 py-4">White</td>
-                      <td className="px-6 py-4">Laptop PC</td>
-                      <td className="px-6 py-4">$1999</td>
-                    </tr>
-                    <tr className="bg-white -800">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                      >
-                        Magic Mouse 2
-                      </th>
-                      <td className="px-6 py-4">Black</td>
-                      <td className="px-6 py-4">Accessories</td>
-                      <td className="px-6 py-4">$99</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-          {activeTab === 3 && (
             <div
               className={`shadow-md border gap-8 items-start justify-between h-full flex w-full p-5 rounded-md`}
             >
@@ -242,33 +167,35 @@ function ProductDetails() {
                   </div>
                 </div>
                 <div className="flex flex-col w-full mt-5">
-                <h2 className="my-4 font-[500] text-[18px]">
-                  Share Your Review and Provide a Rating
-                </h2>
-                <Box
-                  sx={{ "& > legend": { mt: 2 } }}
-                  className="flex items-center gap-4"
-                >
-                  <span className="text-sm text-gray-600">
-                    Rate this Product:
-                  </span>
-                  <Rating
-                    name="simple-controlled"
-                    value={ratingValue}
-                    onChange={(event, newValue) => {
-                      setRatingValue(newValue);
-                    }}
+                  <h2 className="my-4 font-[500] text-[18px]">
+                    Share Your Review and Provide a Rating
+                  </h2>
+                  <Box
+                    sx={{ "& > legend": { mt: 2 } }}
+                    className="flex items-center gap-4"
+                  >
+                    <span className="text-sm text-gray-600">
+                      Rate this Product:
+                    </span>
+                    <Rating
+                      name="simple-controlled"
+                      value={ratingValue}
+                      onChange={(event, newValue) => {
+                        setRatingValue(newValue);
+                      }}
+                    />
+                    <span className="text-sm text-gray-600 text-center">
+                      ({ratingValue})
+                    </span>
+                  </Box>
+                  <TextField
+                    id="standard-multiline-flexible"
+                    label="Your Review"
+                    multiline
+                    maxRows={4}
+                    variant="standard"
+                    className="w-full !mt-3"
                   />
-                  <span className="text-sm text-gray-600 text-center">({ratingValue})</span>
-                </Box>
-                <TextField
-                  id="standard-multiline-flexible"
-                  label="Your Review"
-                  multiline
-                  maxRows={4}
-                  variant="standard"
-                  className="w-full !mt-3"
-                />
                 </div>
               </div>
 
@@ -409,8 +336,8 @@ function ProductDetails() {
         </div>
         <hr className="mt-12" />
         <div className="container pt-10">
-        <h2 className="text-[20px] font-[600]">Related Products</h2>
-        <ProductsSlider />
+          <h2 className="text-[20px] font-[600]">Related Products</h2>
+          {/* <ProductsSlider /> */}
         </div>
       </section>
     </>

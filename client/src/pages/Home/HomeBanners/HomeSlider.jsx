@@ -56,7 +56,7 @@ function HomeSlider({ productsData }) {
                     {product?.bannerTitle}
                   </h4>
                   <h2 className="text-[30px] right-[-100%] opacity-0 duration-[1.5s] relative font-[700]">
-                    {product?.bannerDescription}
+                    {product?.name}
                   </h2>
                   <h3 className="text-[18px] right-[-100%] opacity-0 duration-[1s] relative flex items-center gap-3 font-[500] w-full text-left my-3">
                     Starting At Only{" "}

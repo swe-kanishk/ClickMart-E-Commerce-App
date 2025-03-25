@@ -4,7 +4,7 @@ import { Button, Rating } from "@mui/material";
 import QtyBox from "./QtyBox";
 import { MyContext } from "../App";
 
-function ProductDetailsContent({ product }) {
+function ProductDetailsContent({ productData }) {
   const [activeProductSize, setActiveProductSize] = useState("S");
 
   return (
@@ -13,27 +13,27 @@ function ProductDetailsContent({ product }) {
         <span className="text-gray-600">
           Brands:{" "}
           <span className="font-[500] text-black opacity-80 text-[14px]">
-            {product?.brand}
+            {productData?.brand}
           </span>
         </span>
         <Rating
           name="size-rating"
           size="small"
-          defaultValue={product?.rating}
+          defaultValue={productData?.rating}
           readOnly
         />
         <span className="text-[13px] cursor-pointer text-gray-600">
           Review (5)
         </span>
       </div>
-      <h1 className="text-[24px] font-[600] mb-1">{product?.name}</h1>
-      <p className="text-gray-600 text-sm">{product?.description}</p>
+      <h1 className="text-[24px] font-[600] mb-1">{productData?.name}</h1>
+      <p className="text-gray-600 text-sm">{productData?.description}</p>
       <div className="flex items-center gap-4 mb-2 mt-3">
         <span className="oldPrice line-through text-gray-500 text-[18px] font-[500]">
-          &#8377;{product?.oldPrice}
+          &#8377;{productData?.oldPrice}
         </span>
         <span className="price text-primary text-[18px] font-[600]">
-          &#8377;{product?.price}
+          &#8377;{productData?.price}
         </span>
       </div>
       <hr />
@@ -41,14 +41,14 @@ function ProductDetailsContent({ product }) {
         <span className="text-[14px]">
           Available In Stock:{" "}
           <span className="text-green-700 font-semibold">
-            {product?.countInStock} Items
+            {productData?.countInStock} Items
           </span>
         </span>
         <div className="flex flex-col items-start justify-center">
-          {product?.size?.length > 0 && (
+          {productData?.size?.length > 0 && (
             <div className="flex items-center gap-2 size-btns my-3">
               <span className="font-semibold">Size:</span>
-              {product?.size?.map((n) => {
+              {productData?.size?.map((n) => {
                 return (
                   <Button
                     onClick={() => setActiveProductSize(n)}

@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 function HomeBanner({banner}) {
   return (
-      <div className="group overflow-hidden w-full rounded-lg relative">
-        <div className={`absolute flex flex-col px-4 justify-center w-[55%] h-[100%] z-50 ${banner?.textAlignment}-0`}>
+      <div className="group overflow-hidden w-full h-full rounded-lg relative">
+        <div className={`absolute flex flex-col pr-2 pl-5 justify-center w-[50%] h-[100%] z-50 ${banner?.textAlignment}-0`}>
           <h3 className="font-medium pb-2 text-xl">
             {banner?.title}
           </h3>

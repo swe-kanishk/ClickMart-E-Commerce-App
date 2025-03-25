@@ -91,7 +91,7 @@ function Home() {
             )}
           </div>
           {bannersV1Data?.length > 0 && (
-            <div className="part-2 w-[25%] gap-2 overflow-hidden flex flex-col">
+            <div className="part-2 w-[25%] gap-3 overflow-hidden flex flex-col">
               {bannersV1Data?.slice(0, 2).map((banner) => {
                 return <HomeBanner banner={banner} />;
               })}
