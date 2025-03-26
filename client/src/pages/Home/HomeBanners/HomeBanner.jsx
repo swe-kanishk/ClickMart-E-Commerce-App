@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function HomeBanner({banner}) {
   return (
       <div className="group overflow-hidden w-full h-full rounded-lg relative">
-        <div className={`absolute flex flex-col pr-2 pl-5 justify-center w-[50%] h-[100%] z-50 ${banner?.textAlignment}-0`}>
+        <div className={`absolute flex flex-col pr-2 pl-5 justify-center w-[50%] h-[100%] z-50 ${banner?.textAlignment === "left" ? "left-0" : "right-0"}`}>
           <h3 className="font-medium pb-2 text-xl">
             {banner?.title}
           </h3>

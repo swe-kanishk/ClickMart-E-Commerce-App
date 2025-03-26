@@ -4,8 +4,16 @@ import { Button, Rating } from "@mui/material";
 import QtyBox from "./QtyBox";
 import { MyContext } from "../App";
 
-function ProductDetailsContent({ productData }) {
+function ProductDetailsContent({ productData, setActiveTab, reviewSectionRef }) {
   const [activeProductSize, setActiveProductSize] = useState("S");
+
+  const gotoReviews = () => {
+    window.scrollTo({
+      top: reviewSectionRef?.current?.offsetTop-100,
+      behavior: "smooth",
+    });
+    setActiveTab(2)
+  }
 
   return (
     <div className="w-full">
@@ -22,8 +30,8 @@ function ProductDetailsContent({ productData }) {
           defaultValue={productData?.rating}
           readOnly
         />
-        <span className="text-[13px] cursor-pointer text-gray-600">
-          Review (5)
+        <span onClick={gotoReviews} className="text-[13px] cursor-pointer text-gray-600">
+          Review ({productData?.reviews?.length || 0})
         </span>
       </div>
       <h1 className="text-[24px] font-[600] mb-1">{productData?.name}</h1>

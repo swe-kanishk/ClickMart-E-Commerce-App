@@ -1,5 +1,5 @@
 import { Breadcrumbs, Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ProductZoom from "../../components/ProductZoom";
 
@@ -13,12 +13,16 @@ import { getData, postData } from "../../utils/api";
 import { BiLoader } from "react-icons/bi";
 import { MdOutlineRateReview } from "react-icons/md";
 import toast from "react-hot-toast";
+import ProductsSlider from "../Home/products/ProductsSlider";
 
 function ProductDetails() {
   const [activeTab, setActiveTab] = useState(1);
   const [ratingValue, setRatingValue] = useState(70);
   const [productData, setProductData] = useState(null);
+  const [relatedProductsData, setRelatedProductsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const reviewSectionRef = useRef(null);
 
   const { id } = useParams();
 
@@ -33,14 +37,26 @@ function ProductDetails() {
     setIsLoading(true);
     getData(`/api/product/${id}`)
       .then((res) => {
-        console.log(res);
         if (res?.success === true) {
           setProductData(res?.product);
+          getData(
+            `/api/product/getAllProductsBySubCatId/${res?.product?.subCatId}`
+          ).then((res) => {
+            console.log(res);
+            if (res?.success === true) {
+              const filteredData = res?.data?.filter(
+                (product) => product?._id !== id
+              );
+              setRelatedProductsData(filteredData);
+            }
+          });
         }
       })
       .finally(() => {
         setIsLoading(false);
       });
+
+    scrollTo(0, 0);
   }, [id]);
 
   const handleOnChangeInput = (e) => {
@@ -124,7 +140,11 @@ function ProductDetails() {
             <ProductZoom images={productData?.images} />
           </div>
           <div className="productContent w-[60%] pr-10">
-            <ProductDetailsContent productData={productData} />
+            <ProductDetailsContent
+              reviewSectionRef={reviewSectionRef}
+              setActiveTab={setActiveTab}
+              productData={productData}
+            />
           </div>
         </div>
         <div className="container pt-10">
@@ -138,12 +158,13 @@ function ProductDetails() {
               Description
             </span>
             <span
+              ref={reviewSectionRef}
               onClick={() => setActiveTab(2)}
               className={`link text-[18px] cursor-pointer px-2 rounded-[4px] py-[3px] text-[500] ${
                 activeTab === 3 && "bg-primary hover:!text-white text-white"
               }`}
             >
-              Reviews (5)
+              Reviews ({productData?.reviews?.length || 0})
             </span>
           </div>
           {activeTab === 1 && (
@@ -381,11 +402,13 @@ function ProductDetails() {
             </div>
           )}
         </div>
-        <hr className="mt-12" />
-        <div className="container pt-10">
-          <h2 className="text-[20px] font-[600]">Related Products</h2>
-          {/* <ProductsSlider /> */}
-        </div>
+        {relatedProductsData?.length > 0 && (
+          <div className="container">
+            <hr className="my-8" />
+            <h2 className="text-[20px] font-[600]">Related Products</h2>
+            <ProductsSlider data={relatedProductsData} />
+          </div>
+        )}
       </section>
     </>
   );
