@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 import WishlistItem from "./WishlistItem";
 import AccountSidebar from "../My-Account/AccountSidebar";
+import { MyContext } from "../../App";
+import { getData } from "../../utils/api";
 
 function Wishlist() {
+  const context = useContext(MyContext);
+  useEffect(() => {
+    context?.getMyWishlistData();
+  }, [])
   return (
     <section className="py-10 w-full">
       <div className="container flex gap-5">
@@ -15,13 +21,15 @@ function Wishlist() {
             <div className="px-3 py-2 border-b mb-1">
             <h2>My Wishlist</h2>
           <p>
-            There are <span className="text-red-500 font-medium">2</span>{" "}
+            There are <span className="text-red-500 font-medium">{context?.myWishlistData?.length || 0}</span>{" "}
             products in your wishlist
           </p>
             </div>
-            <WishlistItem />
-            <WishlistItem />
-            <WishlistItem />
+            {
+              context?.myWishlistData?.length > 0 && context?.myWishlistData?.map((item) => {
+                return <WishlistItem key={item?._id} product={item} />
+              })
+            }
           </div>
         </div>
       </div>

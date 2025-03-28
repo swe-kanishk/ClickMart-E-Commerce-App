@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
@@ -82,6 +82,10 @@ function Login() {
   };
 
   const validValue = Object.values(formFields).every((el) => el);
+
+  useEffect(() => {
+    scrollTo(0, 0)
+  }, [])
   return (
     <section className="py-5">
       <div className="container">

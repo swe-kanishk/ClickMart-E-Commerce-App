@@ -234,8 +234,8 @@ function Header() {
                 </li>
                 <li>
                   <Tooltip title="Wishlist">
-                    <IconButton aria-label="wishlist">
-                      <StyledBadge badgeContent={4} color="primary">
+                    <IconButton onClick={() => navigate('/wishlist')} aria-label="wishlist">
+                      <StyledBadge badgeContent={context?.myWishlistData?.length || 0} color="primary">
                         <IoMdHeartEmpty />
                       </StyledBadge>
                     </IconButton>

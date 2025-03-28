@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header/Header";
 import Home from "./pages/Home/Home";
@@ -24,7 +24,7 @@ import Checkout from "./pages/Checkout/Checkout";
 import MyAccount from "./pages/My-Account/MyAccount";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Orders from "./pages/Order/Orders";
-import { getData } from "./utils/api";
+import { getData, postData } from "./utils/api";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Address from "./pages/My-Account/Address";
 
@@ -39,6 +39,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
+  const [myWishlistData, setMyWishlistData] = useState([]);
 
   const getCat = () => {
     getData("/api/category").then((res) => {
@@ -47,6 +48,18 @@ function App() {
       }
     });
   };
+
+  const getMyWishlistData = () => {
+    getData('/api/wishlist', { withCredentials: true }).then((res) => {
+
+      if(res?.success === true) {
+        setMyWishlistData(res?.wishlist)
+      }
+      else {
+        setMyWishlistData([]);
+      }
+    })
+  }
 
   useEffect(() => {
     getCat();
@@ -76,11 +89,36 @@ function App() {
     } else {
       setIsLogin(false);
     }
+    getMyWishlistData();
   }, [isLogin]);
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal({ open: false, product: {} });
   };
+
+  const addToMyWishlist = (product) => {
+    const productData = {
+      productId: product?._id,
+      productTitle: product?.name,
+      image: product?.images?.[0],
+      rating: product?.rating?.[0] || 1,
+      price: product?.price,
+      oldPrice: product?.oldPrice,
+      discount: product?.discount,
+      brand: product?.brand
+    }
+    postData(`/api/wishlist/`, productData, { withCredentials: true }).then(
+      (res) => {
+        if (res?.success === true) {
+          toast.success(res?.message);
+          setMyWishlistData(prevState => [res?.userWishlist, ...prevState])
+        } else {
+          toast.error(res?.message);
+          <Navigate to={'/login'} />
+        }
+      }
+    );
+  }
 
   const value = {
     setOpenProductDetailsModal,
@@ -91,6 +129,10 @@ function App() {
     userData,
     setUserData,
     categoryData,
+    addToMyWishlist,
+    myWishlistData,
+    getMyWishlistData,
+    setMyWishlistData,
   };
 
   return (

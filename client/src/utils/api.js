@@ -13,8 +13,7 @@ export const postData = async (url, formData) => {
 
     return res.data;
   } catch (error) {
-    console.error("Error in postData:", error);
-    throw error.response?.data || error.message;
+    return error?.response?.data
   }
 };
 
@@ -30,8 +29,7 @@ export const getData = async (url, credentials) => {
 
     return res.data;
   } catch (error) {
-    console.error("Error in getData:", error);
-    throw error.response?.data || error.message;
+    return error?.response?.data
   }
 };
 
