@@ -8,26 +8,76 @@ import { IoIosGitCompare } from "react-icons/io";
 import { MdZoomOutMap } from "react-icons/md";
 import { IoOpenOutline } from "react-icons/io5";
 import { MyContext } from "../../../App";
+import { FaCartPlus } from "react-icons/fa6";
+import { editData } from "../../../utils/api";
+import toast from "react-hot-toast";
 
 function ProductItem({ product }) {
   const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [cartId, setCartId] = useState(null);
 
   const context = useContext(MyContext);
   const navigate = useNavigate();
 
-  const handleAddToMyWishlist = (product) => {
+  const handleAddToMyWishlist = () => {
     context?.addToMyWishlist(product);
   };
+
+  useEffect(() => {
+    const item = context?.cartData?.find(
+      (item) => item?.productId === product?._id
+    );
+    setQuantity(item?.quantity || 1);
+  }, [product?._id, context?.cartData]);
 
   useEffect(() => {
     const isAdded = context?.myWishlistData?.filter((item) =>
       item?.productId?.includes(product?._id)
     );
-    isAdded?.length > 0 ? setIsAddedToWishlist(true) : setIsAddedToWishlist(false);
+    isAdded?.length > 0
+      ? setIsAddedToWishlist(true)
+      : setIsAddedToWishlist(false);
   }, [context?.myWishlistData]);
+
+  const addItemToCart = () => {
+    context?.addToCart(product, quantity);
+  };
+
+  const handleChangeQty = (e) => {
+    const newQuantity = e?.currentTarget?.id === "increment-button" ? Math.min(quantity + 1, product?.countInStock) : quantity === 1 ? context?.removeItemFromCart(cartId) : quantity - 1;
+
+    if (newQuantity !== quantity) {
+      setQuantity(newQuantity);
+
+      editData(
+        "/api/cart",
+        { quantity: newQuantity, productId: product?._id },
+        { withCredentials: true }
+      ).then((res) => {
+        if (res?.data?.success) {
+          toast.success(res?.data?.message);
+          context?.setCartData((prevState) =>
+            prevState.map((item) =>
+              item?.productId === product?._id
+                ? res?.data?.updatedCartItem
+                : item
+            )
+          );
+        }
+      });
+    }
+    return;
+  };
+
+  useEffect(() => {
+    const item = context?.cartData?.find((item) => item?.productId === product?._id)
+    item ? setCartId(item?._id) : setCartId(null)
+  }, [context?.cartData])
   return (
-    <div className="productItem border rounded-md w-[250px] max-h-[410px] min-h-[400px] overflow-hidden shadow-lg">
-      <div className="img-wrapper group h-[250px] max-w-[250px] rounded-md overflow-hidden relative">
+    <div className="productItem border relative rounded-md w-[300px] max-h-[410px] min-h-[410px] overflow-hidden shadow-lg">
+      <div className="img-wrapper group h-[200px] max-w-[300px] rounded-md overflow-hidden relative">
         <span className="discout flex items-center absolute top-[10px] left-[10px] z-50 bg-red-500 rounded-[0.2rem] text-white text-[12px] px-1 py-[2px]">
           {product?.discount}% off
         </span>
@@ -85,7 +135,7 @@ function ProductItem({ product }) {
           </Tooltip>
         </div>
       </div>
-      <div className="info p-3 flex flex-col w-[250px] justify-start items-start">
+      <div className="info p-3 pb-0 flex flex-col w-[250px] justify-start items-start">
         <h6 className="text-[13px]">
           <span className="link">{product?.brand}</span>
         </h6>
@@ -105,14 +155,93 @@ function ProductItem({ product }) {
           size="small"
           readOnly
         />
-        <div className="flex items-center gap-4 py-2">
-          <span className="oldPrice line-through text-gray-500 text-[16px] font-[500]">
+        <div className="flex items-center gap-3 pt-2">
+          <span className="oldPrice line-through text-red-500 text-[16px] font-[400]">
             &#8377;{product?.oldPrice}
           </span>
-          <span className="price text-primary text-[16px] font-medium">
+          <span className="price text-green-600 text-[16px] font-medium">
             &#8377;{product?.price}
           </span>
         </div>
+      </div>
+      <div className="flex absolute bottom-3 w-full px-2">
+        {cartId ? (
+          <div className="relative flex items-center max-w-full border border-blue-400 rounded-lg">
+            <button
+              onClick={handleChangeQty}
+              type="button"
+              id="decrement-button"
+              data-input-counter-decrement="quantity-input"
+              className="bg-blue-100  hover:bg-blue-200 border-r border-blue-400 rounded-s-lg p-3 h-10"
+            >
+              <svg
+                className="w-3 h-3 text-blue-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 18 2"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 1h16"
+                />
+              </svg>
+            </button>
+            <input
+              readOnly
+              type="number"
+              value={quantity}
+              id="quantity-input"
+              data-input-counter
+              aria-describedby="helper-text-explanation"
+              className="bg-blue-50 border-x-0 outline:none focus:outline-none border-t-blue-300  border-b-blue-300 h-10 text-center text-blue-600 font-[600] text-sm block w-full py-2.5"
+              required
+            />
+            <button
+              onClick={handleChangeQty}
+              type="button"
+              id="increment-button"
+              data-input-counter-increment="quantity-input"
+              className="bg-blue-100  hover:bg-blue-200  border-blue-400 border-l rounded-e-lg p-3 h-10"
+            >
+              <svg
+                className="w-3 h-3 text-blue-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 18 18"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 1v16M1 9h16"
+                />
+              </svg>
+            </button>
+          </div>
+        ) : (
+          <Button
+            disabled={isLoading}
+            onClick={addItemToCart}
+            type="submit"
+            className={`!w-full !capitalize ${
+              isLoading ? "!bg-red-400" : "!bg-blue-500"
+            }  !text-white !py-2 !font-medium hover:!bg-blue-400`}
+          >
+            {isLoading ? (
+              <BiLoader size={"22px"} className="animate-spin" />
+            ) : (
+              <span className="flex items-center gap-3">
+                Add to Cart <FaCartPlus size={20} />
+              </span>
+            )}
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -69,7 +69,7 @@ function Header() {
 
   return (
     <>
-      <header className="bg-white sticky -top-[110px] z-[100] w-full">
+      <header className="bg-white sticky -top-[50px] z-[100] w-full">
         <div className="top-strip py-2 border-t-[1px] border-b-[1px] border-gray-200">
           <div className="container">
             <div className="flex items-center justify-between">
@@ -247,7 +247,7 @@ function Header() {
                       onClick={() => context.setOpenCartPanel(true)}
                       aria-label="cart"
                     >
-                      <StyledBadge badgeContent={4} color="primary">
+                      <StyledBadge badgeContent={context?.cartData?.length || 0} color="primary">
                         <BsCart3 />
                       </StyledBadge>
                     </IconButton>

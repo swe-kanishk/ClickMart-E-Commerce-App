@@ -24,7 +24,7 @@ import Checkout from "./pages/Checkout/Checkout";
 import MyAccount from "./pages/My-Account/MyAccount";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Orders from "./pages/Order/Orders";
-import { getData, postData } from "./utils/api";
+import { deleteData, getData, postData } from "./utils/api";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Address from "./pages/My-Account/Address";
 
@@ -40,6 +40,7 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
   const [myWishlistData, setMyWishlistData] = useState([]);
+  const [cartData, setCartData] = useState([]);
 
   const getCat = () => {
     getData("/api/category").then((res) => {
@@ -50,16 +51,24 @@ function App() {
   };
 
   const getMyWishlistData = () => {
-    getData('/api/wishlist', { withCredentials: true }).then((res) => {
-
-      if(res?.success === true) {
-        setMyWishlistData(res?.wishlist)
-      }
-      else {
+    getData("/api/wishlist", { withCredentials: true }).then((res) => {
+      if (res?.success === true) {
+        setMyWishlistData(res?.wishlist);
+      } else {
         setMyWishlistData([]);
       }
-    })
-  }
+    });
+  };
+
+  const getCartData = () => {
+    getData("/api/cart", { withCredentials: true }).then((res) => {
+      if (res?.success === true) {
+        setCartData(res?.cartItems);
+      } else {
+        setCartData([]);
+      }
+    });
+  };
 
   useEffect(() => {
     getCat();
@@ -72,25 +81,30 @@ function App() {
       getData(
         `/api/user/user-details?token=${localStorage.getItem("accessToken")}`,
         { withCredentials: true }
-      )
-        .then((res) => {
-          console.log(res);
-          if (res?.success) {
-            setUserData(res.data);
-          } else {
-            toast.error("Something went wrong!");
-          }
-        })
-        .catch((err) => {
-          toast.error(err?.message);
-          setIsLogin(false);
+      ).then((res) => {
+        console.log(res);
+        if (res?.success) {
+          setUserData(res.data);
+          getMyWishlistData();
+          getCartData();
+        } else {
+          toast.error("Something went wrong!");
           localStorage.removeItem("accessToken");
-        });
-    } else {
-      setIsLogin(false);
+          setIsLogin(false);
+        }
+      });
     }
-    getMyWishlistData();
   }, [isLogin]);
+
+  const removeItemFromCart = (id) => {
+    deleteData(`/api/cart/${id}`, {withCredentials: true}).then((res) => {
+      console.log(res)
+      if(res?.data?.success === true) {
+        toast.success(res?.data?.message);
+        setCartData(prevState => prevState?.filter(item => item?._id !== id))
+      }
+    })
+  }
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal({ open: false, product: {} });
@@ -105,20 +119,47 @@ function App() {
       price: product?.price,
       oldPrice: product?.oldPrice,
       discount: product?.discount,
-      brand: product?.brand
-    }
+      brand: product?.brand,
+    };
     postData(`/api/wishlist/`, productData, { withCredentials: true }).then(
       (res) => {
         if (res?.success === true) {
           toast.success(res?.message);
-          setMyWishlistData(prevState => [res?.userWishlist, ...prevState])
+          setMyWishlistData((prevState) => [res?.userWishlist, ...prevState]);
         } else {
           toast.error(res?.message);
-          <Navigate to={'/login'} />
+          <Navigate to={"/login"} />;
         }
       }
     );
-  }
+  };
+
+  const addToCart = (product, quantity = 1) => {
+    const productData = {
+      productId: product?._id,
+      productTitle: product?.name,
+      image: product?.images?.[0],
+      quantity,
+      countInStock: product?.countInStock,
+      subTotal: parseInt(product?.price) * quantity,
+      rating: product?.rating?.[0] || 1,
+      price: product?.price,
+      oldPrice: product?.oldPrice,
+      discount: product?.discount,
+      brand: product?.brand,
+    };
+    postData(`/api/cart/`, productData, { withCredentials: true }).then(
+      (res) => {
+        if (res?.success === true) {
+          toast.success(res?.message);
+          setCartData((prevState) => ([res?.data, ...prevState]));
+        } else {
+          toast.error(res?.message);
+          <Navigate to={"/login"} />;
+        }
+      }
+    );
+  };
 
   const value = {
     setOpenProductDetailsModal,
@@ -133,6 +174,10 @@ function App() {
     myWishlistData,
     getMyWishlistData,
     setMyWishlistData,
+    cartData,
+    setCartData,
+    addToCart,
+    removeItemFromCart
   };
 
   return (
@@ -180,7 +225,9 @@ function App() {
             {openProductDetailsModal?.product && (
               <>
                 <div className="col-1 w-[40%]">
-                  <ProductZoom images={openProductDetailsModal?.product?.images} />
+                  <ProductZoom
+                    images={openProductDetailsModal?.product?.images}
+                  />
                 </div>
                 <div className="col-2 w-[60%] flex-1">
                   <ProductDetailsContent

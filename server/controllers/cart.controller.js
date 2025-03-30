@@ -1,16 +1,15 @@
 import CartProductModel from "../models/cartProduct.model.js";
-import UserModel from "../models/user.model.js";
 
 export const addItemToCart = async (req, res) => {
   try {
     const userId = req.userId;
-    const { productId } = req.body;
+    const { productId, productTitle, image, quantity, subTotal, countInStock, rating, price, oldPrice, brand, discount } = req.body;
 
-    if (!productId) {
+    if (!productId || !productTitle || !image || !quantity || !subTotal || !countInStock || !rating || !price || !oldPrice || !brand || !discount) {
       return res.status(402).json({
         success: false,
         error: true,
-        message: "Provide productId!",
+        message: "Product all fields required!",
       });
     }
 
@@ -29,18 +28,19 @@ export const addItemToCart = async (req, res) => {
     const cartItem = new CartProductModel({
       quantity: 1,
       userId: userId,
-      productId: productId,
+      productId, 
+      productTitle, 
+      image, 
+      subTotal, 
+      countInStock, 
+      rating, 
+      price, 
+      oldPrice, 
+      brand, 
+      discount
     });
 
     const cartProduct = await cartItem.save();
-    const updateUserCart = await UserModel.updateOne(
-      { _id: userId },
-      {
-        $push: {
-          shopping_cart: productId,
-        },
-      }
-    );
 
     return res.status(200).json({
       message: "Added to cart successfully!",
@@ -61,14 +61,12 @@ export const getCartItem = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const cartItem = await CartProductModel.find({ userId }).populate(
-      "productId"
-    );
+    const cartItems = await CartProductModel.find({ userId });
 
     return res.status(200).json({
       error: false,
       success: true,
-      data: cartItem,
+      cartItems,
     });
   } catch (error) {
     return res.status(500).json({
@@ -82,28 +80,29 @@ export const getCartItem = async (req, res) => {
 export const updateCartItemQty = async (req, res) => {
   try {
     const userId = req.userId;
-    const { _id, qty } = req.body;
+    const { productId, quantity } = req.body;
 
-    if (!_id || !qty) {
+    if (!productId || !quantity) {
       return res.status(400).json({
         success: false,
         error: true,
-        message: "Provide _id, Qty!",
+        message: "Provide productId, Qty!",
       });
     }
 
-    const updateCartItem = await CartProductModel.updateOne(
-      { _id, userId },
-      {
-        quantity: qty,
-      }
+    const updatedCartItem = await CartProductModel.findOneAndUpdate(
+      { productId, userId },
+      { quantity: quantity },
+      { new: true } 
     );
+    
+
 
     return res.status(200).json({
       message: "Updated successfully!",
       error: false,
       success: true,
-      data: updateCartItem,
+      updatedCartItem
     });
   } catch (error) {
     return res.status(500).json({
@@ -116,18 +115,17 @@ export const updateCartItemQty = async (req, res) => {
 
 export const deleteCartItem = async (req, res) => {
   try {
-    const userId = req.userId;
-    const { _id, productId } = req.body;
+    const  {id} = req.params;
 
-    if (!_id) {
+    if (!id) {
       return res.status(400).json({
-        message: "Provide _id!",
+        message: "Provide id!",
         error: true,
         success: false,
       });
     }
 
-    const deleteCartItem = await CartProductModel.deleteOne({ _id, userId });
+    const deleteCartItem = await CartProductModel.findByIdAndDelete(id);
     if (!deleteCartItem) {
       return res.status(404).json({
         message: "Product is not found in the cart!",
@@ -135,16 +133,6 @@ export const deleteCartItem = async (req, res) => {
         success: false,
       });
     }
-
-    const user = await UserModel.findOne({ _id: userId });
-    const userCartItems = user?.shopping_cart;
-
-    const deletedCartItem = userCartItems.splice(
-      userCartItems.indexOf(productId),
-      1
-    );
-
-    await user.save();
 
     return res.status(200).json({
       message: "Cart item deleted successfully!",

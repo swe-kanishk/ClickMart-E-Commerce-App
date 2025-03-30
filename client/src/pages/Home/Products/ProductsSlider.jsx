@@ -14,8 +14,8 @@ function ProductsSlider({ data }) {
   return (
     <div className="py-3">
       <Swiper
-        slidesPerView={6}
-        spaceBetween={15}
+        slidesPerView={5}
+        spaceBetween={5}
         navigation={true}
         pagination={{
           clickable: true,
