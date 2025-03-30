@@ -49,6 +49,9 @@ const cartProductSchema = new Schema({
     type: Number,
     required: [true, "Product discount required!"],
   },
+  productSize: String,
+  productWeight: String,
+  productRAM: String,
   }, { timestamps: true });
 
 const CartProductModel = model("CartProduct", cartProductSchema);
