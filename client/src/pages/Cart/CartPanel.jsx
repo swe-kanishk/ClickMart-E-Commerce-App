@@ -28,20 +28,20 @@ function CartPanel() {
           </Button>
         </div>
         <div className="scroll w-full px-4 max-h-[565px] overflow-y-scroll overflow-x-hidden">
-        {context?.cartData?.length > 0 &&
-          context?.cartData?.map((item) => {
-            return (
+          {context?.cartData?.length > 0 &&
+            context?.cartData?.map((item) => {
+              return (
                 <div className="cartItem w-full gap-4 flex items-start border-b py-4">
                   <Link
                     to={`/productDetails/${item?.productId}`}
                     className="img-section group w-[25%] border overflow-hidden rounded-lg"
                     onClick={() => context.setOpenCartPanel(false)}
                   >
-                      <img
-                        className="w-full group-hover:scale-105 transition-all aspect-square object-cover"
-                        src={item?.image}
-                        alt=""
-                      />
+                    <img
+                      className="w-full group-hover:scale-105 transition-all aspect-square object-cover"
+                      src={item?.image}
+                      alt=""
+                    />
                   </Link>
                   <div className="info w-[75%]">
                     <Link
@@ -75,19 +75,28 @@ function CartPanel() {
                     }
                   />
                 </div>
-            );
-          })}
-          </div>
+              );
+            })}
+        </div>
       </div>
       <div className="bottom-section w-full">
         <div className="bottomInfo px-4 py-3 w-full border-t flex flex-col items-center gap-1">
           <div className="flex items-center justify-between w-full">
-            <span className="text-[14px] font-[500]">3 items</span>
-            <span className="text-primary font-medium">$117</span>
-          </div>
-          <div className="flex items-center justify-between w-full">
-            <span className="text-[14px] font-[500]">Shipping</span>
-            <span className="text-primary font-medium">$9</span>
+            <span className="text-[14px] font-[500]">
+              {context?.cartData?.length} items
+            </span>
+            <span className="text-primary font-medium">
+              {context?.cartData?.length > 0 &&
+                context?.cartData
+                  ?.map(
+                    (item) => parseInt(item?.price) * parseInt(item?.quantity)
+                  )
+                  .reduce((total, price) => total + price, 0)
+                  .toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "INR",
+                  })}
+            </span>
           </div>
         </div>
         <div className="bottomInfo px-4 py-3 w-full border-t flex flex-col items-center gap-1">
@@ -105,12 +114,18 @@ function CartPanel() {
           </div>
         </div>
         <div className="flex items-center px-4 py-3 border-t justify-between w-full gap-5">
-          <Button className="!w-[50%] !bg-red-500 !text-white hover:!bg-black">
-            View Cart
-          </Button>
+          <Link
+            className="!w-[100%]"
+            onClick={() => context?.setOpenCartPanel(false)}
+            to={"/cart"}
+          >
+            <Button className="!w-[100%] !bg-red-500 !text-white hover:!bg-black">
+              View Cart
+            </Button>
+          </Link>
           <Link
             to="/checkout"
-            className="!w-[50%] d-block"
+            className="!w-[100%]"
             onClick={() => context.setOpenCartPanel(false)}
           >
             <Button className="!bg-red-500 !text-white w-full hover:!bg-black">

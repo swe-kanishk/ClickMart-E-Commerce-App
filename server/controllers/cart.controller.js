@@ -3,7 +3,7 @@ import CartProductModel from "../models/cartProduct.model.js";
 export const addItemToCart = async (req, res) => {
   try {
     const userId = req.userId;
-    const { productId, productTitle, image, quantity, subTotal, countInStock, rating, price, oldPrice, brand, discount } = req.body;
+    const { productId, productTitle, productSize, productRAM, productWeight, image, quantity, subTotal, countInStock, rating, price, oldPrice, brand, discount } = req.body;
 
     if (!productId || !productTitle || !image || !quantity || !subTotal || !countInStock || !rating || !price || !oldPrice || !brand || !discount) {
       return res.status(402).json({
@@ -33,6 +33,9 @@ export const addItemToCart = async (req, res) => {
       image, 
       subTotal, 
       countInStock, 
+      productSize, 
+      productRAM, 
+      productWeight,
       rating, 
       price, 
       oldPrice, 

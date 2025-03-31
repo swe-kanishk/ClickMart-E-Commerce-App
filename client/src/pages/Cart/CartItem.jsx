@@ -1,12 +1,14 @@
 import { Button, DialogContent, Rating } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { GoTriangleDown } from "react-icons/go";
+import { MyContext } from "../../App";
 
-function CartItem() {
+function CartItem({item}) {
+    const context = useContext(MyContext)
     const [isOpenSizeDialog, setIsOpenSizeDialog] = useState(false)
     const [ratingValue, setRatingValue] = useState(2);
   return (
@@ -15,23 +17,23 @@ function CartItem() {
       <div className="img-section w-[15%] rounded-lg overflow-hidden">
         <Link>
           <img
-            src="https://img.freepik.com/free-photo/fashion-girl-posing-studio-wearing-smart-casual-sportive-outfit-business-style-sweet-pastel-colors-sunglasses-backpack-denim-jacket-mint-background-stylish-woman_291049-1800.jpg"
+            src={item?.image}
             alt=""
             className="w-full"
           />
         </Link>
       </div>
       <div className="info w-[85%] relative">
-        <Button className="!rounded-full !absolute !-top-1 !-right-1 !min-h-[35px] !h-[35px] !flex !items-center !justify-center !min-w-[35px] !w-[35px] !text-gray-500">
+        <Button onClick={() => context?.removeItemFromCart(item?._id)} className="!rounded-full !absolute !-top-1 !-right-1 !min-h-[35px] !h-[35px] !flex !items-center !justify-center !min-w-[35px] !w-[35px] !text-gray-500">
           <IoMdClose size={"22px"} />
         </Button>
-        <span className="text-[13px]">Zara</span>
+        <span className="text-[13px]">{item?.brand}</span>
         <h3 className="text-[15px]">
           <Link to="/" className="link">
-            Pure Cotton Slin Fit Printed Casual Top with Shirt
+            {item?.productTitle}
           </Link>
         </h3>
-        <Rating name="read-only" value={ratingValue} size="small" readOnly />
+        <Rating name="read-only" value={item?.rating} size="small" readOnly />
         <div className="flex items-center gap-4">
           <span
             onClick={() => setIsOpenSizeDialog(false)}
@@ -43,18 +45,18 @@ function CartItem() {
             onClick={() => setIsOpenSizeDialog(false)}
             className="flex items-center justify-center bg-[#f1f1f1] py-1 px-3 cursor-pointer rounded-md font-medium mt-2 text-[12px]"
           >
-            Qty: 1 <GoTriangleDown />
+            Qty: {item?.quantity} <GoTriangleDown />
           </span>
         </div>
         <div className="flex items-center gap-2 mt-2">
           <span className="oldPrice text-primary text-[14px] font-medium">
-            $48.00
+            &#8377;{item?.price}
           </span>
           <span className="oldPrice line-through text-gray-500 text-[14px] font-[500]">
-            $56.00
+          &#8377;{item?.oldPrice}
           </span>
           <span className="oldPrice text-red-500 text-[14px] font-[500]">
-            18% off
+            {item?.discount}% off
           </span>
         </div>
       </div>
