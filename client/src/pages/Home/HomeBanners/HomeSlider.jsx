@@ -48,7 +48,8 @@ function HomeSlider({ productsData }) {
             <SwiperSlide>
               <div className="item w-full rounded-md overflow-hidden relative">
                 <img
-                  src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_imageslider/views/img/sample-1.jpg"
+                className="aspect-video max-h-[65vh] object-cover"
+                  src={product?.bannerImages}
                   alt=""
                 />
                 <div className="info absolute top-0 right-[-100%] opacity-0 transition-all duration-700 w-[45%] text-start h-[100%] flex items-start justify-center flex-col z-50 p-8">
