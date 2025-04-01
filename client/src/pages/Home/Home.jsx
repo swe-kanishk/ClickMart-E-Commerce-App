@@ -30,6 +30,7 @@ function Home() {
   const [popularProductsData, setPopularProductsData] = useState([]);
   const [blogsData, setBlogsData] = useState([]);
   const [bannersV1Data, setBannersV1Data] = useState([]);
+  const [adsBannerData, setAdsBannersData] = useState([]);
 
   const context = useContext(MyContext);
 
@@ -66,6 +67,11 @@ function Home() {
     getData(`/api/bannerV1/`).then((res) => {
       if (res?.success === true) {
         setBannersV1Data(res?.banners);
+      }
+    });
+    getData(`/api/adsBanner`).then((res) => {
+      if (res?.success === true) {
+        setAdsBannersData(res?.banners);
       }
     });
   }, []);
@@ -180,11 +186,13 @@ function Home() {
         <ProductSkelton length={6} />
       )}
 
-      <section className="pb-8 pt-0 bg-white blogSection">
-        <div className="container">
-          <AdsBannerSlider />
-        </div>
-      </section>
+      {adsBannerData?.length > 0 && (
+        <section className="pb-8 pt-0 bg-white blogSection">
+          <div className="container">
+            <AdsBannerSlider data={adsBannerData} />
+          </div>
+        </section>
+      )}
 
       {blogsData?.length > 0 && (
         <section className="pb-8 pt-0 bg-white blogSection">

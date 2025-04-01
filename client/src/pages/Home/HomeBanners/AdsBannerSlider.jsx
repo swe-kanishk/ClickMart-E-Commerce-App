@@ -5,11 +5,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import { Navigation } from "swiper/modules";
+import { Link } from "react-router-dom";
 
-function AdsBannerSlider({ adBanner }) {
+function AdsBannerSlider({ data }) {
   return (
     <Swiper
-      slidesPerView={4}
+      slidesPerView={3}
       spaceBetween={15}
       navigation={true}
       pagination={{
@@ -18,30 +19,23 @@ function AdsBannerSlider({ adBanner }) {
       modules={[Navigation]}
       className="mySwiper"
     >
-      <SwiperSlide key={adBanner?._id} className="!w-1/4 py-3 px-1 h-auto">
-        <img
-          src="https://serviceapi.spicezgold.com/download/1741669037986_banner2.webp"
-          alt=""
-        />
-      </SwiperSlide>
-      <SwiperSlide key={adBanner?._id} className="!w-1/4 py-3 px-1 h-auto">
-        <img
-          src="https://serviceapi.spicezgold.com/download/1741669037986_banner2.webp"
-          alt=""
-        />
-      </SwiperSlide>
-      <SwiperSlide key={adBanner?._id} className="!w-1/4 py-3 px-1 h-auto">
-        <img
-          src="https://serviceapi.spicezgold.com/download/1741669037986_banner2.webp"
-          alt=""
-        />
-      </SwiperSlide>
-      <SwiperSlide key={adBanner?._id} className="!w-1/4 py-3 px-1 h-auto">
-        <img
-          src="https://serviceapi.spicezgold.com/download/1741669037986_banner2.webp"
-          alt=""
-        />
-      </SwiperSlide>
+      {data?.length > 0 &&
+        data.map((adBanner) => {
+          return (
+            <SwiperSlide
+              key={adBanner?._id}
+              className="!w-2/6 py-3 px-1 h-auto"
+            >
+              <Link
+                to={`/productListing?catId=${adBanner?.catId || ""}&subCatId=${
+                  adBanner?.subCatId || ""
+                }&thirdSubCatId=${adBanner?.thirdSubCatId || ""}`}
+              >
+                <img className="cursor-pointer" src={adBanner?.images} alt="" />
+              </Link>
+            </SwiperSlide>
+          );
+        })}
     </Swiper>
   );
 }
