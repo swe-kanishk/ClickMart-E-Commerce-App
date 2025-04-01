@@ -52,6 +52,8 @@ import CreateNewBlog from "../Pages/Blog/CreateNewBlog";
 import EditBlog from "../Pages/Blog/EditBlog";
 import AddBannerV1 from "../Pages/banners/AddBannerV1";
 import EditBannerV1 from "../Pages/banners/EditBannerV1";
+import AddAdsBanner from "../Pages/banners/AddAdsBanner";
+import EditAdsBanner from "../Pages/banners/EditAdsBanner";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -279,6 +281,8 @@ function Header() {
           {context?.isOpenFullScreenPannel?.model === "Edit Blog" && <EditBlog />}
           {context?.isOpenFullScreenPannel?.model === "Add Banner1" && <AddBannerV1 />}
           {context?.isOpenFullScreenPannel?.model === "Edit Banner1" && <EditBannerV1 />}
+          {context?.isOpenFullScreenPannel?.model === "Add Ads Banner" && <AddAdsBanner />}
+          {context?.isOpenFullScreenPannel?.model === "Edit Ads Banner" && <EditAdsBanner />}
         </Dialog>
     </>
   );

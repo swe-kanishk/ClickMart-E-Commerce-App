@@ -26,6 +26,7 @@ import AddSizes from "./Pages/product/AddSizes";
 import AddWeight from "./Pages/product/AddWeight";
 import BlogList from "./Pages/Blog/BlogList";
 import BannerV1List from "./Pages/banners/BannerV1List";
+import AdsBannerList from "./Pages/banners/adsBannerList";
 
 const MyContext = createContext();
 
@@ -473,6 +474,31 @@ function App() {
               } transition-all`}
             >
               <BannerV1List />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: "/adsBanner/list",
+      exact: true,
+      element: (
+        <section className="main">
+          <Header />
+          <div className="mainContent flex">
+            <div
+              className={`sidebarWrapper overflow-hidden ${
+                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
+              } transition-all`}
+            >
+              <Sidebar />
+            </div>
+            <div
+              className={`right-content p-5 ${
+                isSidebarOpen ? "w-[82%]" : "w-[100%]"
+              } transition-all`}
+            >
+              <AdsBannerList />
             </div>
           </div>
         </section>

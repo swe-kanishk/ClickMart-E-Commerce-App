@@ -279,6 +279,26 @@ function Sidebar() {
                   Add Banner v1
                 </Button>
               </li>
+              <li className="w-full">
+                <Link to="/adsBanner/list">
+                  <Button className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500">
+                    <span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span>{" "}
+                    Ads Banner List
+                  </Button>
+                </Link>
+                <Button
+                  onClick={() =>
+                    context.setIsOpenFullScreenPannel({
+                      open: true,
+                      model: "Add Ads Banner",
+                    })
+                  }
+                  className="!capitalize !w-full !pl-8 !text-[13px] flex gap-2 !font-[500] !justify-start !text-gray-500"
+                >
+                  <span className="block bg-gray-300 h-[6px] w-[6px] rounded-full"></span>{" "}
+                  Add Ads Banner
+                </Button>
+              </li>
             </ul>
           </Collapse>
         </li>
