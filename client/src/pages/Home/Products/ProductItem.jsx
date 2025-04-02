@@ -46,7 +46,12 @@ function ProductItem({ product }) {
   };
 
   const handleChangeQty = (e) => {
-    const newQuantity = e?.currentTarget?.id === "increment-button" ? Math.min(quantity + 1, product?.countInStock) : quantity === 1 ? context?.removeItemFromCart(cartId) : quantity - 1;
+    const newQuantity =
+      e?.currentTarget?.id === "increment-button"
+        ? Math.min(quantity + 1, product?.countInStock)
+        : quantity === 1
+        ? context?.removeItemFromCart(cartId)
+        : quantity - 1;
 
     if (newQuantity !== quantity) {
       setQuantity(newQuantity);
@@ -72,9 +77,11 @@ function ProductItem({ product }) {
   };
 
   useEffect(() => {
-    const item = context?.cartData?.find((item) => item?.productId === product?._id)
-    item ? setCartId(item?._id) : setCartId(null)
-  }, [context?.cartData])
+    const item = context?.cartData?.find(
+      (item) => item?.productId === product?._id
+    );
+    item ? setCartId(item?._id) : setCartId(null);
+  }, [context?.cartData]);
   return (
     <div className="productItem border relative rounded-md w-[300px] max-h-[410px] min-h-[410px] overflow-hidden shadow-lg">
       <div className="img-wrapper group h-[200px] max-w-[300px] rounded-md overflow-hidden relative">
@@ -97,6 +104,32 @@ function ProductItem({ product }) {
             />
           )}
         </Link>
+        <div className="group-hover:flex hidden gap-2 items-center justify-center absolute top-[0px] left-[0px] w-full h-full z-[55] bg-[#131212cb] text-white text-[12px] px-1 py-[2px]">
+          {product?.size?.length > 0 &&
+            product?.size?.map((size, index) => {
+              return (
+                <span key={index} className="flex items-center cursor-pointer justify-center p-1 text-[14px] bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor- text-gray-700 hover:bg-white">
+                  {size}
+                </span>
+              );
+            })}
+          {product?.productRam?.length > 0 &&
+            product?.productRam?.map((ram, index) => {
+              return (
+                <span key={index} className="flex items-center cursor-pointer justify-center p-1 text-[14px] bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor- text-gray-700 hover:bg-white">
+                  {ram}
+                </span>
+              );
+            })}
+          {product?.weight?.length > 0 &&
+            product?.weight?.map((weight, index) => {
+              return (
+                <span key={index} className="flex items-center cursor-pointer justify-center p-1 text-[14px] bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor- text-gray-700 hover:bg-white">
+                  {weight}
+                </span>
+              );
+            })}
+        </div>
         <div className="actions absolute transition-all gap-1.5 duration-300 top-[-100%] group-hover:top-[10px] right-[12px] opacity-0 group-hover:opacity-100 flex flex-col">
           <Tooltip placement="right" title="View">
             <Button

@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 function AdsBannerSlider({ data }) {
   return (
     <Swiper
-      slidesPerView={3}
+      slidesPerView={4}
       spaceBetween={15}
       navigation={true}
       pagination={{
@@ -24,14 +24,15 @@ function AdsBannerSlider({ data }) {
           return (
             <SwiperSlide
               key={adBanner?._id}
-              className="!w-2/6 py-3 px-1 h-auto"
+              className=" !overflow-hidden !rounded-md"
             >
               <Link
                 to={`/productListing?catId=${adBanner?.catId || ""}&subCatId=${
                   adBanner?.subCatId || ""
                 }&thirdSubCatId=${adBanner?.thirdSubCatId || ""}`}
               >
-                <img className="cursor-pointer" src={adBanner?.images} alt="" />
+
+                <img className="cursor-pointer !rounded-lg object-cover w-full h-full duration-500 transition-all hover:scale-105 hover:-rotate-1" src={adBanner?.images} alt="" />
               </Link>
             </SwiperSlide>
           );
