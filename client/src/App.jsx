@@ -134,21 +134,8 @@ function App() {
     );
   };
 
-  const addToCart = (product, quantity = 1) => {
-    const productData = {
-      productId: product?._id,
-      productTitle: product?.name,
-      image: product?.images?.[0],
-      quantity,
-      countInStock: product?.countInStock,
-      subTotal: parseInt(product?.price) * quantity,
-      rating: product?.rating?.[0] || 1,
-      price: product?.price,
-      oldPrice: product?.oldPrice,
-      discount: product?.discount,
-      brand: product?.brand,
-    };
-    postData(`/api/cart/`, productData, { withCredentials: true }).then(
+  const addToCart = (product) => {
+    postData(`/api/cart/`, product, { withCredentials: true }).then(
       (res) => {
         if (res?.success === true) {
           toast.success(res?.message);

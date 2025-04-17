@@ -17,6 +17,9 @@ function ProductItem({ product }) {
   const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [cartId, setCartId] = useState(null);
+  const [activeTab, setActiveTab] = useState(null);
+  const [isShowTabs, setIsShowTabs] = useState(false);
+  const [showTabValue, setShowTabValue] = useState(null);
 
   const context = useContext(MyContext);
   const navigate = useNavigate();
@@ -42,7 +45,41 @@ function ProductItem({ product }) {
   }, [context?.myWishlistData]);
 
   const addItemToCart = () => {
-    context?.addToCart(product, quantity);
+    if(product?.size?.length !== 0 && isShowTabs === false) {
+      setIsShowTabs(true)
+      toast.error('Please select item size!');
+      return
+    }
+    if(product?.productRam?.length !== 0 && isShowTabs === false) {
+      setIsShowTabs(true)
+      toast.error('Please select item ram!');
+      return
+    }
+    if(product?.weight?.length !== 0 && isShowTabs === false) {
+      setIsShowTabs(true)
+      toast.error('Please select item weight!');
+      return
+    }
+
+    const productData = {
+      productId: product?._id,
+      productTitle: product?.name,
+      image: product?.images?.[0],
+      quantity: quantity || 1,
+      countInStock: product?.countInStock,
+      subTotal: parseInt(product?.price) * quantity,
+      rating: product?.rating?.[0] || 1,
+      price: product?.price,
+      oldPrice: product?.oldPrice,
+      discount: product?.discount,
+      productSize: product?.size?.length > 0 ? showTabValue : '',
+      productRAM: product?.productRam?.length > 0 ? showTabValue : '',
+      productWeight: product?.weight?.length > 0 ? showTabValue : '',
+      brand: product?.brand,
+    };
+
+    setIsShowTabs(false);
+    context?.addToCart(productData);
   };
 
   const handleChangeQty = (e) => {
@@ -82,6 +119,11 @@ function ProductItem({ product }) {
     );
     item ? setCartId(item?._id) : setCartId(null);
   }, [context?.cartData]);
+
+  const handleClickActiveTab = (index, value) => { 
+    setShowTabValue(value)
+    setActiveTab(index);
+  };
   return (
     <div className="productItem border relative rounded-md w-[300px] max-h-[410px] min-h-[410px] overflow-hidden shadow-lg">
       <div className="img-wrapper group h-[200px] max-w-[300px] rounded-md overflow-hidden relative">
@@ -104,32 +146,52 @@ function ProductItem({ product }) {
             />
           )}
         </Link>
-        <div className="group-hover:flex hidden gap-2 items-center justify-center absolute top-[0px] left-[0px] w-full h-full z-[55] bg-[#131212cb] text-white text-[12px] px-1 py-[2px]">
-          {product?.size?.length > 0 &&
-            product?.size?.map((size, index) => {
-              return (
-                <span key={index} className="flex items-center cursor-pointer justify-center p-1 text-[14px] bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor- text-gray-700 hover:bg-white">
-                  {size}
-                </span>
-              );
-            })}
-          {product?.productRam?.length > 0 &&
-            product?.productRam?.map((ram, index) => {
-              return (
-                <span key={index} className="flex items-center cursor-pointer justify-center p-1 text-[14px] bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor- text-gray-700 hover:bg-white">
-                  {ram}
-                </span>
-              );
-            })}
-          {product?.weight?.length > 0 &&
-            product?.weight?.map((weight, index) => {
-              return (
-                <span key={index} className="flex items-center cursor-pointer justify-center p-1 text-[14px] bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor- text-gray-700 hover:bg-white">
-                  {weight}
-                </span>
-              );
-            })}
-        </div>
+        {isShowTabs === true && (
+          <div className="flex gap-2 items-center justify-center absolute top-[0px] left-[0px] w-full h-full z-[55] bg-[#131212cb] text-white text-[12px] px-1 py-[2px]">
+            {product?.size?.length > 0 &&
+              product?.size?.map((size, index) => {
+                return (
+                  <span
+                    onClick={() => handleClickActiveTab(index, size)}
+                    key={index}
+                    className={`flex items-center cursor-pointer justify-center p-1 text-[14px] ${
+                      activeTab === index && "bg-primary text-white"
+                    } bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor- text-gray-700 hover:bg-white`}
+                  >
+                    {size}
+                  </span>
+                );
+              })}
+            {product?.productRam?.length > 0 &&
+              product?.productRam?.map((ram, index) => {
+                return (
+                  <span
+                    onClick={() => handleClickActiveTab(index, ram)}
+                    key={index}
+                    className={`flex items-center cursor-pointer justify-center p-1 text-[14px] ${
+                      activeTab === index && "bg-primary text-white"
+                    } bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor- text-gray-700 hover:bg-white`}
+                  >
+                    {ram}
+                  </span>
+                );
+              })}
+            {product?.weight?.length > 0 &&
+              product?.weight?.map((weight, index) => {
+                return (
+                  <span
+                    onClick={() => handleClickActiveTab(index, weight)}
+                    key={index}
+                    className={`flex items-center cursor-pointer justify-center p-1 text-[14px] ${
+                      activeTab === index && "bg-primary text-white"
+                    } bg-[#f6f6f6f1] min-w-[25px] h-[25px] rounded-sm cursor-pointer text-gray-700 hover:bg-white`}
+                  >
+                    {weight}
+                  </span>
+                );
+              })}
+          </div>
+        )}
         <div className="actions absolute transition-all gap-1.5 duration-300 top-[-100%] group-hover:top-[10px] right-[12px] opacity-0 group-hover:opacity-100 flex flex-col">
           <Tooltip placement="right" title="View">
             <Button
