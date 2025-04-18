@@ -142,7 +142,6 @@ function ProductDetails() {
           <div className="productContent w-[60%] pr-10">
             <ProductDetailsContent
               reviewSectionRef={reviewSectionRef}
-              setActiveTab={setActiveTab}
               productData={productData}
             />
           </div>

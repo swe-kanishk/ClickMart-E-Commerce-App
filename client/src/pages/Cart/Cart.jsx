@@ -32,7 +32,9 @@ function Cart() {
             <h3 className="pb-3 border-b">Cart Totals</h3>
             <p className="flex mt-2 items-center justify-between">
               <span className="text-[14px] font-[500]">Subtotal</span>
-              <span className="text-red-500 font-[600]">$123.00</span>
+              <span className="text-red-500 font-[600]">{
+                  context?.cartData?.reduce((acc, curr) => parseFloat(curr?.price) * parseFloat(curr?.quantity), 0).toLocaleString("en-IN", {style: 'currency', currency: 'INR'})
+                }</span>
             </p>
             <p className="flex mt-2 items-center justify-between">
               <span className="text-[14px] font-[500]">Shipping</span>

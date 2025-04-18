@@ -26,7 +26,7 @@ export const addItemToCart = async (req, res) => {
     }
 
     const cartItem = new CartProductModel({
-      quantity: 1,
+      quantity,
       userId: userId,
       productId, 
       productTitle, 

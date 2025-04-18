@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa6";
 
-function QtyBox() {
-  const [qty, setQty] = useState(1);
+function QtyBox({ qty, setQty }) {
 
   const handleQuantity = (type) => () => {
     if (type === "add") setQty(qty + 1);

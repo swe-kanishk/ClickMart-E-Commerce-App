@@ -139,13 +139,14 @@ function App() {
       (res) => {
         if (res?.success === true) {
           toast.success(res?.message);
+          console.log(res)
           setCartData((prevState) => ([res?.data, ...prevState]));
         } else {
           toast.error(res?.message);
           <Navigate to={"/login"} />;
         }
       }
-    );
+    )
   };
 
   const value = {

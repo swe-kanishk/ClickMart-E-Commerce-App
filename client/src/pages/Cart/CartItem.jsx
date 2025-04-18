@@ -1,15 +1,13 @@
-import { Button, DialogContent, Rating } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import { Button, Rating } from "@mui/material";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
-import DialogTitle from "@mui/material/DialogTitle";
-import Dialog from "@mui/material/Dialog";
 import { GoTriangleDown } from "react-icons/go";
 import { MyContext } from "../../App";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { editData } from "../../utils/api";
-import toast from "react-hot-toast";
+import toast from "react-hot-toast"; 
 
 function CartItem({ item }) {
   const context = useContext(MyContext);
@@ -44,6 +42,9 @@ function CartItem({ item }) {
     editData('/api/cart', updatedProductData, {withCredentials: true}).then((res) => {
       if(res?.data?.success === true) {
         toast.success(res?.data?.message)
+        const updatedData = res?.data?.updatedCartItem
+        const updatedCartData = context?.cartData?.map(item => item?._id === updatedData?._id ? updatedData : item);
+        context?.setCartData(updatedCartData)
       }
     })
   }

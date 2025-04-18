@@ -3,9 +3,16 @@ import { IoIosGitCompare, IoMdHeartEmpty, IoMdCart } from "react-icons/io";
 import { Button, Rating } from "@mui/material";
 import QtyBox from "./QtyBox";
 import { MyContext } from "../App";
+import toast from "react-hot-toast";
+import { BiLoader } from "react-icons/bi";
 
-function ProductDetailsContent({ productData, setActiveTab, reviewSectionRef }) {
-  const [activeProductSize, setActiveProductSize] = useState("S");
+function ProductDetailsContent({ productData, reviewSectionRef }) {
+    const [showTabValue, setShowTabValue] = useState(null);
+    const [activeTab, setActiveTab] = useState(null);
+    const [qty, setQty] = useState(1);
+    const [isLoading, setIsLoading] = useState(false)
+
+  const context = useContext(MyContext)
 
   const gotoReviews = () => {
     window.scrollTo({
@@ -15,6 +22,51 @@ function ProductDetailsContent({ productData, setActiveTab, reviewSectionRef }) 
     setActiveTab(2)
   }
 
+  const addItemToCart = () => {
+    if(productData?.size?.length !== 0 && !showTabValue) {
+      toast.error('Please select item size!');
+      return
+    }
+    if(productData?.productRam?.length !== 0 && !showTabValue) {
+      toast.error('Please select item ram!');
+      return
+    }
+    if(productData?.weight?.length !== 0 && !showTabValue) {
+      toast.error('Please select item weight!');
+      return
+    }
+
+    setIsLoading(true)
+
+    const cartProductData = {
+      productId: productData?._id,
+      productTitle: productData?.name,
+      image: productData?.images?.[0],
+      quantity: qty,
+      countInStock: productData?.countInStock,
+      subTotal: parseInt(productData?.price) * qty,
+      rating: productData?.rating?.[0] || 1,
+      price: productData?.price,
+      oldPrice: productData?.oldPrice,
+      discount: productData?.discount,
+      productSize: productData?.size?.length > 0 ? showTabValue : '',
+      productRAM: productData?.productRam?.length > 0 ? showTabValue : '',
+      productWeight: productData?.weight?.length > 0 ? showTabValue : '',
+      brand: productData?.brand,
+      productRAMData: productData?.productRam,
+      productSizeData: productData?.size,
+      productWeightData: productData?.weight
+    };
+    context?.addToCart(cartProductData);
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
+  };
+
+  const handleClickActiveTab = (index, value) => { 
+    setShowTabValue(value)
+    setActiveTab(index);
+  };
   return (
     <div className="w-full">
       <div className="flex items-center gap-3 mb-2">
@@ -56,11 +108,41 @@ function ProductDetailsContent({ productData, setActiveTab, reviewSectionRef }) 
           {productData?.size?.length > 0 && (
             <div className="flex items-center gap-2 size-btns my-3">
               <span className="font-semibold">Size:</span>
-              {productData?.size?.map((n) => {
+              {productData?.size?.map((n, index) => {
                 return (
                   <Button
-                    onClick={() => setActiveProductSize(n)}
-                    className={`${activeProductSize === n && "active-size"}`}
+                    onClick={() => handleClickActiveTab(index, n)}
+                    className={`${activeTab === index && "active-size"}`}
+                  >
+                    {n}
+                  </Button>
+                );
+              })}
+            </div>
+          )}
+          {productData?.weight?.length > 0 && (
+            <div className="flex items-center gap-2 size-btns my-3">
+              <span className="font-semibold">Size:</span>
+              {productData?.weight?.map((n, index) => {
+                return (
+                  <Button
+                    onClick={() => handleClickActiveTab(index, n)}
+                    className={`${activeTab === index && "active-size"}`}
+                  >
+                    {n}
+                  </Button>
+                );
+              })}
+            </div>
+          )}
+          {productData?.productRam?.length > 0 && (
+            <div className="flex items-center gap-2 size-btns my-3">
+              <span className="font-semibold">Size:</span>
+              {productData?.productRam?.map((n, index) => {
+                return (
+                  <Button
+                    onClick={() => handleClickActiveTab(index, n)}
+                    className={`${activeTab === index && "active-size"}`}
                   >
                     {n}
                   </Button>
@@ -73,11 +155,14 @@ function ProductDetailsContent({ productData, setActiveTab, reviewSectionRef }) 
           </p>
           <div className="flex items-center gap-4">
             <div className="w-[80px]">
-              <QtyBox />
+              <QtyBox qty={qty} setQty={setQty} />
             </div>
-            <Button className="flex gap-1 !capitalize hover:!bg-black !bg-primary !text-white">
+            <Button disabled={isLoading} onClick={addItemToCart} className="flex gap-1 !capitalize hover:!bg-black !bg-primary !text-white">
               {" "}
-              <IoMdCart size={"20px"} className="" /> Add to Cart
+              {
+                isLoading ? <BiLoader size={22} className="min-w-[100px] animate-spin"/> : <><IoMdCart size={"20px"} className="" /> Add to Cart</>
+              }
+              
             </Button>
           </div>
         </div>
