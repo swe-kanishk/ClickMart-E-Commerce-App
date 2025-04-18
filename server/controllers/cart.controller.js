@@ -3,7 +3,7 @@ import CartProductModel from "../models/cartProduct.model.js";
 export const addItemToCart = async (req, res) => {
   try {
     const userId = req.userId;
-    const { productId, productTitle, productSize, productRAM, productWeight, image, quantity, subTotal, countInStock, rating, price, oldPrice, brand, discount } = req.body;
+    const { productId, productTitle, productRAMData, productSizeData, productWeightData, productSize, productRAM, productWeight, image, quantity, subTotal, countInStock, rating, price, oldPrice, brand, discount } = req.body;
 
     if (!productId || !productTitle || !image || !quantity || !subTotal || !countInStock || !rating || !price || !oldPrice || !brand || !discount) {
       return res.status(402).json({
@@ -35,6 +35,9 @@ export const addItemToCart = async (req, res) => {
       countInStock, 
       productSize, 
       productRAM, 
+      productRAMData, 
+      productSizeData, 
+      productWeightData,
       productWeight,
       rating, 
       price, 
@@ -80,10 +83,10 @@ export const getCartItem = async (req, res) => {
   }
 };
 
-export const updateCartItemQty = async (req, res) => {
+export const updateCartItem = async (req, res) => {
   try {
     const userId = req.userId;
-    const { productId, quantity } = req.body;
+    const { productId, quantity, subTotal, productRAM, productWeight, productSize } = req.body;
 
     if (!productId || !quantity) {
       return res.status(400).json({
@@ -95,7 +98,7 @@ export const updateCartItemQty = async (req, res) => {
 
     const updatedCartItem = await CartProductModel.findOneAndUpdate(
       { productId, userId },
-      { quantity: quantity },
+      { quantity, subTotal, productRAM, productWeight, productSize },
       { new: true } 
     );
     

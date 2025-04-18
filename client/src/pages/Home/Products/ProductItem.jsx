@@ -76,6 +76,9 @@ function ProductItem({ product }) {
       productRAM: product?.productRam?.length > 0 ? showTabValue : '',
       productWeight: product?.weight?.length > 0 ? showTabValue : '',
       brand: product?.brand,
+      productRAMData: product?.productRam,
+      productSizeData: product?.size,
+      productWeightData: product?.weight
     };
 
     setIsShowTabs(false);

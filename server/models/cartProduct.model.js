@@ -52,6 +52,9 @@ const cartProductSchema = new Schema({
   productSize: String,
   productWeight: String,
   productRAM: String,
+  productRAMData: [], 
+  productSizeData: [], 
+  productWeightData: [],
   }, { timestamps: true });
 
 const CartProductModel = model("CartProduct", cartProductSchema);
