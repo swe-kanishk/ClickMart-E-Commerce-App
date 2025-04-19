@@ -6,7 +6,7 @@ import { MyContext } from "../App";
 import toast from "react-hot-toast";
 import { BiLoader } from "react-icons/bi";
 
-function ProductDetailsContent({ productData, reviewSectionRef }) {
+function ProductDetailsContent({ productData, reviewSectionRef,  addItemInCart }) {
     const [showTabValue, setShowTabValue] = useState(null);
     const [activeTab, setActiveTab] = useState(null);
     const [qty, setQty] = useState(1);
@@ -56,8 +56,10 @@ function ProductDetailsContent({ productData, reviewSectionRef }) {
       productRAMData: productData?.productRam,
       productSizeData: productData?.size,
       productWeightData: productData?.weight
-    };
-    context?.addToCart(cartProductData);
+    }; 
+    if(context?.addToCart){
+      context?.addToCart(cartProductData);
+    }else addItemInCart(cartProductData)
     setTimeout(() => {
       setIsLoading(false)
     }, 1000)

@@ -219,7 +219,8 @@ function App() {
                 </div>
                 <div className="col-2 w-[60%] flex-1">
                   <ProductDetailsContent
-                    product={openProductDetailsModal?.product}
+                    productData={openProductDetailsModal?.product}
+                    addItemInCart={addToCart}
                   />
                 </div>
               </>

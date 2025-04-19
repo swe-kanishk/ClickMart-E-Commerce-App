@@ -56,6 +56,7 @@ function Header() {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           context.setIsLogin(false);
+          context.setCartData([]);
           navigate('/')
         } else {
           toast.error(res?.message);
