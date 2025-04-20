@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { IoBagCheck } from "react-icons/io5";
+import { MyContext } from "../../App";
 
 function Checkout() {
+    const context = useContext(MyContext)
   return (
     <section className='py-10'>
       <div className="container flex gap-5">

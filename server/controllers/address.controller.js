@@ -13,6 +13,8 @@ export const addAddress = async (req, res) => {
       selected,
       mobile,
       status,
+      landmark,
+      addressType
     } = req.body;
 
     if (
@@ -21,6 +23,7 @@ export const addAddress = async (req, res) => {
       !state ||
       !pincode ||
       !country ||
+      !landmark ||
       (!selected && selected !== false) ||
       !mobile ||
       (!status && status !== false)
@@ -41,6 +44,8 @@ export const addAddress = async (req, res) => {
       mobile,
       status,
       userId,
+      landmark,
+      addressType,
       selected,
     });
     const savedAddress = await address.save();

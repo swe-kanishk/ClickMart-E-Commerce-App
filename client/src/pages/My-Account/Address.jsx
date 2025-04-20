@@ -12,6 +12,10 @@ import toast from "react-hot-toast";
 import { deleteData, editData, postData } from "../../utils/api";
 import { MyContext } from "../../App";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 function Address() {
   const [isOpenModel, setIsOpenModel] = useState(false);
@@ -35,6 +39,8 @@ function Address() {
     pincode: "",
     country: "",
     mobile: "",
+    addressType: 'Home',
+    landmark: "",
     status: false,
     selected: false,
   });
@@ -90,6 +96,9 @@ function Address() {
     } else if (formFields.mobile === "") {
       toast.error("Please enter your mobile no.!");
       return;
+    } else if (formFields.landmark === "") {
+      toast.error("Please enter your landmark!");
+      return;
     }
     setIsLoading(true);
     postData(`/api/address/add`, formFields, { withCredentials: true }).then(
@@ -98,6 +107,18 @@ function Address() {
           toast.success(res?.message);
           setIsLoading(false);
           setIsOpenModel(false);
+          setFormFields({
+            address_line1: "",
+            city: "",
+            state: "",
+            pincode: "",
+            country: "",
+            mobile: "",
+            addressType: 'Home',
+            landmark: "",
+            status: false,
+            selected: false,
+          });
         } else {
           toast.error(res?.message);
           setIsLoading(false);
@@ -252,29 +273,56 @@ function Address() {
               />
             </div>
             <div className="col w-[50%]">
-              <Select
-                value={formFields?.status}
-                onChange={handleOnChangeInput}
-                displayEmpty
-                size="small"
+              <TextField
+                className="w-full"
+                label="State"
+                variant="outlined"
                 disabled={isLoading}
-                name="status"
-                className="!w-full !p-[2px]"
-                inputProps={{ "aria-label": "Without label" }}
-              >
-                <MenuItem value={true}>True</MenuItem>
-                <MenuItem value={false}>False</MenuItem>
-              </Select>
+                onChange={handleOnChangeInput}
+                value={formFields?.landmark}
+                name="landmark"
+                size="small"
+              />
+            </div>
+          </div>
+          <hr />
+          <div className="flex flex-col pb-0 gap-1 mt-4">
+            <h3 className="text-gray-600 text-[15px] font-medium">Address Type: </h3>
+            <div className="col w-full">
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <FormControlLabel
+                    value="Home"
+                    checked={formFields?.addressType === 'Home'}
+                    control={<Radio />}
+                    onChange={handleOnChangeInput}
+                    name="addressType"
+                    disabled={isLoading}
+                    label="Home"
+                  />
+                  <FormControlLabel
+                    value="Office"
+                    checked={formFields?.addressType === 'Office'}
+                    control={<Radio />}
+                    onChange={handleOnChangeInput}
+                    name="addressType"
+                    disabled={isLoading}
+                    label="Office"
+                  />
+                </RadioGroup>
             </div>
           </div>
           <br />
-          <div className="flex items-center gap-5 justify-between">
+          <div className="flex items-center pb-2 gap-5 justify-between">
             <Button
               disabled={!validValue || isLoading}
               type="submit"
               className={`!w-full ${
                 isLoading || !validValue ? "!bg-red-400" : "!bg-red-500"
-              }  !text-white !py-1 !capitalize hover:!bg-black`}
+              }  !text-white !py-2 !capitalize hover:!bg-black`}
             >
               {isLoading ? (
                 <BiLoader size={"22px"} className="animate-spin" />
@@ -286,7 +334,7 @@ function Address() {
               onClick={handleClose}
               className={`!w-full btn-org ${
                 isLoading ? "!bg-gray-100" : "!bg-gray-200"
-              }  !text-black !py-1 !capitalize hover:!bg-gray-200`}
+              }  !text-black !py-2 !capitalize hover:!bg-gray-200`}
             >
               Cancel
             </Button>

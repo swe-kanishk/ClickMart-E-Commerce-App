@@ -17,6 +17,14 @@ const addressSchema = new Schema(
     pincode: {
         type: String,
     },
+    landmark: {
+        type: String,
+    },
+    addressType: {
+        type: String,
+        enum: ["Home", "Office"],
+        default: "Home",
+    },
     country: {
         type: String,
     },
