@@ -36,6 +36,7 @@ function App() {
     product: {},
   });
   const [openCartPanel, setOpenCartPanel] = useState(false);
+  const [openAddressPanel, setOpenAddressPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
@@ -153,6 +154,8 @@ function App() {
     setOpenProductDetailsModal,
     openCartPanel,
     setOpenCartPanel,
+    openAddressPanel,
+    setOpenAddressPanel,
     isLogin,
     setIsLogin,
     userData,

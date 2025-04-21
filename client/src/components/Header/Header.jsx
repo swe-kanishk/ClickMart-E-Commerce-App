@@ -21,6 +21,7 @@ import { HiClipboardCheck } from "react-icons/hi";
 import { IoLogOutOutline } from "react-icons/io5";
 import { getData } from "../../utils/api";
 import toast from "react-hot-toast";
+import AddAddress from "../../pages/My-Account/AddAddress";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -261,6 +262,7 @@ function Header() {
         <Navigation />
       </header>
       <CartPanel />
+      <AddAddress />
     </>
   );
 }
