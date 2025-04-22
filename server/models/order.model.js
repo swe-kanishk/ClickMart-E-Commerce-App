@@ -27,13 +27,13 @@ const orderSchema = new Schema(
       type: String,
       default: "",
     },
+    order_status: {
+      type: String,
+      default: "",
+    },
     delivery_address: {
       type: Schema.ObjectId,
       ref: "Address",
-    },
-    subTotalAmount: {
-      type: Number,
-      default: 0,
     },
     totalAmount: {
       type: Number,

@@ -39,7 +39,6 @@ app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/homeSlides", homeSlideRouter);
 app.use("/api/blogs", blogRouter);
-app.use("/api/blogs", blogRouter);
 app.use("/api/bannerV1", bannerV1Router);
 app.use("/api/adsBanner", adsBannerRouter);
 app.use("/api/wishlist", wishlistRouter);
