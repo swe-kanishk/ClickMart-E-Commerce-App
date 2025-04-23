@@ -1417,3 +1417,39 @@ export const filterProducts = async (req, res) => {
     });
   }
 };
+
+export const searchProduct = async (req, res) => {
+  try {
+    const query = request.query?.q;
+
+    if (!query) {
+      return res.status(500).json({
+        message: "Query is required!",
+        success: false,
+        error: true,
+      });
+    }
+    
+    const items = await ProductModel.find({
+      $or: [
+        {name: {$regex: query, $options: "i"}},
+        {brand: {$regex: query, $options: "i"}},
+        {catName: {$regex: query, $options: "i"}},
+        {subCatName: {$regex: query, $options: "i"}},
+        {thirdSubCatName: {$regex: query, $options: "i"}},
+      ]
+    }).populate("category")
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      items
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};

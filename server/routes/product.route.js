@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addProductRam, addProductSize, addProductWeight, createProduct, deleteMultipleProducts, deleteMultipleRAMS, deleteMultipleSizes, deleteMultipleWeights, deleteProduct, deleteProductRAM, deleteProductSize, deleteProductWeight, filterProducts, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdLevelCatId, getAllProductsByThirdLevelCatName, getFeaturedProducts, getProduct, getProductRams, getProductsCount, getProductSizes, getProductWeights, removeImageFromCloudinary, updateProduct, updateProductRAM, updateProductSize, updateProductWeight, uploadBannerImages, uploadImages } from "../controllers/product.controller.js";
+import { addProductRam, addProductSize, addProductWeight, createProduct, deleteMultipleProducts, deleteMultipleRAMS, deleteMultipleSizes, deleteMultipleWeights, deleteProduct, deleteProductRAM, deleteProductSize, deleteProductWeight, filterProducts, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdLevelCatId, getAllProductsByThirdLevelCatName, getFeaturedProducts, getProduct, getProductRams, getProductsCount, getProductSizes, getProductWeights, removeImageFromCloudinary, searchProduct, updateProduct, updateProductRAM, updateProductSize, updateProductWeight, uploadBannerImages, uploadImages } from "../controllers/product.controller.js";
 import auth from "../middlewares/auth.js";
 import upload from "../middlewares/multer.js";
 
@@ -9,6 +9,7 @@ productRouter.get('/', getAllProducts)
 productRouter.get('/rams', getProductRams)
 productRouter.get('/sizes', getProductSizes)
 productRouter.get('/weights', getProductWeights)
+productRouter.get('/search', searchProduct)
 productRouter.post('/', auth, createProduct)
 productRouter.post('/uploadBannerImages', auth, upload.array('bannerImages'), uploadBannerImages)
 productRouter.get('/getProductsByPrice', getAllProductsByPrice)
