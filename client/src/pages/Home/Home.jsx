@@ -14,7 +14,7 @@ import { Navigation } from "swiper/modules";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import ProductsSlider from "./products/ProductsSlider";
+import ProductsSlider from "./Products/ProductsSlider";
 import BlogItem from "../BlogItem";
 import HomeBanner from "./HomeBanners/HomeBanner";
 import { MyContext } from "../../App";
