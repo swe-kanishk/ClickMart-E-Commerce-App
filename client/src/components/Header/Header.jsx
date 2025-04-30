@@ -9,7 +9,7 @@ import { IoIosGitCompare } from "react-icons/io";
 import { BsCart3 } from "react-icons/bs";
 import Tooltip from "@mui/material/Tooltip";
 import Navigation from "./Navigation/Navigation";
-import Logo from "./logo";
+import Logo from "../../../public/user-avatar.png";
 import { MyContext } from "../../App";
 import CartPanel from "../../pages/Cart/CartPanel";
 import { Button } from "@mui/material";
