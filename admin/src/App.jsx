@@ -1,4 +1,5 @@
 import "./App.css";
+import "./responsive.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard";
 import Header from "./Components/Header";
@@ -27,6 +28,7 @@ import AddWeight from "./Pages/product/AddWeight";
 import BlogList from "./Pages/Blog/BlogList";
 import BannerV1List from "./Pages/banners/BannerV1List";
 import AdsBannerList from "./Pages/banners/adsBannerList";
+import MainLayout from "./MainLayout";
 
 const MyContext = createContext();
 
@@ -35,6 +37,8 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [adminData, setAdminData] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [sidebarWidth, setSidebarWidth] = useState(18);
 
   const checkAuthStatus = async () => {
     const token = localStorage.getItem("accessToken");
@@ -83,15 +87,29 @@ function App() {
   const getCat = () => {
     getData("/api/category").then((res) => {
       if (res?.success === true) {
-        console.log(res);
         setCategoryData(res?.data);
       }
     });
   };
 
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
   useEffect(() => {
     getCat();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (windowWidth < 992) {
+      setIsSidebarOpen(false);
+      setSidebarWidth(100);
+    } else {
+      setSidebarWidth(18);
+    }
+  }, [windowWidth]);
 
   const [isOpenFullScreenPannel, setIsOpenFullScreenPannel] = useState({
     open: false,
@@ -108,25 +126,9 @@ function App() {
       path: "/",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <Dashboard />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <Dashboard />
+        </MainLayout>
       ),
     },
     {
@@ -158,350 +160,126 @@ function App() {
       path: "/products",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <Products />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <Products />
+        </MainLayout>
       ),
     },
     {
       path: "/category/list",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <CategoryList />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <CategoryList />
+        </MainLayout>
       ),
     },
     {
       path: "/homeSlider/list",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <HomeSliderBanners />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <HomeSliderBanners />
+        </MainLayout>
       ),
     },
     {
       path: "/blogs",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <BlogList />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <BlogList />
+        </MainLayout>
       ),
     },
     {
       path: "/subCategory/list",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <SubCategoryList />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <SubCategoryList />
+        </MainLayout>
       ),
     },
     {
       path: "/users",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <Users />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <Users />
+        </MainLayout>
       ),
     },
     {
       path: "/profile",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <Profile />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <Profile />
+        </MainLayout>
       ),
     },
     {
       path: "/product/:id",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <ProductDetails />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <ProductDetails />
+        </MainLayout>
       ),
     },
     {
       path: "/orders",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <Orders />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <Orders />
+        </MainLayout>
       ),
     },
     {
       path: "/product/addRams",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <AddRAMS />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <AddRAMS />
+        </MainLayout>
       ),
     },
     {
       path: "/product/addSizes",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <AddSizes />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <AddSizes />
+        </MainLayout>
       ),
     },
     {
       path: "/product/addWeight",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <AddWeight />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <AddWeight />
+        </MainLayout>
       ),
     },
     {
       path: "/bannerV1/list",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <BannerV1List />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <BannerV1List />
+        </MainLayout>
       ),
     },
     {
       path: "/adsBanner/list",
       exact: true,
       element: (
-        <section className="main">
-          <Header />
-          <div className="mainContent flex">
-            <div
-              className={`sidebarWrapper overflow-hidden ${
-                isSidebarOpen ? "w-[18%]" : "w-[0px] opacity-0"
-              } transition-all`}
-            >
-              <Sidebar />
-            </div>
-            <div
-              className={`right-content p-5 ${
-                isSidebarOpen ? "w-[82%]" : "w-[100%]"
-              } transition-all`}
-            >
-              <AdsBannerList />
-            </div>
-          </div>
-        </section>
+        <MainLayout>
+          <AdsBannerList />
+        </MainLayout>
       ),
     },
   ]);
@@ -518,7 +296,10 @@ function App() {
     categoryData,
     setCategoryData,
     getCat,
-    handleCloseFullScreenPannel
+    handleCloseFullScreenPannel,
+    windowWidth,
+    setSidebarWidth,
+    sidebarWidth,
   };
 
   return (

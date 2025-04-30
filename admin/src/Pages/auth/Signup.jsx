@@ -122,8 +122,8 @@ function Signup() {
     });
   };
   return (
-    <section className="bg-[#ffffff]">
-      <header className="w-full fixed top-0 left-0 px-4 py-3 flex items-center justify-between">
+    <section className="bg-[#ffffff] h-[100lvh]">
+      <header className="w-full hidden fixed top-0 left-0 px-4 py-3 sm:flex items-center justify-between">
         <Logo />
         <div className="flex items-center gap-6">
           <NavLink to={"/login"} exact={true} activeClassName="isActive">
@@ -146,10 +146,10 @@ function Signup() {
       </header>
       <img
         src="https://fullstack-ecommerce-add-admin.netlify.app/static/media/pattern.df9a7a28fc13484d1013.webp"
-        className="w-full fixed top-0 left-0 pointer-events-none opacity-5"
+        className="w-full h-full fixed top-0 left-0 pointer-events-none opacity-5"
         alt=""
       />
-      <div className="login-card max-w-[760px] mx-auto z-50 pt-32">
+            <div className="login-card w-full h-full sm:max-w-[600px] flex flex-col items-center justify-center mx-auto z-50 px-6">
         <div className="flex justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -181,11 +181,11 @@ function Signup() {
             ></rect>
           </svg>
         </div>
-        <h1 className="text-center text-[40px] font-bold mt-4">
+        <h1 className="text-center whitespace-nowrap sm:text-[40px] text-[24px] xs font-bold mt-4">
           Join us today! <br />{" "}
           <span>Get special benefits and stay up-to-date.</span>
         </h1>
-        <div className="flex items-center mt-5 justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center mt-5 justify-center gap-4">
           <LoadingButton
             size="small"
             onClick={handleGoogleSignup}
@@ -212,11 +212,11 @@ function Signup() {
         </div>
         <br />
         <div className="flex items-center gap-3 w-full justify-center">
-          <span className="flex items-center h-[1px] w-[150px] bg-slate-400"></span>
+          <span className="flex items-center h-[1px] sm:w-[150px] w-[50px] bg-slate-400"></span>
           <span className="text-slate-500 text-[14px]">
-            Or, Sign in with your email
+            Or, Sign up with your email
           </span>
-          <span className="flex items-center h-[1px] w-[150px] bg-slate-400"></span>
+          <span className="flex items-center h-[1px] sm:w-[150px] w-[50px] bg-slate-400"></span>
         </div>
         <form className="w-full mt-4 space-y-4" onSubmit={handleSubmit}>
           <div>

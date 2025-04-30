@@ -54,14 +54,14 @@ function Sidebar() {
 
   return (
     <div
-      className={`fixed py-2 px-2 top-0 left-0 bg-[#fff] ${
-        context.isSidebarOpen ? "w-[18%]" : "w-[0px]"
+      className={`fixed py-2 px-2 !z-[80] top-0 left-0 bg-[#ffff] ${
+        context.isSidebarOpen ? `min-w-[${context?.sidebarWidth/2}%] max-w-[300px]` : "w-[0px]"
       } border-r border-gray-300 h-full`}
     >
       <div className="pb-3 border-b whitespace-nowrap transition-all">
         <Logo />
       </div>
-      <ul className="mt-4">
+      <ul className="mt-4 overflow-y-scroll max-h-[70vh]">
         <li>
           <Link to="/">
             <Button className="w-full !py-2 !capitalize hover:!text-black !justify-start gap-2 !text-gray-700 !text-[600] hover:!bg-[#f1f1f1] flex items-end">

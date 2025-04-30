@@ -19,7 +19,7 @@ function DashBoardBox() {
         spaceBetween={10}
         navigation={false}
         modules={[Navigation]}
-        className="mySwiper"
+        className="dashboardBoxesSlider"
       >
         <SwiperSlide>
             <div className="box bg-blue-600 px-4 py-10 rounded-md cursor-pointer border hover:bg-[#4045e5] flex items-center gap-4 border-gray-200 hover:border-gray-400 transition-all">

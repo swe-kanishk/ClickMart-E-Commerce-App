@@ -93,8 +93,8 @@ function Header() {
   return (
     <>
       <header
-        className={`w-full h-[60px] pr-5 shadow-md flex transition-all ${
-          context.isSidebarOpen ? "pl-[18%]" : "pl-7"
+        className={`w-full fixed h-[60px] z-[55] pr-5 shadow-md flex transition-all ${
+          context.isSidebarOpen ? `pl-[300px]` : "pl-7"
         } border-b border-gray-300 items-center justify-between bg-[#fff]`}
       >
         <div
@@ -108,7 +108,7 @@ function Header() {
             </div>
           )}
           <Button
-            className="!w-[40px] z-50 !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
+            className="!w-[40px] !min-w-[40px] !text-gray-700 !rounded-full !h-[40px]"
             onClick={() => context.setIsSidebarOpen(!context.isSidebarOpen)}
           >
             {context.isSidebarOpen ? (
