@@ -13,7 +13,7 @@ import { getData, postData } from "../../utils/api";
 import { BiLoader } from "react-icons/bi";
 import { MdOutlineRateReview } from "react-icons/md";
 import toast from "react-hot-toast";
-import ProductsSlider from "../Home/products/ProductsSlider";
+import ProductsSlider from "../Home/Products/ProductsSlider";
 
 function ProductDetails() {
   const [activeTab, setActiveTab] = useState(1);
